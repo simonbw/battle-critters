@@ -1,0 +1,49 @@
+Java Battle Server
+	Improve Dynamic Class loading
+	Declare Winner
+	Security
+		Replace Class Loader for critters to limit which classes they can use
+		File Permissions
+		Method Timeout
+		Memory Limit
+
+Web Backend
+	cleanup
+ 		COMMENT EVERYTHING
+ 		Throw Exceptions
+ 		put templates into folders
+
+Web Interface
+	New Battle Screen
+		Select Critters from list
+			my critters tab
+			search function
+			order by: name, rank, etc
+		stylize table and buttons
+		Loading Screen/Modal
+	Recent Battles Screen
+		AJAX load battles
+		Give information on critters and 
+	Home Page
+		Not Logged In
+			General Info About BattleCritters
+		Logged In
+			News
+			Recent Battles
+			My Critters
+	Critter Editor
+		consildate edit and view pages
+		compile via ajax
+		disable ctrl-s default action
+	Static Pages
+		About Us
+		FAQ
+		Critter Rules
+
+Communications
+	Email Stuart Reges
+		Ask about copyright
+		Ask about cheating
+	Email Thomas
+		update on progress
+	Get battle-critters@gmail.com

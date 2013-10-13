@@ -1,0 +1,10 @@
+{% extends "layout.html" %}
+{% block title %}Critters{% endblock %}
+{% block body %}
+<h1>All Critters</h1>
+<ul>
+	{% for critter in critters%}
+	<li>{{critter.get_link()}} -- {{critter.owner.get_link()}}</li>
+	{% endfor %}
+</ul>
+{% endblock %}

@@ -1,0 +1,36 @@
+#titlebar
+{
+	padding: 4px;
+	top: 0px;
+	left: 0px;
+	width: 100%;
+	box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	height: 26px;
+	position: absolute;
+	background: $toolbar_bg;
+	box-shadow: 0px 0px 3px 3px rgba(0,0,0,0.6);
+	color: $toolbar_text;
+	a
+	{
+		color: #EAEAEA;
+		&:hover {color: #FFF;}
+	}
+
+	.center { float: center; }
+	.left {
+		float: left;
+		margin-left: 20px;
+		.item { float: left; }
+	}
+	.right {
+		float: right;
+		margin-right: 20px;
+		.item {
+			float: right;
+			padding-right: 5px;
+			margin-right: 5px;
+			border-right: 1px solid #FFF;
+		}
+	}
+}

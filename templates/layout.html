@@ -1,0 +1,63 @@
+<!doctype HTML>
+<html>
+<head>
+	{% block scripts %}
+	<!--<script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.min.js"></script>-->
+	<script src="{{ url_for('static', filename='js/jquery.js') }}"></script>
+	{% endblock %}
+
+	{% block stylesheets %}
+	<link rel=stylesheet type=text/css href="{{ url_for('static', filename='css/style.css') }}">
+	{% endblock %}
+	<title>Battle-Critters -- {% block title %}{% endblock %}</title>
+</head>
+
+<body>
+	<div id="titlebar">
+		<div class="left">
+			<a href="{{url_for('home_app.home_page')|safe}}">Battle Critters</a>
+		</div>
+		<div class="center">
+		</div>
+		<div class="right">
+			{% if 'user' in g %}
+			<div class="item">{{g.user.get_link()}}</div>
+			<div class="item"><a href="{{url_for('login_app.logout')}}">Logout</a></div>
+			{% else %}
+			<div class="item"><a href="{{url_for('login_app.login_page')}}">Sign In</a></div>
+			<div class="item"><a href="{{url_for('users_app.new_user')}}">Make An Account</a></div>
+			{% endif %}
+		</div>
+
+	</div>
+
+	{% block bodybox %}
+	<div id="bodybox">
+		{% with messages = get_flashed_messages() %}
+		{% if messages %}
+		<ul id="flashes">
+			{% for message in messages %}
+			<li>{{ message }}</li>
+			{% endfor %}
+		</ul>
+		{% endif %}
+		{% endwith %}
+		{% block body %} {% endblock %}
+		<div class="clear"></div>
+	</div>
+	{% block footer %}
+	<div id="footer">
+		<ul class="navlist">
+			<li><a href="{{url_for('home_app.about_us_page')}}">About Us</a></li>
+			<li><a href="{{url_for('home_app.faq_page')}}">FAQ</a></li>
+			<li><a href="{{url_for('home_app.rules_page')}}">Rules</a></li>
+		</ul>
+		<div>
+			Copyright Simon Baumgardt-Wellander 2013
+		</div>
+	</div>
+	{% endblock footer %}
+	{% endblock bodybox %}
+</body>
+
+</html>

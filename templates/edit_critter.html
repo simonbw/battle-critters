@@ -1,0 +1,53 @@
+{% extends "layout.html" %}
+{% block title %}Edit Critter{% endblock %}
+{% block scripts %}
+{{super()}}
+{% if g.user == critter.owner %}
+<script type="text/javascript">
+SAVEPATH = "{{critter.get_url('save')|safe}}";
+COMPILEPATH = "{{critter.get_url('compile')|safe}}";
+</script>
+<script type="text/javascript" src="{{url_for('static', filename='codemirror/lib/codemirror.js')}}"></script>
+<script type="text/javascript" src="{{url_for('static', filename='codemirror/mode/clike/clike.js')}}"></script>
+<script type="text/javascript" src="{{url_for('static', filename='js/editor.js')}}"></script>
+{% endif %}
+{% endblock %}
+
+{% block stylesheets %}
+{% if g.user == critter.owner %}
+<link rel=stylesheet type=text/css href="{{ url_for('static', filename='codemirror/lib/codemirror.css') }}">
+<link rel=stylesheet type=text/css href="{{ url_for('static', filename='css/editor-theme.css') }}">
+{% endif %}
+{{super()}}
+
+{% endblock %}
+
+{% block bodybox %}
+{% if g.user == critter.owner %}
+<div id="editorbox">
+	<div id="toolbar">
+		<h1>{{critter.name}}</h1>
+		<div class="items">
+			<span class="item left"><a href="{{critter.get_url()|safe}}">Back</a></span>
+			<span class="item left"><a id="savebutton">Save</a></span>
+			<span class="item left"><a id="compilebutton">Compile</a></span>
+			<span class="item right"><a id="autosavebutton"> </a></span>
+			<div class="clear"></div>
+		</div>
+	</div>
+
+	<textarea id="editor">{{critter.content}}</textarea>
+	
+	<div id="statusbar">
+		<li id="savestatus"></li>
+		<li id="compilestatus"></li>
+		<div id="errordisplay"></div>
+	</div>
+</div>
+{% else %}
+<h1>{{critter.name}}</h1>
+<section>
+<p> Some stats about the critter </p>
+</section>
+{% endif %}
+{% endblock bodybox%}

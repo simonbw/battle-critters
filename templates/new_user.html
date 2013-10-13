@@ -1,0 +1,16 @@
+{% extends "layout.html" %}
+{% block title %}New User{% endblock %}
+{% block body %}
+	<form action="{{url_for('users_app.new_user')}}" method="POST">
+		<fieldset>
+			<legend>Create User</legend>
+			username
+			<input type="text" name="username" autofocus="autofocus"></input>
+			password
+			<input type="password" name="password"></input>
+			confirm password
+			<input type="password" name="password2"></input>
+			<button type="Submit">Submit</button>
+		</fieldset>
+	</form>
+{% endblock %}

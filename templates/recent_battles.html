@@ -1,0 +1,15 @@
+{% extends "layout.html" %}
+{% block title %}Battles{% endblock %}
+{% block body %}
+
+	<h1>Recent Battles</h1>
+
+	<ul>
+	{% for battle in battles %}
+		<li><a href="{{url_for('battles_app.view_battle', battle_id=battle.id)}}">{{battle.id}} -- {{battle.creation_time}}</a></li>
+	{% endfor %}
+	</ul>
+
+	<a href="{{url_for('battles_app.new_battle_page')}}">Create a new battle</a>
+
+{% endblock %}

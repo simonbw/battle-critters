@@ -1,0 +1,49 @@
+{% extends "layout.html" %}
+{% block title %}FAQ{% endblock %}
+{% block scripts %}
+{{ super() }}
+<script>
+$(document).ready(function($) {
+	$(".question").click(function(event) {
+		$(this).parent().children(".answer").slideToggle(150);
+	});
+});
+</script>
+{% endblock scripts %}
+<style>
+#faqlist
+{
+	color: red;
+}
+</style>
+{% block body %}
+	<h1>FAQ</h1>
+	<section class="modulebox">
+		<ul id="faqlist">
+			<li>
+				<div class="question">Question 1</div>
+				<div class="answer">
+					Lorem ipsum Minim pariatur dolore labore magna dolore ullamco sunt qui Excepteur irure ullamco pariatur elit anim irure fugiat veniam nostrud magna consequat eiusmod culpa sunt dolore occaecat occaecat ea nulla quis.
+				</div>
+			</li>
+			<li>
+				<div class="question">Question 2</div>
+				<div class="answer">
+					Lorem ipsum Minim pariatur dolore labore magna dolore ullamco sunt qui Excepteur irure ullamco pariatur elit anim irure fugiat veniam nostrud magna consequat eiusmod culpa sunt dolore occaecat occaecat ea nulla quis.
+				</div>
+			</li>
+			<li>
+				<div class="question">Question 3</div>
+				<div class="answer">
+					Lorem ipsum Minim pariatur dolore labore magna dolore ullamco sunt qui Excepteur irure ullamco pariatur elit anim irure fugiat veniam nostrud magna consequat eiusmod culpa sunt dolore occaecat occaecat ea nulla quis.
+				</div>
+			</li>
+			<li>
+				<div class="question">Question 4</div>
+				<div class="answer">
+					Lorem ipsum Minim pariatur dolore labore magna dolore ullamco sunt qui Excepteur irure ullamco pariatur elit anim irure fugiat veniam nostrud magna consequat eiusmod culpa sunt dolore occaecat occaecat ea nulla quis.
+				</div>
+			</li>
+		</ul>
+	</section>
+{% endblock %}

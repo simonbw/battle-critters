@@ -1,0 +1,90 @@
+{% extends "layout.html" %}
+{% block title %}Battle!{% endblock %}
+{% block scripts %}
+{{super()}}
+<script type="text/javascript">
+FRAME_URL = "{{battle.get_frame_url()}}";
+BATTLE_LENGTH = {{battle.length}};
+critter_names = [];
+{% for i in range(battle.get_critters()|length) %}
+{% if (critters[i] == battle.get_winner())%}
+winner_index = {{i}};
+{% endif %}
+critter_names.push("{{critters[i].name}}");
+{% endfor %}
+</script>
+<script type="text/javascript" src="{{url_for('static', filename='js/battle_viewer.js')}}">
+</script>
+{% endblock %}
+{% block stylesheets %}
+{{super()}}
+<style>
+#abovebar {
+	background: #AAAAAA;
+	padding: 4px;
+	margin: 0px;
+}
+#belowbar {
+	background: #AAAAAA;
+	padding: 4px;
+	margin: 0px;
+	clear: both;
+}
+#loadcounter {
+	font-size: 12px;
+}
+#framecounter {
+	font-size: 12px;
+}
+#battlefield {
+	border: 2px solid #000000;
+	background: #FFF;
+	margin: 0px;
+	padding: 0px;
+	float:left;
+
+}
+#sidebar {
+	float:left;
+	padding: 10px;
+}
+.critterlabel {
+	padding: 4px;
+	background: #666;
+}
+.critterlabel.winner {
+	border: 2px solid #FFF;
+}
+</style>
+{% endblock stylesheets %}
+{% block body %}
+
+<h1>BATTLE</h1>
+<h3>{{battle.get_pretty_time()}}</h3>
+<div id="abovebar">
+	<button id="resetbutton">Reset</button>
+	<button id="backbutton">Last Frame</button>
+	<button id="rewindbutton">Rewind</button>
+	<button id="stopbutton">Stop</button>
+	<button id="playbutton">Play</button>
+	<button id="nextbutton">Next Frame</button>
+	<button id="skipbutton">Skip 100</button>
+	<span id="framecounter"></span>
+</div>
+
+<canvas id="battlefield" width="500px" height="500px"></canvas>
+<div id="sidebar")>
+	{% for i in range(critters|length) %}
+	<div class="critterlabel" id="critterlabel{{i}}">
+		{{critters[i].name}}
+		<span class="crittercounter" id="crittercounter{{i}}"></span>
+	</div>
+	{% endfor %}
+</div>
+
+<div id="belowbar">
+	<span id="loadcounter"></span>
+</div>
+
+
+{% endblock %}

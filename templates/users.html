@@ -1,0 +1,11 @@
+{% extends "layout.html" %}
+{% block title %}Users{% endblock %}
+{% block body %}
+	<h1>Users</h1>
+
+	<ul class = "userlist">
+		{% for user in user_list %}
+		<li>{{user.get_link()}}</li>
+		{% endfor %}
+	</ul>
+{% endblock %}

@@ -1,0 +1,61 @@
+{% extends "layout.html" %}
+{% block title %}Home{% endblock %}
+{% block scripts %}
+{{ super() }}
+<script>
+var NEWS_URL = "{{url_for('home_app.news')}}";
+var MAX_NEWS = {{max_news}}l
+var DELETE_FILE_URL = "{{url_for('editor_app.delete_file', owner=g.user.username, filename='insertfilenamehere')}}";
+var NEW_FILE_URL = "{{url_for('editor_app.new_file', owner=g.user.username, filename='insertfilenamehere')}}";
+var CRITTER_LIST_URL = "{{url_for('editor_app.get_critter_list')}}";
+var USERNAME = "{{g.user.username|safe}}";
+</script>
+<script type="text/javascript" src="{{ url_for('static', filename='js/home.js') }}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='js/news.js') }}"></script>
+{% endblock scripts %}
+{% block body %}
+<h1> Home </h1>
+<div class="modulebox">
+	<div class="module recent_battles">
+		<h2>Recent Battles</h2>
+		<ul id="battlelist" class="list">
+			{% for battle in g.user.get_battles() %}
+			<li>
+				{{battle.get_link()|safe}}
+			</li>
+			{% endfor %}
+		</ul>
+		<button><a href="{{url_for('battles_app.new_battle_page')}}">New Battle</a></button>
+	</div>
+	<div class="module critters">
+		<h2>My Critters</h2>
+		<ul id="critterlist" class="list">
+			{% for critter in g.user.get_critters() %}
+			<li>
+				{{critter.get_link()|safe}}
+				<button class="deletebutton" onclick="delete_file('{{critter.name}}')">Delete</button>
+			</li>
+			{% endfor %}
+		</ul>
+		<button id="newfilebutton">New Critter</button>
+	</div>
+	<div class="module news">
+		<h2>News</h2>
+		<button id="nextnews">Next</button>
+		<button id="previousnews">Previous</button>
+		<div id="newsbox">
+		</div>
+	</div>
+	{% if (g.user.admin) %}
+	<div class="module admin">
+		<h2>Admin</h2>
+		<a href="{{url_for('users_app.list_users')}}">All Users</a>
+
+		</input name="title" id="newsformtitle">
+		<textarea name="content" id="newsformcontent"></textarea>
+		<button id="postnewsbutton">Submit</button>
+
+	</div>
+	{% endif %}
+</div>
+{% endblock %}

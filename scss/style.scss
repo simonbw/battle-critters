@@ -1,0 +1,197 @@
+$dark_bg = #0B0B0B;
+$dark_bg_highlight = #323232;
+$main_text = #F7F7F7;
+$light_bg = #CFCFCF;
+$light_bg2 = #AFAFAF;
+$light_bg3 = #EEEEEE;
+
+$module_spacing = 14px;
+$module_radius = 8px;
+
+$toolbar_bg = #888;
+$toolbar_text = #FFFFFF;
+
+$gutter_bg = #222222;
+$gutter_text = #AAAAAA;
+$toolbar_font = "Lucida Sans Unicode", "Lucida Grande", sans-serif;
+
+$main_font = Helvetica;
+
+@import	"editor";
+@import	"faq";
+@import	"footer";
+@import	"titlebar";
+@import "news";
+
+button
+{
+	cursor: default;
+	a
+	{
+		text-decoration: none;
+		color: black;
+		cursor: default;
+	}
+}
+.clear
+{
+	clear: both;
+}
+body
+{
+	background: url('/static/images/background2.png');
+	padding:
+	{
+		top: 0px;
+		left: 100px;
+		right: 100px;
+	}
+	font: {
+		family: $main_font;
+		size: 15px;
+	}
+}
+#flashes
+{
+	margin:auto;
+	margin-bottom: 20px;
+	background: #FFFF00;
+	border-top: 1px dotted #FF0000;
+	border-bottom: 1px dotted #FF0000;
+	color: #FF0000; 
+	padding: 4px;
+
+	li
+	{
+		margin-left: 20px;
+		list-style: none;
+	}
+}
+#bodybox
+{
+	background: $light_bg;
+	color: #111;
+	padding: 
+	{
+		top: 40px;
+		left: 0px;
+		right: 0px;
+		bottom: 10px;
+	}
+
+	border-bottom-left-radius: $module_radius;
+	border-bottom-right-radius: $module_radius;
+
+	h1
+	{
+		display: block;
+		margin: 0px;
+		width: 100%;
+		box-sizing: border-box;
+		-moz-box-sizing: border-box;
+		background: $light_bg2;
+		padding: 
+		{
+			left: 20px;
+			right 20px;
+			top: 5px;
+			bottom: 5px;
+		}
+		font:
+		{
+			size : 40px;
+		}
+	}
+	h2
+	{
+		margin: 0px;
+		font
+		{
+			size: 20px;
+		}
+	}
+	h3
+	{
+		margin: 0px;
+		font
+		{
+			size: 15px;
+		}
+	}
+	h4
+	{
+		margin: 0px;
+		font
+		{
+			size: 12px;
+		}
+	}
+	p
+	{
+		padding: 0px;
+		margin:
+		{
+			top: 0px;
+			left: 0px;
+			right: 0px;
+			bottom: 6px;
+		}
+	}
+	section {
+		margin:
+		{
+			top: $module_spacing;
+			bottom: $module_spacing;
+		}
+		padding:
+		{
+			left: $module_spacing;
+			right: $module_spacing;
+		}
+	}
+	.module
+	{
+		float: left;
+		margin: 
+		{
+			top: $module_spacing;
+			left: $module_spacing;
+			bottom: 0px;
+			right: 0px;
+		}
+		padding: 10px;
+		background: $light_bg2;
+		border-radius: $module_radius;
+	}
+	.news
+	{
+		max-width: 400px;
+	}
+	.recent_battles
+	{
+		
+	}
+	.modulebox
+	{
+		padding:
+		{
+			top: 0px;
+			left: 0px;
+			right: $module_spacing + 0px;
+			bottom: $module_spacing + 0px;
+		}
+	}
+	ul.list
+	{
+		list-style: none;
+		margin: 0px;
+		padding:
+		{
+			left: 10px;
+		}
+		li:
+		{
+			list-style: none;
+		}
+	}
+}

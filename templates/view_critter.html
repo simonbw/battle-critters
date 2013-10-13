@@ -1,0 +1,39 @@
+{% extends "layout.html" %}
+{% block title %}View Critter{% endblock %}
+{% block scripts %}
+{{super()}}
+<script type="text/javascript" src="{{url_for('static', filename='codemirror/lib/codemirror.js')}}"></script>
+<script type="text/javascript" src="{{url_for('static', filename='codemirror/mode/clike/clike.js')}}"></script>
+<script type="text/javascript">
+$(document).ready(function($) {
+	var editor = CodeMirror.fromTextArea($('#editor').get(0), {
+		mode: 'text/x-java',
+		lineNumbers: true,
+		readOnly: true,
+		indentUnit: 4,
+	});
+	$(editor).height("auto");
+});
+
+</script>
+{% endblock %}
+{% block stylesheets %}
+<link rel=stylesheet type=text/css href="{{ url_for('static', filename='codemirror/lib/codemirror.css') }}">
+{{super()}}
+{% endblock %}
+{% block body %}
+<h1>{{critter.name}}</h1>
+<h2>{{critter.creation_time}}</h2>
+<h3>{{critter.owner.get_link()}}</h3>
+<p>
+	This is maybe where some stats about the critter will go.
+</p>
+{{critter.get_link('compile', 'compile')}}
+<div>
+	<textarea id="editor" readonly="readonly">{{critter.content}}</textarea>
+</div>
+
+{% if g.user == critter.owner %}
+<a href="{{critter.get_url('edit')|safe}}">edit</a>
+{% endif %}
+{% endblock %}

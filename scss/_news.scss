@@ -1,0 +1,27 @@
+#newsbox
+{
+	
+	padding: 4px;
+	background: #CCCCCC;
+	
+	article
+	{
+		h1
+		{
+			font-size: 16px;
+			margin: 0px;
+			padding: 0px;
+			background: none;
+			
+		}
+		h2
+		{
+			font-size: 12px;
+			margin: 0px;
+			padding: 0px;
+			padding-left: 16px;
+			font-style: italic;
+			background: none;
+		}
+	}
+}
