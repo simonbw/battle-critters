@@ -39,8 +39,10 @@ app.config.from_object(__name__)
 
 def start_java_server():
 	"""Start the java server. This should be run in its own process."""
+        print "Starting Java Server..."
 	cp = '"' + os.path.join('.', 'java','bin') + ';' + os.path.join('.', 'java','lib','py4j0.8.jar') + '"'
 	command = "java -cp {cp} {classname}".format(cp=cp, classname='battlecritters.Main')
+        print command
 	subprocess.Popen(command, shell=False)
 	print "Java server started"
 

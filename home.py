@@ -16,7 +16,7 @@ def home_page():
 	"""Display the homepage. Different for logged in users."""
 	try:
 		if 'username' in session:
-			var max_news = 2
+			max_news = 2
 			return render_template('user_home.html', max_news=max_news)
 		else:
 			return render_template('guest_home.html')
