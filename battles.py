@@ -69,10 +69,10 @@ class Battle():
 		return util.format_date(self.creation_time)
 
 	def get_link(self, text=None):
-		"""Return an HTML snippet with a link to the userpage. If text is none, defaults to the username."""
+		"""Return an HTML snippet with a link to the userpage. If text is none, defaults to the time."""
 		if text is None:
 			text = self.get_pretty_time()
-		return Markup("<a href='{url}' class='battle'>{text}</a>".format(url=self.get_url(),text=text))
+		return Markup("<a href='{url}' class='battle'>{text}</a>".format(url=self.get_url(), text=text))
 
 
 @battles_app.route('/')
@@ -96,7 +96,7 @@ def get_frames(battle_id):
 	end = int(request.args['end'])
 	return battle.get_frames(start, end)
 	
-@battles_app.route('/new', methods=["GET"])
+@battles_app.route('/new', methods=["GET", "POST"])
 def new_battle_page():
 	"""The page for creating a new battle."""
 	if request.method == "GET":
@@ -106,13 +106,13 @@ def new_battle_page():
 			length = request.form['length']
 			width = request.form['width']
 			height = request.form['height']
-			ranked = bool(request.form['ranked'])
+			ranked = True #bool(request.form['ranked'])
 
 			critters = []
 			for owner_name, critter_name in zip(request.form.getlist('owners[]'), request.form.getlist('critters[]')):
-				critters.append(editor.Critter.from_name(critter_name, owner_name=owner_name))
+				critters.append(Critter.from_name(critter_name, owner_name=owner_name))
 
-			create_battle(length, width, height, critters, ranked)
+			return create_battle(length, width, height, critters, ranked)
 		except Exception as e:
 			traceback.print_exc(file=sys.stdout)
 			return Markup("ERROR: " + repr(e))
@@ -120,19 +120,28 @@ def new_battle_page():
 def create_battle(length, height, width, critters, ranked):
 	"""Actually create a new battle"""
 
-	#create database entry
+	# make sure values are the right type
+	length = int(length)
+	height = int(height)	
+	width = int(width)
+
+	# create database entry
 	current_time = time.time()
 	cursor = g.db.execute('INSERT INTO battles (creation_time, length, width, height, ranked) VALUES (?,?,?,?,?);', (current_time, length, width, height, int(ranked)))
 	battle_id = cursor.lastrowid
 	
+	# create Java Battle
 	jbattle = g.java_server.createBattle(length, width, height)
 
 	# add critters
 	position = 0
 	for critter in critters:
+		critter_name = critter.name
+		owner_name = critter.owner.username
+
 		g.db.execute("INSERT INTO battle_critters (battle_id, critter_id, position) VALUES (?,?,?)", (battle_id, critter.id, position))
 		position += 1
-		print "python adding critter:", owner_name + '.' + critter_name + "({0}{1})".format(critter.id, critter.name)
+		print "python adding critter:", owner_name + '.' + critter_name + "({0}:{1})".format(critter.id, critter.name)
 		jbattle.addCritter(owner_name, critter_name)
 
 	jbattle.start()
@@ -148,7 +157,8 @@ def create_battle(length, height, width, critters, ranked):
 	owner_name, critter_name = jbattle.getWinner().split('.')
 	winner = Critter.from_name(critter_name, owner_name=owner_name)
 	g.db.execute("UPDATE battle_critters SET winner = 1 WHERE critter_id = ?", (winner.id,))
-	g.execute.db("UPDATE critters SET score = score + ? WHERE id = ?", (score_change, winner.id))
+	
+	# g.db.execute("UPDATE critters SET score = score + ? WHERE id = ?", (score_change, winner.id))
 
 	# for loser in jbattle.getLosers():
 	# 	owner_name, critter_name = loser.split('.')

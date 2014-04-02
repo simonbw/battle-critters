@@ -191,7 +191,7 @@ def delete_file(owner, filename):
 
 @editor_app.route('/<owner>/<filename>/compile', methods=["GET","POST"])
 def compile_file(owner, filename):
-	"""Display the page to edit a critter. User must be the owner of the critter or an admin."""
+	"""Compile a file. User must be the owner of the critter or an admin."""
 	if (g.user.username != owner and not g.user.admin):
 		raise Exception("You don't have permission to do that")
 	critter = Critter.from_name(filename, owner_name=owner)

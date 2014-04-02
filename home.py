@@ -4,6 +4,7 @@ Display the home page. Also does news stuff and other static pages. For now.
 
 import time
 import traceback
+import util
 
 from flask import Blueprint, g, render_template, request, redirect, session, url_for, Markup
 
@@ -16,7 +17,7 @@ def home_page():
 	"""Display the homepage. Different for logged in users."""
 	try:
 		if 'username' in session:
-			max_news = 2
+			max_news = int(g.db.execute("SELECT COUNT(*) AS max_news FROM news").fetchone()[0])
 			return render_template('user_home.html', max_news=max_news)
 		else:
 			return render_template('guest_home.html')
@@ -28,17 +29,23 @@ def home_page():
 def news():
 	try:
 		if request.method == "GET":
-			if reqest.args['max']:
-				result = 2
+			if 'max' in request.args:
+				# TODO: Return actual length of news
+				return Markup(g.db.execute("SELECT COUNT(*) AS max_news FROM news").fetchone()[0])
 			else:
 				offset = int(request.args['page'])
-				return render_template('news_format.html', articles=g.db.execute("SELECT * FROM news ORDER BY date DESC LIMIT 1 OFFSET ?", (offset,)).fetchall())
+				rows = g.db.execute("SELECT * FROM news ORDER BY date DESC LIMIT 1 OFFSET ?", (offset,)).fetchall()
+				articles = []
+				for row in rows:
+					article = {'title': row['title'], 'content': row['content'], 'date': util.format_date(int(row['date'])), }
+					articles.append(article)
+				return render_template('news_format.html', articles=articles)
 		elif request.method == "POST" or request.method == "PUT":
 			title = request.form['title']
 			content = request.form['content']
-			g.db.execute("INSERT INTO news (title,date,content) VALUES (?,?,?)", (title,time.time(),content))
+			g.db.execute("INSERT INTO news (title, date, content) VALUES (?,?,?)", (title, time.time(), content))
 			g.db.commit()
-			return "success"	
+			return "success"
 	except Exception as e:
 		traceback.print_exc()
 		return Markup(e)

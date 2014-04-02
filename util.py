@@ -6,7 +6,7 @@ import datetime
 import time
 
 def format_date(seconds):
-	"""Return a date formatted nicely"""
+	"""Return a date/time formatted nicely."""
 	now = datetime.datetime.today()
 	date = datetime.datetime.fromtimestamp(seconds)
 	if date.date() == now.date():

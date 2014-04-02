@@ -1,6 +1,5 @@
 Java Battle Server
 	Improve Dynamic Class loading
-	Declare Winner
 	Security
 		Replace Class Loader for critters to limit which classes they can use
 		File Permissions
@@ -33,8 +32,6 @@ Web Interface
 			My Critters
 	Critter Editor
 		consildate edit and view pages
-		compile via ajax
-		disable ctrl-s default action
 	Static Pages
 		About Us
 		FAQ
@@ -47,3 +44,9 @@ Communications
 	Email Thomas
 		update on progress
 	Get battle-critters@gmail.com
+
+
+==================
+---- THE PLAN ----
+==================
+

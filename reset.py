@@ -14,6 +14,7 @@ import database
 import users
 
 def reset_all():
+	import editor
 	import main
 	from main import app
 	database.init_db(app)
@@ -54,6 +55,13 @@ def reset_all():
 				for name in ["bob", "joe", "example"]:
 					print name
 					u = users.create_user(name, name)
+			except:
+				traceback.print_exc(file=sys.stdout)
+				errored = True
+
+			try:
+				print "Creating default critters..."
+				editor.create_file(users.User.from_username('simon'), 'Husky')
 			except:
 				traceback.print_exc(file=sys.stdout)
 				errored = True

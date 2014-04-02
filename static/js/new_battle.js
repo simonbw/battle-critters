@@ -13,7 +13,7 @@ $(document).ready(function() {
 			width: $("#width").val(),
 			length: $("#length").val()
 		};
-		alert(request_data);
+		console.log(request_data);
 		$.post(NEW_BATTLE_URL, request_data, function(data) {
 			alert(data);
 			var battle_id = parseInt(data);

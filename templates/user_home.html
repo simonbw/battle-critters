@@ -4,7 +4,7 @@
 {{ super() }}
 <script>
 var NEWS_URL = "{{url_for('home_app.news')}}";
-var MAX_NEWS = {{max_news}}l
+var MAX_NEWS = {{max_news}};
 var DELETE_FILE_URL = "{{url_for('editor_app.delete_file', owner=g.user.username, filename='insertfilenamehere')}}";
 var NEW_FILE_URL = "{{url_for('editor_app.new_file', owner=g.user.username, filename='insertfilenamehere')}}";
 var CRITTER_LIST_URL = "{{url_for('editor_app.get_critter_list')}}";
@@ -41,8 +41,7 @@ var USERNAME = "{{g.user.username|safe}}";
 	</div>
 	<div class="module news">
 		<h2>News</h2>
-		<button id="nextnews">Next</button>
-		<button id="previousnews">Previous</button>
+		<button id="previousnews">Newer</button><button id="nextnews">Older</button>
 		<div id="newsbox">
 		</div>
 	</div>
@@ -50,11 +49,13 @@ var USERNAME = "{{g.user.username|safe}}";
 	<div class="module admin">
 		<h2>Admin</h2>
 		<a href="{{url_for('users_app.list_users')}}">All Users</a>
-
-		</input name="title" id="newsformtitle">
+		</br>
+		<h3>Post News</h3>
+		<input name="title" id="newsformtitle"></input>
+		</br>
 		<textarea name="content" id="newsformcontent"></textarea>
+		</br>
 		<button id="postnewsbutton">Submit</button>
-
 	</div>
 	{% endif %}
 </div>

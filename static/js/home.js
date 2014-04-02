@@ -25,12 +25,12 @@ function load_critter_list() {
 		username: USERNAME,
 		delete_buttons: true
 	}, function(data) {
-		console.log(data);
+		// console.log(data);
 		$('#critterlist').html(data);
 	});
 }
 
-// 
+ 
 $(document).ready(function() {
 	load_critter_list();
 	$("#newfilebutton").click(function() {

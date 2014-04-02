@@ -38,12 +38,12 @@ SECRET_KEY = 'development key' #Used to keep client-side sessions secure.
 app.config.from_object(__name__)
 
 def start_java_server():
-  """Start the java server. This should be run in its own process."""
-  cp = os.path.join('.', 'java','bin') + os.pathsep + os.path.join('.', 'java','lib','py4j0.8.jar')
-  command = ["java", "-cp",cp, "battlecritters.Main"]
-  print command
-  subprocess.Popen(command, shell=False)
-  print "Java server started"
+	"""Start the java server. This should be run in its own process."""
+	cp = os.path.join('.', 'java','bin') + os.pathsep + os.path.join('.', 'java','lib','py4j0.8.jar')
+	command = ["java", "-cp", cp, "battlecritters.Main"]
+	print command
+	subprocess.Popen(command, shell=False)
+	print "Java server started"
 
 @app.before_request
 def before_request():

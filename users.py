@@ -82,7 +82,11 @@ class User:
 			AND critters.owner_id=? \
 			ORDER BY battles.creation_time DESC \
 			LIMIT ?;", (self.id, limit)).fetchall()
-		return map(battles.Battle, rows)
+
+		results = []
+		for row in rows:
+			results.append(battles.Battle.from_id(row[0]))
+		return results
 
 	def __str__(self):
 		return "<User: {0},{1}>".format(self.id, self.username)
