@@ -1,47 +1,41 @@
-#faqlist
-{
+#faqlist {
 	background: $light_bg3;
 	box-sizing: border-box;
 	-moz-box-sizing: border-box;
 	border-radius: $module_radius;
-	margin:
-	{
+	margin: {
 		left: 160px;
 		right: 160px;
 	}
-	padding:
-	{
+	padding: {
 		top: 1px;
 		bottom: 1px;
 		left: 20px;
 		right: 20px;
 	}
 
-	li
-	{
+	li {
 		border-bottom: 1px dotted grey;
-		&:last-child{ border-bottom: none; }
+		&:last-child{
+			border-bottom: none;
+		}
 		list-style: none;
-		padding:
-		{
+		padding: {
 			bottom: 10px;
 			top: 0px;
 			left: 0px;
 			right: 0px;
 		}
-		margin:
-		{
+		margin: {
 			top:20px;
 			bottom:10px;
 		}
-		.question
-		{
+		.question {
 			font-size: 20px;
 			font-weight: bold;
 			cursor: pointer;
 		}
-		.answer
-		{
+		.answer {
 
 		}
 	}

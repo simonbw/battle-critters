@@ -1,23 +1,19 @@
-#footer
-{
+#footer {
 	text-align: center;
 	margin: auto;
 	width: 50%;
 	color: #999;
-	font:
-	{
+	font: {
 		size: 12px;
 	}
 
-	.navlist
-	{
+	.navlist {
 		width: 100%;
 		box-sizing: border-box;
 		-moz-box-sizing: border-box;
 		padding: 0px;
 		
-		margin:
-		{
+		margin: {
 			top: 4px;
 			bottom: 4px;
 			left: 0px;
@@ -25,18 +21,20 @@
 		}
 
 		
-		li
-		{
+		li {
 			display: inline;
 			list-style: none;
 			padding: 0px;
 			margin-left: 5px;
 			margin-right: 5px;
-			a
-			{
+			a {
 				color: #DFDFDF;
-				&:hover { color: #FFF; }
-				&:active { color: #FFF; }
+				&:hover {
+					color: #FFF;
+				}
+				&:active {
+					color: #FFF;
+				}
 			}
 		}
 	}

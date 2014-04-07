@@ -1,9 +1,13 @@
 $dark_bg = #0B0B0B;
 $dark_bg_highlight = #323232;
-$main_text = #F7F7F7;
+$main_text = #111111;
 $light_bg = #CFCFCF;
 $light_bg2 = #AFAFAF;
 $light_bg3 = #EEEEEE;
+
+$accent1 = #444;
+$accent2 = #888;
+$accent2 = #BBB;
 
 $module_spacing = 14px;
 $module_radius = 8px;
@@ -17,42 +21,40 @@ $toolbar_font = "Lucida Sans Unicode", "Lucida Grande", sans-serif;
 
 $main_font = Helvetica;
 
-@import	"editor";
-@import	"faq";
-@import	"footer";
-@import	"titlebar";
+@import "battle";
+@import "editor";
+@import "faq";
+@import "footer";
+@import "login";
+@import "mixins";
 @import "news";
+@import "titlebar";
 
-button
-{
+* {
+	box-sizing: border-box;
+}
+
+
+button {
 	cursor: default;
-	a
-	{
+	a {
 		text-decoration: none;
 		color: black;
 		cursor: default;
 	}
 }
-.clear
-{
+.clear {
 	clear: both;
 }
-body
-{
+body {
 	background: url('/static/images/background2.png');
-	padding:
-	{
-		top: 0px;
-		left: 100px;
-		right: 100px;
-	}
+	padding: 0px;
 	font: {
 		family: $main_font;
 		size: 15px;
 	}
 }
-#flashes
-{
+#flashes {
 	margin:auto;
 	margin-bottom: 20px;
 	background: #FFFF00;
@@ -61,73 +63,65 @@ body
 	color: #FF0000; 
 	padding: 4px;
 
-	li
-	{
+	li {
 		margin-left: 20px;
 		list-style: none;
 	}
 }
-#bodybox
-{
+#bodybox {
 	background: $light_bg;
-	color: #111;
-	padding: 
-	{
+	color: $main_text;
+	padding:  {
 		top: 40px;
 		left: 0px;
 		right: 0px;
 		bottom: 10px;
 	}
+	margin: {
+		left: 100px;
+		right: 100px;
+	}
 
 	border-bottom-left-radius: $module_radius;
 	border-bottom-right-radius: $module_radius;
 
-	h1
-	{
+	h1 {
 		display: block;
 		margin: 0px;
 		width: 100%;
 		box-sizing: border-box;
 		-moz-box-sizing: border-box;
 		background: $light_bg2;
-		padding: 
-		{
+		padding:  {
 			left: 20px;
 			right 20px;
 			top: 5px;
 			bottom: 5px;
 		}
-		font:
-		{
+		font: {
 			size : 40px;
 		}
 	}
-	h2
-	{
+	h2 {
 		margin: 0px;
-		font
-		{
+		font: {
 			size: 20px;
 		}
 	}
-	h3
-	{
+	h3 {
 		margin: 0px;
-		font
-		{
+		font {
 			size: 15px;
 		}
 	}
-	h4
-	{
+	h4 {
 		margin: 0px;
 		font
 		{
 			size: 12px;
-		}
+		} 
 	}
-	p
-	{
+	p {
 		padding: 0px;
 		margin:
 		{
@@ -136,62 +130,58 @@ body
 			right: 0px;
 			bottom: 6px;
 		}
-	}
-	section {
-		margin:
-		{
+	} section {
+		margin: {
 			top: $module_spacing;
 			bottom: $module_spacing;
 		}
-		padding:
-		{
+		padding: {
 			left: $module_spacing;
 			right: $module_spacing;
 		}
 	}
-	.module
-	{
+	.module {
 		float: left;
-		margin: 
-		{
+		margin:  {
 			top: $module_spacing;
 			left: $module_spacing;
 			bottom: 0px;
 			right: 0px;
 		}
-		padding: 10px;
+		padding: 16px;
 		background: $light_bg2;
 		border-radius: $module_radius;
 	}
-	.news
-	{
+	.news {
 		max-width: 400px;
 	}
-	.recent_battles
-	{
+	.recent_battles {
 		
 	}
-	.modulebox
-	{
-		padding:
-		{
+	.modulebox {
+		padding: {
 			top: 0px;
 			left: 0px;
 			right: $module_spacing + 0px;
 			bottom: $module_spacing + 0px;
 		}
 	}
-	ul.list
-	{
+	ul.list {
 		list-style: none;
 		margin: 0px;
-		padding:
-		{
+		padding: {
 			left: 10px;
 		}
-		li:
-		{
+		li: {
 			list-style: none;
 		}
 	}
+}
+
+// extras
+.right {
+	float: right;
+}
+.left: {
+	float: left;
 }

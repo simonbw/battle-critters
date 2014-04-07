@@ -1,8 +1,11 @@
 {% extends "layout.html" %}
 {% block title %}Home{% endblock %}
 {% block body %}
-	<h1> Home </h1>
+	<h1>Battle Critters</h1>
 	<section>
-		<p>Battle-Critters is a website that allows you to write scripts that control a group of critters and pit them in battle against other player's AI's. The critters are written in Java. It is easy to create a functioning critter and difficult to create the most powerful one.</p>
+		<div id="loginbox">
+			{% include 'login_box.html' %}
+		</div>
+		<p>Battle Critters is a website that allows you to write scripts that control a group of critters and pit them in battle against other player's AI's. The critters are written in Java. It is easy to create a functioning critter and difficult to create the most powerful one.</p>
 	</section>
 {% endblock %}

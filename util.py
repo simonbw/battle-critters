@@ -3,6 +3,7 @@ Assorted Utility functions and classes for doing all sorts of things. Does not d
 """
 
 import datetime
+import string
 import time
 
 def format_date(seconds):
@@ -12,3 +13,4 @@ def format_date(seconds):
 	if date.date() == now.date():
 		return date.strftime('%I:%M %p')
 	return date.strftime('%a %H:%M %p')
+

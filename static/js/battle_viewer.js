@@ -45,7 +45,7 @@ $(document).ready(function() {
 
 function load_complete() {
 	if (interval_id == null) {
-		// play();
+		play();
 	}
 }
 
@@ -82,7 +82,7 @@ function parse_frame_data(data) {
 		frames[index] = new_frame;
 	}
 
-	$('#loadcounter').html("Frames Loaded:" + frames.length + "/" + (MAX_FRAME + 1) + " in " + chunks_loaded + " chunks");
+	$('#loadcounter').html("Frames Loaded: " + frames.length + "/" + (MAX_FRAME + 1) + " in " + chunks_loaded + " chunks");
 }
 
 function render_frame() {

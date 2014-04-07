@@ -26,6 +26,7 @@ function time() {
 }
 
 $(document).ready(function() {
+	// EDITING
 	$("#errordisplay").hide();
 
 	$("#errordisplay").click(function() {
@@ -34,13 +35,13 @@ $(document).ready(function() {
 
 	if (AUTOSAVE)
 		$("#autosavebutton").html("Disable Autosave");
-	else 
+	else
 		$("#autosavebutton").html("Enable Autosave");
 	$("#autosavebutton").click(function() {
 		AUTOSAVE = !AUTOSAVE;
 		if (AUTOSAVE)
 			$("#autosavebutton").html("Disable Autosave");
-		else 
+		else
 			$("#autosavebutton").html("Enable Autosave");
 	});
 
@@ -83,6 +84,7 @@ $(document).ready(function() {
 		$('#compilestatus').html("uncompiled");
 		$('#statusbar').addClass('unsaved');
 		$('#statusbar').removeClass('error');
+		resetHeight();
 		saved = false;
 
 		if (AUTOSAVE) {
@@ -109,10 +111,12 @@ $(document).ready(function() {
 					$("#errordisplay").slideDown(150);
 					$('#savestatus').html("Error Saving");
 					$('#statusbar').addClass('error');
+					resetHeight();
 				} else {
 					saved = true;
 					$('#savestatus').html("Last saved: " + time());
 					$('#statusbar').removeClass("unsaved");
+					resetHeight();
 				}
 				if (callback != undefined) {
 					callback(data);
@@ -129,6 +133,7 @@ $(document).ready(function() {
 			compiling = true;
 			editor.setOption("readOnly", true);
 			f = function(savedata) {
+				resetHeight();
 				console.log("compiling " + COMPILEPATH);
 				$('#compilestatus').html("Compiling...");
 				$('#statusbar').addClass('compiling');
@@ -143,13 +148,14 @@ $(document).ready(function() {
 						$("#errordisplay").slideDown(150);
 						$('#compilestatus').html("Compilation Error");
 						$('#statusbar').addClass('error');
-
+						resetHeight();
 					} else {
 						$('#compilestatus').html("Compiled Successfully");
 						$('#statusbar').addClass('compiled');
 						$('#statusbar').removeClass('error');
 						$("#errordisplay").html("");
 						$("#errordisplay").slideDown(150);
+						resetHeight();
 					}
 				});
 			}
@@ -170,4 +176,49 @@ $(document).ready(function() {
 		}
 	}
 
+	/**
+	 * Sets the maximum height so the editor doesn't go off the page.
+	 */
+	function resetHeight() {
+		var maxHeight = $(window).height() - $("#editor").offset().top - $('#statusbar').height() - $('#toolbar').height() - 140;
+		$('.CodeMirror-scroll').css('max-height', '' + maxHeight + 'px');
+		$('#editorbox #helpbox').css('max-height', '' + maxHeight + 'px');
+		var minHeight = $('#editorbox #helpbox').height() + 50;
+		$('.CodeMirror-scroll').css('min-height', '' + minHeight + 'px');
+		editor.refresh();
+	}
+
+	// // This is sketchy but it guarantees that Codemirror eventually works
+	// window.setInterval(function() {
+	// 	editor.refresh();
+	// 	resetHeight();
+	// }, 500);
+
+	/**
+	 * Set the active help tab.
+	 */
+	function helpTab(i) {
+		$('#helpbox .tab').hide();
+		$('#helpbox .tabbutton').removeClass('active');
+		$('#helpbox .tab:eq(' + i + ')').show();
+		$('#helpbox .tabbutton:eq(' + i + ')').addClass('active');
+		resetHeight();
+	}
+
+	// there should be a better way to do this...
+	$('#helpbox #tabbuttonbar .tabbutton:eq(' + 0 + ')').click(function() {
+		helpTab(0);
+	});
+	$('#helpbox #tabbuttonbar .tabbutton:eq(' + 1 + ')').click(function() {
+		helpTab(1);
+	});
+	$('#helpbox #tabbuttonbar .tabbutton:eq(' + 2 + ')').click(function() {
+		helpTab(2);
+	});
+	helpTab(0);
+
+	resetHeight();
+	$(window).resize(resetHeight);
+
+	setTimeout(resetHeight, 10);
 });

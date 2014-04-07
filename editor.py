@@ -4,6 +4,7 @@ Handles the model, as well as pages for editing and viewing, of critter code.
 
 import os
 import re
+import string
 import subprocess
 import sys
 import time
@@ -17,6 +18,11 @@ import users
 import ranking
 
 FILENAME_TEST = re.compile(r'[A-Z|a-z][\w]*')
+JAVA_KEYWORDS = ('abstract', 'continue', 'for', 'new', 'switch', 'assert', 'default', 'goto', 'package', 'synchronized', 'boolean', 'do', 'if', 'private', 'this','break', 'double', 'implements', 'protected', 'throw', 'byte', 'else', 'import', 'public', 'throws', 'case', 'enum', 'instanceof', 'return', 'transient', 'catch', 'extends', 'int', 'short', 'try','char', 'final', 'interface', 'static', 'void', 'class', 'finally', 'long', 'strictfp', 'volatile','const', 'float', 'native', 'super', 'while')
+JAVA_LETTERS = string.ascii_letters
+JAVA_DIGITS = string.digits
+JAVA_LETTERS_OR_DIGITS = JAVA_LETTERS + JAVA_DIGITS
+MAX_CLASS_NAME_LENGTH = 128
 COMPRESSION_LEVEL = 1
 DEFAULT_CONTENT = ""
 with open(os.path.join('static', 'default_critter.java')) as f:
@@ -218,7 +224,7 @@ def new_file(owner, filename):
 	if (g.user.username != owner and not g.user.admin):
 		raise Exception("You don't have permission to do that")
 	try:
-		if not FILENAME_TEST.match(filename):
+		if not check_filename(filename):
 			raise Exception("Invalid Class Name")
 		if (g.user.username != owner and not g.user.admin):
 			raise Exception("You don't have permission to do that")
@@ -233,7 +239,7 @@ def new_file(owner, filename):
 		return "success"
 	except Exception as e:
 		traceback.print_exc(file=sys.stdout)
-		return Markup("ERROR2: " + str(e))
+		return Markup("ERROR: " + str(e))
 
 def create_file(owner, filename, content=None):
 	"""Actually create a new critter"""
@@ -257,3 +263,16 @@ def process_file(content, owner, filename):
 	content = "\n".join(prepends) + "\n" + content
 	
 	return content
+
+def check_filename(filename):
+	"""Returns True if filename is a valid name for a Critter, else returns False."""
+	if len(filename) < 1 or len(filename) > MAX_CLASS_NAME_LENGTH:
+		return False
+	if filename in JAVA_KEYWORDS:
+		return False
+	if filename[0] not in JAVA_LETTERS:
+		return False
+	for c in filename:
+		if c not in JAVA_LETTERS_OR_DIGITS:
+			return False
+	return True

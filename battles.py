@@ -54,6 +54,9 @@ class Battle():
 		query = "SELECT * FROM battle_frames WHERE battle_id=? AND frame_number>=? AND frame_number<=?;"
 		rows = g.db.execute(query, (self.id, start, end)).fetchall()
 		lines = ["FRAME " + str(row['frame_number']) + "\n" + row['data'] for row in rows]
+
+		# TODO: PLEASE REMOVE THIS. THIS IS JUST TO SIMULATE LATENCY
+		time.sleep(0.1)
 		return "\n".join(lines)
 
 	def get_frame_url(self):

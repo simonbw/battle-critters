@@ -4,8 +4,8 @@
 {{super()}}
 {% if g.user == critter.owner %}
 <script type="text/javascript">
-SAVEPATH = "{{critter.get_url('save')|safe}}";
-COMPILEPATH = "{{critter.get_url('compile')|safe}}";
+	SAVEPATH = "{{critter.get_url('save')|safe}}";
+	COMPILEPATH = "{{critter.get_url('compile')|safe}}";
 </script>
 <script type="text/javascript" src="{{url_for('static', filename='codemirror/lib/codemirror.js')}}"></script>
 <script type="text/javascript" src="{{url_for('static', filename='codemirror/mode/clike/clike.js')}}"></script>
@@ -35,19 +35,157 @@ COMPILEPATH = "{{critter.get_url('compile')|safe}}";
 			<div class="clear"></div>
 		</div>
 	</div>
-
-	<textarea id="editor">{{critter.content}}</textarea>
-	
+	<div id="middlebox">
+		<textarea id="editor">{{critter.content}}</textarea>
+		<div id="helpbox">
+			<div id=tabbuttonbar>
+				<a class="tabbutton">API</a>
+				<a class="tabbutton">Keyboard Shortcuts</a>
+				<a class="tabbutton">Other Stuff</a>
+				<div class="clear"></div>
+			</div>
+			<div id="helpboxcontent">
+				<div class="tab">
+					<h1>Critter API</h1>
+					<p>This pane is to give you some reminders about the Critter API.</p>
+					<h2>Action</h2>
+					<table>
+						<tr>
+							<td>HOP</td>
+							<td>Move the critter forward</td>
+						</tr>
+						<tr>
+							<td>INFECT</td>
+							<td>Infect the critter in front of this critter</td>
+						</tr>
+						<tr>
+							<td>RIGHT</td>
+							<td>Turn clockwise</td>
+						</tr>
+						<tr>
+							<td>LEFT</td>
+							<td>Turn counter-clockwise</td>
+						</tr>
+					</table>
+					<h2>CritterInfo</h2>
+					<table>
+						<tr>
+							<td>getFront()</td>
+							<td>Returns the <code>Neighbor</code> in front of this Critter.</td>
+						</tr>
+						<tr>
+							<td>getBack()</td>
+							<td>Returns the <code>Neighbor</code> behind this Critter.</td>
+						</tr>
+						<tr>
+							<td>getLeft()</td>
+							<td>Returns the <code>Neighbor</code> to the left of this Critter.</td>
+						</tr>
+						<tr>
+							<td>getRight()</td>
+							<td>Returns the <code>Neighbor</code> to the right of this Critter.</td>
+						</tr>
+						<tr>
+							<td>getDirection()</td>
+							<td>Returns the <code>Direction</code> this Critter is facing.</td>
+						</tr>
+						<tr>
+							<td>getInfectCount()</td>
+							<td>Returns the number of critters this critter has infected as an <code>int</code></td>
+						</tr>
+					</table>
+					<h2>Neighbor</h2>
+					<table>
+						<tr>
+							<td>WALL</td>
+							<td>Walls at the edge of the map. Cannot be moved through.</td>
+						</tr>
+						<tr>
+							<td>SAME</td>
+							<td>Another critter of the same type.</td>
+						</tr>
+						<tr>
+							<td>OTHER</td>
+							<td>A critter of a different type.</td>
+						</tr>
+						<tr>
+							<td>EMPTY</td>
+							<td>An empty cell.</td>
+						</tr>
+					</table>
+					<h2>Direction</h2>
+					<table>
+						<tr>
+							<td>NORTH</td>
+							<td></td>
+						</tr>
+						<tr>
+							<td>SOUTH</td>
+							<td></td>
+						</tr>
+						<tr>
+							<td>EAST</td>
+							<td></td>
+						</tr>
+						<tr>
+							<td>WEST</td>
+							<td></td>
+						</tr>
+					</table>
+				</div>
+				<div class="tab">
+					<h1>Keyboard Shortcuts</h1>
+					<h2>Files</h2>
+					<table>
+						<tr>
+							<td>Ctrl+S</td>
+							<td>Save Critter</td>
+						</tr>
+						<tr>
+							<td>Ctrl+B</td>
+							<td>Build Critter</td>
+						</tr>
+					</table>
+					<h2>Editing</h2>
+					<table>
+						<tr>
+							<td>Ctrl+D</td>
+							<td>Delete Line</td>
+						</tr>
+						<tr>
+							<td>Ctrl+Z</td>
+							<td>Undo</td>
+						</tr>
+						<tr>
+							<td>Ctrl+Shift+Z</td>
+							<td>Redo</td>
+						</tr>
+						<tr>
+							<td>Ctrl+Y</td>
+							<td>Redo</td>
+						</tr>
+					</table>
+				</div>
+				<div class="tab">
+					<h1>Other Stuff</h1>
+				</div>
+				<div class="clear"></div>
+			</div>
+			<div class="clear"></div>
+		</div>
+		<div class="clear"></div>
+	</div>
 	<div id="statusbar">
 		<li id="savestatus"></li>
 		<li id="compilestatus"></li>
 		<div id="errordisplay"></div>
 	</div>
 </div>
+
 {% else %}
 <h1>{{critter.name}}</h1>
 <section>
-<p> Some stats about the critter </p>
+	<p> Some stats about the critter </p>
 </section>
 {% endif %}
 {% endblock bodybox%}

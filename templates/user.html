@@ -2,15 +2,17 @@
 {% block title %}User: {{user.username}}{% endblock %}
 {% block body %}
 <h1>{{user.username}}</h1>
-<p>
-	This is where some stats about the user will go.
-</p>
-<h2>Critters</h2>
-<ul class="critterlist">
-	{% for critter in user.get_critters() %}
-	<li>
-		{{critter.get_link()|safe}}
-	</li>
-	{% endfor %}
-</ul>
+<section>
+	<p>
+		This is where some stats about the user will go.
+	</p>
+	<h2>Critters</h2>
+	<ul class="critterlist">
+		{% for critter in user.get_critters() %}
+		<li>
+			{{critter.get_link()|safe}}
+		</li>
+		{% endfor %}
+	</ul>
+</section>
 {% endblock %}

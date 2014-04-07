@@ -1,5 +1,4 @@
-#titlebar
-{
+#titlebar {
 	padding: 4px;
 	top: 0px;
 	left: 0px;
@@ -11,17 +10,22 @@
 	background: $toolbar_bg;
 	box-shadow: 0px 0px 3px 3px rgba(0,0,0,0.6);
 	color: $toolbar_text;
-	a
-	{
+	a {
 		color: #EAEAEA;
-		&:hover {color: #FFF;}
+		&:hover {
+			color: #FFF;
+		}
 	}
 
-	.center { float: center; }
+	.center {
+		float: center;
+	}
 	.left {
 		float: left;
 		margin-left: 20px;
-		.item { float: left; }
+		.item {
+			float: left;
+		}
 	}
 	.right {
 		float: right;

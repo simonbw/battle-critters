@@ -4,6 +4,7 @@
 {{ super() }}
 <script>
 $(document).ready(function($) {
+	$('.answer').hide();
 	$(".question").click(function(event) {
 		$(this).parent().children(".answer").slideToggle(150);
 	});
