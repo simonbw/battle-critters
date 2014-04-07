@@ -1,0 +1,13 @@
+<form action="login" method="POST" id="loginform">
+	<fieldset>
+		<legend>Login</legend>
+		<label>
+			<input type="text" name="username" autofocus="autofocus" placeholder="username"/>
+		</label>
+		<label for="passwordinput">
+			<input type="password" name="password" placeholder="password"/>
+		</label>
+		<button type="Submit">login</button>
+		<a href="{{url_for('editor_app.get_critter_list')}}">Make an account</a>
+	</fieldset>
+</form>

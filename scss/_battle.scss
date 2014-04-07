@@ -1,0 +1,76 @@
+#abovebar {
+	background: $light_bg2;
+	padding: 4px;
+	margin: 0px;
+
+	a {
+		cursor: pointer;
+		float:left;
+		margin: 0px;
+		background: none;
+		border: 1px solid $light_bg2;
+		font-size: 13px;
+		color: $accent1;
+		-moz-user-select: none;
+		-webkit-user-select: none;
+		-ms-user-select: none;
+
+		padding: {
+			top: 2px;
+			bottom: 2px;
+			left: 6px;
+			right: 6px;
+		}
+
+		&.active {
+			background: $light_bg3;
+		}
+		&:hover {
+			color: #EEE;
+		}
+	}
+}
+#belowbar {
+	background: $light_bg2;
+	padding: 4px;
+	margin: 0px;
+	clear: both;
+}
+#loadcounter {
+	font-size: 12px;
+}
+#framecounter {
+	text-align: center;
+	display: block;
+	float: left;
+	height: 100%;
+	background: $light_bg3;
+	color: $accent1;
+	vertical-align: middle;
+	padding: {
+		top: 2px;
+		bottom: 2px;
+		left: 6px;
+		right: 6px;
+	}
+}
+#battlefield {
+	border: 2px solid #000000;
+	background: #FFF;
+	margin: 0px;
+	padding: 0px;
+	float:left;
+
+}
+#sidebar {
+	float:left;
+	padding: 10px;
+}
+.critterlabel {
+	padding: 4px;
+	background: #666;
+
+	&.winner {
+		border: 2px solid #FFF;
+	}
+}

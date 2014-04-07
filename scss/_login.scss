@@ -1,0 +1,51 @@
+#loginbox {
+	float: right;
+	margin: {
+		left: $module_spacing;
+		right: $module_spacing;
+	}
+}
+
+#loginform {
+	max-width: 250px;
+	fieldset {
+		border: 2px solid $accent1;
+		border-radius: $module_radius;
+		background: $light_bg3;
+		padding: 16px;
+
+		legend {
+			background: $light_bg3;
+			padding: {
+				left: 8px;
+				right: 8px;
+				top: 4px;
+				bottom: 0px;
+			}
+			border: {
+				top: 2px solid $accent1;
+				left: 1px solid $accent1;
+				right: 1px solid $accent1;
+			}
+			border-top-left-radius: $module_radius;
+			border-top-right-radius: $module_radius;
+		}
+	}
+	input {
+		width: 100%;
+		box-sizing: border-box;
+		background: #FFF;
+		&:focus {
+			background: #FFFFDD;
+		}
+	}
+	label {
+		width: 100%;
+		display: block;
+		box-sizing: border-box;
+	}
+	button {
+		width: 100%;
+		box-sizing: border-box;
+	}
+}
