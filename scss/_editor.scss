@@ -1,3 +1,5 @@
+@import "editor-theme";
+
 #editorbox {
 	margin: {
 		top: 50px;
@@ -246,4 +248,38 @@
 			}
 		}
 	}
+}
+
+// Find/Replace bar
+.CodeMirror-dialog {
+	position: absolute;
+	left: 0px; right: 0px;
+	bottom: 0px;
+	background: $dark_bg;
+	color: $accent2;
+	z-index: 15;
+	padding: .1em .8em;
+	overflow: hidden;
+}
+
+.CodeMirror-dialog-top {
+	border-top: 1px solid $accent2;
+}
+
+.CodeMirror-dialog-bottom {
+	// border-top: 1px solid $accent2;
+	bottom: 0;
+}
+
+.CodeMirror-dialog input {
+	border: none;
+	outline: none;
+	background: transparent;
+	width: 20em;
+	color: inherit;
+	font-family: monospace;
+}
+
+.CodeMirror-dialog button {
+	font-size: 70%;
 }

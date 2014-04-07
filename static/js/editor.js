@@ -3,11 +3,15 @@ AUTOSAVE = true; // bool if editor should automatically save
 AUTOSAVE_WAIT = 500; // milliseconds idle before autosaving.
 EDITOR_ID = '#editor'; // id of the text area
 
-// KEYS //
+// SETUP KEYS //
+var BLOCK_KEYS = "S"
 $(document).bind('keydown', function(e) {
-	if (e.ctrlKey && (e.which == 83)) {
-		e.preventDefault();
-		return false;
+	var k = e.which;
+	for (var i = 0; i < BLOCK_KEYS.length; i++) {
+		if (e.ctrlKey && (k == BLOCK_KEYS.charCodeAt(i))) {
+			e.preventDefault();
+			return false;
+		}
 	}
 });
 
@@ -33,10 +37,12 @@ $(document).ready(function() {
 		$(this).slideUp(100)
 	});
 
-	if (AUTOSAVE)
+	if (AUTOSAVE) {
 		$("#autosavebutton").html("Disable Autosave");
-	else
+	}
+	else {
 		$("#autosavebutton").html("Enable Autosave");
+	}
 	$("#autosavebutton").click(function() {
 		AUTOSAVE = !AUTOSAVE;
 		if (AUTOSAVE)
@@ -76,6 +82,7 @@ $(document).ready(function() {
 		smartIndent: true,
 		indentUnit: 4,
 		undoDepth: 100,
+		keyMap: "sublime",
 		extraKeys: keymap,
 		theme: "custom_theme",
 	});
@@ -98,7 +105,7 @@ $(document).ready(function() {
 	 */
 	function save(callback) {
 		if (!saving && !saved) {
-			console.log("saving to " + SAVEPATH)
+			// console.log("saving to " + SAVEPATH)
 			$('#savestatus').html("Saving...");
 			saving = true;
 			$.post(SAVEPATH, {
@@ -134,7 +141,7 @@ $(document).ready(function() {
 			editor.setOption("readOnly", true);
 			f = function(savedata) {
 				resetHeight();
-				console.log("compiling " + COMPILEPATH);
+				// console.log("compiling " + COMPILEPATH);
 				$('#compilestatus').html("Compiling...");
 				$('#statusbar').addClass('compiling');
 				$('#statusbar').removeClass('error');

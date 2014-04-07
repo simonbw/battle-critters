@@ -1,17 +1,17 @@
 .cm-s-custom_theme.CodeMirror {
-	background: #141414; 
-	color: #f7f7f7;
-	border-right: 1px solid #222;
+	background: $dark_bg; 
+	color: $main_text2;
+	border-right: 1px solid $gutter_bg;
 } 
 
 .cm-s-custom_theme {
 	.CodeMirror-selected { background: #434343 !important;}
 	.CodeMirror-gutters {
-		background: #222; 
-		border-right: 1px solid #888;
+		background: $gutter_bg; 
+		border-right: 1px solid $accent2;
 	}
 	.CodeMirror-linenumber {
-		color: #aaa;
+		color: $gutter_text;
 	}
 	.CodeMirror-cursor {
 		border-left: 1px solid white !important;
@@ -49,8 +49,8 @@
 		color:#bd6b18;
 	}
 	.cm-meta {
-		background-color:#141414;
-		color:#f7f7f7;
+		background-color:$dark_bg;
+		color:$main_text2;
 	} 
 	.cm-error {
 		border-bottom: 1px solid red;
