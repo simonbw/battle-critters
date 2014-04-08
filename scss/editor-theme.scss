@@ -1,3 +1,5 @@
+@import "mixins";
+
 .cm-s-custom_theme.CodeMirror {
 	background: $dark_bg; 
 	color: $main_text2;
@@ -5,7 +7,7 @@
 } 
 
 .cm-s-custom_theme {
-	.CodeMirror-selected { background: #434343 !important;}
+	.CodeMirror-selected { background: $accent1 !important;}
 	.CodeMirror-gutters {
 		background: $gutter_bg; 
 		border-right: 1px solid $accent2;
@@ -38,19 +40,19 @@
 		color: #cda869;
 	} 
 	.cm-comment {
-		color:#777;
-		font-style:italic;
-		font-weight:normal;
+		color: #777;
+		font-style: italic;
+		font-weight: normal;
 	}
 	.cm-string {
-		color:#8f9d6a; font-style:italic;
+		color: #8f9d6a; font-style: italic;
 	}
 	.cm-string-2 {
-		color:#bd6b18;
+		color: #bd6b18;
 	}
 	.cm-meta {
-		background-color:$dark_bg;
-		color:$main_text2;
+		background-color: $dark_bg;
+		color: $main_text2;
 	} 
 	.cm-error {
 		border-bottom: 1px solid red;
@@ -71,8 +73,16 @@
 		color: #AEAEAE;
 	}
 	.cm-link {
-		color:#ad9361;
-		font-style:italic;
-		text-decoration:none;
+		color: #ad9361;
+		font-style: italic;
+		text-decoration: none;
 	} 
+	// 
+	.CodeMirror-matchingbracket {
+		text-decoration: underline;
+		color: $main_text2 !important;
+	}
+	.CodeMirror-activeline-background {
+		background: lighten($dark_bg, 3%);
+	}
 }

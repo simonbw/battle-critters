@@ -17,7 +17,6 @@ from flask import Flask, g, redirect, request, session, render_template, Bluepri
 import users
 import ranking
 
-FILENAME_TEST = re.compile(r'[A-Z|a-z][\w]*')
 JAVA_KEYWORDS = ('abstract', 'continue', 'for', 'new', 'switch', 'assert', 'default', 'goto', 'package', 'synchronized', 'boolean', 'do', 'if', 'private', 'this','break', 'double', 'implements', 'protected', 'throw', 'byte', 'else', 'import', 'public', 'throws', 'case', 'enum', 'instanceof', 'return', 'transient', 'catch', 'extends', 'int', 'short', 'try','char', 'final', 'interface', 'static', 'void', 'class', 'finally', 'long', 'strictfp', 'volatile','const', 'float', 'native', 'super', 'while')
 JAVA_LETTERS = string.ascii_letters
 JAVA_DIGITS = string.digits
@@ -197,7 +196,7 @@ def delete_file(owner, filename):
 
 @editor_app.route('/<owner>/<filename>/compile', methods=["GET","POST"])
 def compile_file(owner, filename):
-	"""Compile a file. User must be the owner of the critter or an admin."""
+	"""Compile a file. User must be the owner of the critter or an admin. Returns 'success', else returns compiler error message."""
 	if (g.user.username != owner and not g.user.admin):
 		raise Exception("You don't have permission to do that")
 	critter = Critter.from_name(filename, owner_name=owner)
@@ -216,7 +215,7 @@ def compile_file(owner, filename):
 		subprocess.check_output(command, stderr=subprocess.STDOUT, shell=True)
 		return "success"
 	except subprocess.CalledProcessError as e:
-		return Markup(e.output.replace("\n","<br>"))
+		return Markup(format_compiler_output(e.output))
 
 @editor_app.route('/<owner>/<filename>/new', methods=["POST", "PUT"])
 def new_file(owner, filename):
@@ -253,15 +252,17 @@ def create_file(owner, filename, content=None):
 	g.db.execute(query, (current_time, current_time, filename, owner.id, content, ranking.DEFAULT_SCORE))
 	g.db.commit()
 
+def compile_file_actual():
+	"""Actually compiles a file"""
+	pass
+
 def process_file(content, owner, filename):
 	"""Process a raw code file to be compiled."""
 	prepends = []
 	prepends.append("package battlecritters.critters.{owner};".format(owner=owner))
 	prepends.append("import battlecritters.battle.Critter;".format(owner=owner))
 	prepends.append("import battlecritters.battle.CritterInfo;".format(owner=owner))
-
 	content = "\n".join(prepends) + "\n" + content
-	
 	return content
 
 def check_filename(filename):
@@ -276,3 +277,19 @@ def check_filename(filename):
 		if c not in JAVA_LETTERS_OR_DIGITS:
 			return False
 	return True
+
+def format_compiler_output(s):
+	# Remove filepaths
+	search = r'\./java/temp_critters/(\w*.java)'
+	replace = r'\1'
+	s = re.sub(search, replace, s)
+	# Fix line numbers
+	search = r'(\w*.java:)(\d+)'
+	replace = lambda m: m.groups()[0] + str(int(m.groups()[1]) - 3)
+	s = re.sub(search, replace, s)
+
+	# HTML line breaks
+	s = s.replace("\n", "<br>")
+	# Non breaking spaces
+	s = s.replace(' ', '&nbsp;')
+	return s

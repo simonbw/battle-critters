@@ -161,62 +161,6 @@
             background: #666; }
             .critterlabel.winner {
               border: 2px solid #FFF; }
-.cm-s-custom_theme.CodeMirror {
-  background: #141414;
-  color: #FAFAFA;
-  border-right: 1px solid #2A2A2A; }
-
-  .cm-s-custom_theme .CodeMirror-selected {
-    background: #434343 !important; }
-    .cm-s-custom_theme .CodeMirror-gutters {
-      background: #2A2A2A;
-      border-right: 1px solid #888; }
-      .cm-s-custom_theme .CodeMirror-linenumber {
-        color: #BBB; }
-        .cm-s-custom_theme .CodeMirror-cursor {
-          border-left: 1px solid white !important; }
-          .cm-s-custom_theme .cm-keyword {
-            color: #f9ee98; }
-            .cm-s-custom_theme .cm-atom {
-              color: #FC0; }
-              .cm-s-custom_theme .cm-number {
-                color: #ca7841; }
-                .cm-s-custom_theme .cm-def {
-                  color: #8DA6CE; }
-                  .cm-s-custom_theme span.cm-variable-2, .cm-s-custom_theme span.cm-tag {
-                    color: #607392; }
-                    .cm-s-custom_theme span.cm-variable-3, .cm-s-custom_theme span.cm-def {
-                      color: #607392; }
-                      .cm-s-custom_theme .cm-operator {
-                        color: #cda869; }
-                        .cm-s-custom_theme .cm-comment {
-                          color: #777;
-                          font-style: italic;
-                          font-weight: normal; }
-                          .cm-s-custom_theme .cm-string {
-                            color: #8f9d6a;
-                            font-style: italic; }
-                            .cm-s-custom_theme .cm-string-2 {
-                              color: #bd6b18; }
-                              .cm-s-custom_theme .cm-meta {
-                                background-color: #141414;
-                                color: #FAFAFA; }
-                                .cm-s-custom_theme .cm-error {
-                                  border-bottom: 1px solid red; }
-                                  .cm-s-custom_theme .cm-builtin {
-                                    color: #cda869; }
-                                    .cm-s-custom_theme .cm-tag {
-                                      color: #997643; }
-                                      .cm-s-custom_theme .cm-attribute {
-                                        color: #d6bb6d; }
-                                        .cm-s-custom_theme .cm-header {
-                                          color: #FF6400; }
-                                          .cm-s-custom_theme .cm-hr {
-                                            color: #AEAEAE; }
-                                            .cm-s-custom_theme .cm-link {
-                                              color: #ad9361;
-                                              font-style: italic;
-                                              text-decoration: none; }
 #editorbox {
   margin-top: 50px;
   margin-left: 100px;
@@ -226,7 +170,7 @@
     padding-bottom: 4px;
     padding-left: 10px;
     padding-right: 10px;
-    background: #888;
+    background: #8B8B8B;
     color: #FAFAFA;
     font-family: "Lucida Sans Unicode", "Lucida Grande", sans-serif;
     font-size: 12px; }
@@ -300,9 +244,78 @@
               margin: auto;
               background: white;
               color: black;
-              max-height: 200px; }
+              max-height: 200px;
+              overflow-y: auto;
+              font-family: monospace;
+              font-size: 12px; }
   #editorbox #editor {
     height: auto; }
+
+#helpbox {
+  margin: 0px;
+  float: right;
+  width: 30%;
+  overflow-y: auto;
+  box-sizing: border-box;
+  padding: 10px; }
+  #helpbox p {
+    padding: 0px;
+    margin-top: 2px;
+    margin-bottom: 2px; }
+    #helpbox h1 {
+      font-size: 22px;
+      margin-left: 0px;
+      margin-right: 0px;
+      margin-top: 12px;
+      margin-bottom: 8px; }
+      #helpbox h2 {
+        font-size: 16px;
+        margin-top: 10px;
+        margin-bottom: 4px;
+        border-bottom: 1px dashed #AAA; }
+        #helpbox table {
+          width: 100%;
+          margin: 0px;
+          box-sizing: border-box;
+          background: #EEE;
+          font-size: 12px;
+          border-collapse: collapse; }
+          #helpbox table tr {
+            border-top: 1px dotted #CFCFCF; }
+            #helpbox table tr:first-child {
+              border-top: none; }
+              #helpbox table td {
+                padding-top: 2px;
+                padding-left: 4px;
+                padding-right: 4px; }
+                #helpbox table td:first-child {
+                  font-weight: bold;
+                  padding-right: 8px;
+                  font-family: monospace; }
+  #helpbox #tabbuttonbar {
+    background: #AAA;
+    width: 100%; }
+    #helpbox #tabbuttonbar .tabbutton {
+      cursor: pointer;
+      float: left;
+      margin: 0px;
+      background: none;
+      font-size: 13px;
+      color: #3A3A3A;
+      -moz-user-select: none;
+      -webkit-user-select: none;
+      -ms-user-select: none;
+      padding-top: 2px;
+      padding-bottom: 2px;
+      padding-left: 8px;
+      padding-right: 8px; }
+      #helpbox #tabbuttonbar .tabbutton.active {
+        cursor: default;
+        background: #EEE; }
+        #helpbox #tabbuttonbar .tabbutton.active:hover {
+          color: #3A3A3A; }
+      #helpbox #tabbuttonbar .tabbutton:hover {
+        color: #EEE; }
 
 .CodeMirror {
   height: auto;
@@ -310,105 +323,47 @@
   width: 70%;
   float: left;
   box-sizing: border-box; }
+  .CodeMirror .compile-error {
+    background: #581414; }
 
-  .CodeMirror-scroll {
-    min-height: 10px;
-    max-height: 300px;
-    box-sizing: border-box; }
+.CodeMirror-scroll {
+  min-height: 10px;
+  max-height: 300px;
+  box-sizing: border-box; }
 
-    #helpbox {
-      margin: 0px;
-      float: right;
-      width: 30%;
-      overflow-y: auto;
-      box-sizing: border-box;
-      padding: 10px; }
-      #helpbox p {
-        padding: 0px;
-        margin-top: 2px;
-        margin-bottom: 2px; }
-        #helpbox h1 {
-          font-size: 22px;
-          margin-left: 0px;
-          margin-right: 0px;
-          margin-top: 12px;
-          margin-bottom: 8px; }
-          #helpbox h2 {
-            font-size: 16px;
-            margin-top: 10px;
-            margin-bottom: 4px;
-            border-bottom: 1px dashed #AAA; }
-            #helpbox table {
-              width: 100%;
-              margin: 0px;
-              box-sizing: border-box;
-              background: #EEE;
-              font-size: 12px;
-              border-collapse: collapse; }
-              #helpbox table tr {
-                border-top: 1px dotted #CFCFCF; }
-                #helpbox table tr:first-child {
-                  border-top: none; }
-                  #helpbox table td {
-                    padding-top: 2px;
-                    padding-left: 4px;
-                    padding-right: 4px; }
-                    #helpbox table td:first-child {
-                      font-weight: bold;
-                      padding-right: 8px;
-                      font-family: monospace; }
-      #helpbox #tabbuttonbar {
-        background: #AAA;
-        width: 100%; }
-        #helpbox #tabbuttonbar .tabbutton {
-          cursor: pointer;
-          float: left;
-          margin: 0px;
-          background: none;
-          font-size: 13px;
-          color: #3A3A3A;
-          -moz-user-select: none;
-          -webkit-user-select: none;
-          -ms-user-select: none;
-          padding-top: 2px;
-          padding-bottom: 2px;
-          padding-left: 8px;
-          padding-right: 8px; }
-          #helpbox #tabbuttonbar .tabbutton.active {
-            cursor: default;
-            background: #EEE; }
-            #helpbox #tabbuttonbar .tabbutton.active:hover {
-              color: #3A3A3A; }
-          #helpbox #tabbuttonbar .tabbutton:hover {
-            color: #EEE; }
+  .CodeMirror-dialog {
+    position: absolute;
+    left: 0px;
+    right: 0px;
+    bottom: 0px;
+    background: #141414;
+    color: #888;
+    z-index: 15;
+    padding: 0.1em 0.8em;
+    overflow: hidden; }
 
-.CodeMirror-dialog {
-  position: absolute;
-  left: 0px;
-  right: 0px;
-  bottom: 0px;
-  background: #141414;
-  color: #888;
-  z-index: 15;
-  padding: 0.1em 0.8em;
-  overflow: hidden; }
+    .CodeMirror-dialog-top {
+      border-top: 1px solid #888; }
 
-  .CodeMirror-dialog-top {
-    border-top: 1px solid #888; }
+      .CodeMirror-dialog-bottom {
+        bottom: 0; }
 
-    .CodeMirror-dialog-bottom {
-      bottom: 0; }
+        .CodeMirror-dialog input {
+          border: none;
+          outline: none;
+          background: transparent;
+          width: 20em;
+          color: inherit;
+          font-family: monospace; }
 
-      .CodeMirror-dialog input {
-        border: none;
-        outline: none;
-        background: transparent;
-        width: 20em;
-        color: inherit;
-        font-family: monospace; }
-
-        .CodeMirror-dialog button {
-          font-size: 70%; }
+          .CodeMirror-dialog button {
+            height: 100%;
+            background: none;
+            border: 1px solid #3A3A3A;
+            color: #888; }
+            .CodeMirror-dialog button:focus {
+              background: #3A3A3A;
+              color: #BBB; }
 #faqlist {
   background: #EEE;
   box-sizing: border-box;
@@ -524,7 +479,7 @@
   -moz-box-sizing: border-box;
   height: 26px;
   position: absolute;
-  background: #888;
+  background: #8B8B8B;
   box-shadow: 0px 0px 3px 3px rgba(0, 0, 0, 0.6);
   color: #FAFAFA; }
   #titlebar a {

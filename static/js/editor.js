@@ -30,11 +30,16 @@ function time() {
 }
 
 $(document).ready(function() {
-	// EDITING
+	var errors = [];
+
 	$("#errordisplay").hide();
 
+	// This should probably be designed a little better.
 	$("#errordisplay").click(function() {
-		$(this).slideUp(100)
+		clearErrors();
+		$(this).slideUp(100, function() {
+			resetHeight();
+		});
 	});
 
 	if (AUTOSAVE) {
@@ -78,6 +83,7 @@ $(document).ready(function() {
 	editor = CodeMirror.fromTextArea($(EDITOR_ID).get(0), {
 		mode: 'text/x-java',
 		lineNumbers: true,
+		lineWrapping: true,
 		indentWithTabs: true,
 		smartIndent: true,
 		indentUnit: 4,
@@ -85,13 +91,14 @@ $(document).ready(function() {
 		keyMap: "sublime",
 		extraKeys: keymap,
 		theme: "custom_theme",
+		matchBrackets: true,
+		styleActiveLine: true,
 	});
 	editor.on("change", function() {
 		$('#savestatus').html("You have unsaved changes");
 		$('#compilestatus').html("uncompiled");
 		$('#statusbar').addClass('unsaved');
 		$('#statusbar').removeClass('error');
-		resetHeight();
 		saved = false;
 
 		if (AUTOSAVE) {
@@ -115,10 +122,11 @@ $(document).ready(function() {
 				if (data != "success") {
 					console.log("Save Error: " + data);
 					$("#errordisplay").html(data);
-					$("#errordisplay").slideDown(150);
+					$("#errordisplay").slideDown(150, function() {
+						resetHeight();
+					});
 					$('#savestatus').html("Error Saving");
 					$('#statusbar').addClass('error');
-					resetHeight();
 				} else {
 					saved = true;
 					$('#savestatus').html("Last saved: " + time());
@@ -140,7 +148,6 @@ $(document).ready(function() {
 			compiling = true;
 			editor.setOption("readOnly", true);
 			f = function(savedata) {
-				resetHeight();
 				// console.log("compiling " + COMPILEPATH);
 				$('#compilestatus').html("Compiling...");
 				$('#statusbar').addClass('compiling');
@@ -150,19 +157,23 @@ $(document).ready(function() {
 					editor.setOption("readOnly", false);
 					$('#statusbar').removeClass('compiling');
 					if (data != "success") {
-						console.log("Compile Error: " + data);
+						// console.log("Compile Error: " + data);
 						$("#errordisplay").html(data);
-						$("#errordisplay").slideDown(150);
+						$("#errordisplay").slideDown(150, function() {
+							resetHeight();
+						});
 						$('#compilestatus').html("Compilation Error");
 						$('#statusbar').addClass('error');
-						resetHeight();
+						processCompilerOutput(data);
 					} else {
 						$('#compilestatus').html("Compiled Successfully");
 						$('#statusbar').addClass('compiled');
 						$('#statusbar').removeClass('error');
 						$("#errordisplay").html("");
-						$("#errordisplay").slideDown(150);
-						resetHeight();
+						$("#errordisplay").slideUp(100, function() {
+							resetHeight();
+						});
+						clearErrors();
 					}
 				});
 			}
@@ -186,20 +197,50 @@ $(document).ready(function() {
 	/**
 	 * Sets the maximum height so the editor doesn't go off the page.
 	 */
-	function resetHeight() {
-		var maxHeight = $(window).height() - $("#editor").offset().top - $('#statusbar').height() - $('#toolbar').height() - 140;
+	function resetHeight(stop) {
+		var maxHeight = $(window).height() - $("#editor").offset().top - $('#statusbar').height() - $('#toolbar').height() - 120;
 		$('.CodeMirror-scroll').css('max-height', '' + maxHeight + 'px');
 		$('#editorbox #helpbox').css('max-height', '' + maxHeight + 'px');
 		var minHeight = $('#editorbox #helpbox').height() + 50;
 		$('.CodeMirror-scroll').css('min-height', '' + minHeight + 'px');
 		editor.refresh();
+
+		// This is needed because it seems this function needs to be called once the DOM rebuilds itself or something
+		if (!stop) {
+			setTimeout(function(){
+				resetHeight(true);
+			}, 20);
+		}
 	}
 
-	// // This is sketchy but it guarantees that Codemirror eventually works
-	// window.setInterval(function() {
-	// 	editor.refresh();
-	// 	resetHeight();
-	// }, 500);
+	/**
+	 * Parses the compiler output and marks line errors.
+	 */
+	function processCompilerOutput(output) {
+		var re = /.java:(\d+)/g;
+		var matches;
+		while ((matches = re.exec(output)) !== null) {
+			markLineError(parseInt(matches[1]) - 1);
+		}
+	}
+
+	/**
+	 * Highlights a line for error
+	 */
+	function markLineError(n) {
+		editor.addLineClass(n, 'background', 'compile-error');
+		errors.push(n);
+	}
+
+	/**
+	 * Removes all compile error marks
+	 */
+	function clearErrors() {
+		for (var i = 0; i < errors.length; i++) {
+			editor.removeLineClass(errors[i], 'background', 'compile-error');
+		}
+		errors = [];
+	}
 
 	/**
 	 * Set the active help tab.
@@ -227,5 +268,6 @@ $(document).ready(function() {
 	resetHeight();
 	$(window).resize(resetHeight);
 
-	setTimeout(resetHeight, 10);
+	resetHeight();
+
 });

@@ -1,3 +1,28 @@
+$dark_bg = #141414;
+$dark_bg_highlight = #2A2A2A;
+$main_text = #111111;
+$main_text2 = #FAFAFA;
+$light_bg = #CFCFCF;
+$light_bg2 = #AAA;
+$light_bg3 = #EEE;
+$light_bg4 = #8B8B8B;
+
+$accent1 = #3A3A3A;
+$accent2 = #888;
+$accent3 = #BBB;
+
+$module_spacing = 14px;
+$module_radius = 8px;
+
+$toolbar_bg = $light_bg4;
+$toolbar_text = $main_text2;
+
+$gutter_bg = $dark_bg_highlight;
+$gutter_text = $accent3;
+$toolbar_font = "Lucida Sans Unicode", "Lucida Grande", sans-serif;
+
+$main_font = Helvetica;
+
 
 @mixin unselectable() {
 	-moz-user-select: none;

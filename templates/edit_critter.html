@@ -8,16 +8,20 @@
 	COMPILEPATH = "{{critter.get_url('compile')|safe}}";
 </script>
 <script type="text/javascript" src="{{url_for('static', filename='codemirror/lib/codemirror.js')}}"></script>
-<script type="text/javascript" src="{{url_for('static', filename='codemirror/mode/clike/clike.js')}}"></script>
-<script type="text/javascript" src="{{url_for('static', filename='codemirror/keymap/sublime.js')}}"></script>
-<script type="text/javascript" src="{{url_for('static', filename='codemirror/keymap/emacs.js')}}"></script>
-<script type="text/javascript" src="{{url_for('static', filename='codemirror/keymap/vim.js')}}"></script>
-<script type="text/javascript" src="{{url_for('static', filename='codemirror/addon/dialog/dialog.js')}}"></script>
-<script type="text/javascript" src="{{url_for('static', filename='codemirror/addon/edit/matchbrackets.js')}}"></script>
-<script type="text/javascript" src="{{url_for('static', filename='codemirror/addon/edit/closebrackets.js')}}"></script>
 <script type="text/javascript" src="{{url_for('static', filename='codemirror/addon/comment/comment.js')}}"></script>
+<script type="text/javascript" src="{{url_for('static', filename='codemirror/addon/dialog/dialog.js')}}"></script>
+<script type="text/javascript" src="{{url_for('static', filename='codemirror/addon/edit/closebrackets.js')}}"></script>
+<script type="text/javascript" src="{{url_for('static', filename='codemirror/addon/edit/matchbrackets.js')}}"></script>
+<script type="text/javascript" src="{{url_for('static', filename='codemirror/addon/fold/foldcode.js')}}"></script>
+<script type="text/javascript" src="{{url_for('static', filename='codemirror/addon/fold/brace-fold.js')}}"></script>
 <script type="text/javascript" src="{{url_for('static', filename='codemirror/addon/search/search.js')}}"></script>
 <script type="text/javascript" src="{{url_for('static', filename='codemirror/addon/search/searchcursor.js')}}"></script>
+<script type="text/javascript" src="{{url_for('static', filename='codemirror/addon/selection/active-line.js')}}"></script>
+<script type="text/javascript" src="{{url_for('static', filename='codemirror/addon/wrap/hardwrap.js')}}"></script>
+<script type="text/javascript" src="{{url_for('static', filename='codemirror/keymap/emacs.js')}}"></script>
+<script type="text/javascript" src="{{url_for('static', filename='codemirror/keymap/sublime.js')}}"></script>
+<script type="text/javascript" src="{{url_for('static', filename='codemirror/keymap/vim.js')}}"></script>
+<script type="text/javascript" src="{{url_for('static', filename='codemirror/mode/clike/clike.js')}}"></script>
 <script type="text/javascript" src="{{url_for('static', filename='js/editor.js')}}"></script>
 {% endif %}
 {% endblock %}
@@ -25,6 +29,7 @@
 {% block stylesheets %}
 {% if g.user == critter.owner %}
 <link rel=stylesheet type=text/css href="{{ url_for('static', filename='codemirror/lib/codemirror.css') }}">
+<link rel=stylesheet type=text/css href="{{ url_for('static', filename='css/editor-theme.css') }}">
 <link rel=stylesheet type=text/css href="{{ url_for('static', filename='codemirror/addon/fold/foldgutter.css') }}">
 {% endif %}
 {{super()}}
@@ -56,7 +61,7 @@
 			<div id="helpboxcontent">
 				<div class="tab">
 					<h1>Critter API</h1>
-					<p>This pane is to give you some reminders about the Critter API.</p>
+					<!-- <p>This pane is to give you some reminders about the Critter API.</p> -->
 					<h2>Action</h2>
 					<table>
 						<tr>
@@ -144,7 +149,7 @@
 				</div>
 				<div class="tab">
 					<h1>Keyboard Shortcuts</h1>
-					<p>The keyboard shortcuts are based on Sublime Text.</p>
+					<!-- <p>The keyboard shortcuts are based on Sublime Text.</p> -->
 					<h2>Files</h2>
 					<table>
 						<tr>
