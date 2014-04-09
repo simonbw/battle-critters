@@ -148,11 +148,37 @@
 	width: 30%;
 	overflow-y: auto;
 	box-sizing: border-box;
-
 	padding: 10px;
+
+	// Only works in chrome
+	&::-webkit-scrollbar {
+		width: 12px;
+	}
+	&::-webkit-scrollbar-button {
+
+	}
+	&::-webkit-scrollbar-track        {
+		width: 12px;
+	}
+	&::-webkit-scrollbar-track-piece  {
+
+	}
+	&::-webkit-scrollbar-thumb        {
+		// border-radius: 10px;
+		background: $light_bg2;
+		// box-shadow: inset 0px 0px 6px $accent1;
+	}
+	&::-webkit-scrollbar-corner       {
+
+	}
+	&::-webkit-resizer                {
+
+	}
+	// end of sketchy stuff
 
 	p {
 		padding: 0px;
+		text-indent: 20px;
 		margin: {
 			top: 2px;
 			bottom: 2px;
@@ -174,6 +200,9 @@
 			bottom: 4px;
 		}
 		border-bottom: 1px dashed $light_bg2;
+	}
+	ul {
+		margin: 0px;
 	}
 	table {
 		width: 100%;
@@ -251,11 +280,39 @@
 	.compile-error {
 		background: $dark_bg + #400;
 	}
+
+
 }
 .CodeMirror-scroll {
 	min-height: 10px;
 	max-height: 300px;
 	box-sizing: border-box;
+
+	// Only works in chrome
+	&::-webkit-scrollbar {
+		width: 12px;
+	}
+	&::-webkit-scrollbar-button {
+
+	}
+	&::-webkit-scrollbar-track        {
+		width: 12px;
+	}
+	&::-webkit-scrollbar-track-piece  {
+
+	}
+	&::-webkit-scrollbar-thumb        {
+		// border-radius: 10px;
+		background: $light_bg2;
+		// box-shadow: inset 0px 0px 6px $accent1;
+	}
+	&::-webkit-scrollbar-corner       {
+
+	}
+	&::-webkit-resizer                {
+
+	}
+	// end of sketchy stuff
 }
 
 // Find/Replace bar

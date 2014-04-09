@@ -1,7 +1,8 @@
 // SETTINGS //
-AUTOSAVE = true; // bool if editor should automatically save
-AUTOSAVE_WAIT = 500; // milliseconds idle before autosaving.
-EDITOR_ID = '#editor'; // id of the text area
+var AUTOSAVE = true; // bool if editor should automatically save
+var AUTOSAVE_WAIT = 500; // milliseconds idle before autosaving.
+var EDITOR_ID = '#editor'; // id of the text area
+var BOTTOM_PADDING = 100;
 
 // SETUP KEYS //
 var BLOCK_KEYS = "S"
@@ -16,10 +17,10 @@ $(document).bind('keydown', function(e) {
 });
 
 // Globals to declare
-edits = 0;
-saving = false;
-compiling = false;
-saved = true;
+var edits = 0;
+var saving = false;
+var compiling = false;
+var saved = true;
 
 /**
  * Return a string containing the time, ready for insertion into HTML
@@ -198,7 +199,7 @@ $(document).ready(function() {
 	 * Sets the maximum height so the editor doesn't go off the page.
 	 */
 	function resetHeight(stop) {
-		var maxHeight = $(window).height() - $("#editor").offset().top - $('#statusbar').height() - $('#toolbar').height() - 120;
+		var maxHeight = $(window).height() - $("#editor").offset().top - $('#statusbar').height() - $('#toolbar').height() - BOTTOM_PADDING;
 		$('.CodeMirror-scroll').css('max-height', '' + maxHeight + 'px');
 		$('#editorbox #helpbox').css('max-height', '' + maxHeight + 'px');
 		var minHeight = $('#editorbox #helpbox').height() + 50;

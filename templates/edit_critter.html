@@ -53,12 +53,23 @@
 		<textarea id="editor">{{critter.content}}</textarea>
 		<div id="helpbox">
 			<div id=tabbuttonbar>
+				<a class="tabbutton">Overview</a>
 				<a class="tabbutton">API</a>
 				<a class="tabbutton">Keyboard Shortcuts</a>
-				<a class="tabbutton">Other Stuff</a>
 				<div class="clear"></div>
 			</div>
 			<div id="helpboxcontent">
+				<div class="tab">
+					<h1>Overview</h1>
+					<p>You are creating a class that will control a critter in battle. Each critter created in battle will be represented by an instance of your Critter class. Your job is to write the <code>getMove</code> method that decides what actions your critters will take. The basic implementation provided will not win any battles. You must improve upon the design by making a more intelligent creature.</p>
+					<p>Your improvements could range from simple to more complex. For instance, you could check if there is an enemy critter in front of you, and if there is, infect it. A more complex behavior could involve searching for critters of the same type to form groups.</p>
+					<p>Some hints:</p>
+					<ul>
+						<li>Static variables can be used to share information between critters.</li>
+						<li>Single critters are more vulnerable than critters in groups.</li>
+						<li>Diagonal movement tends to be effective.</li>
+					</ul>
+				</div>
 				<div class="tab">
 					<h1>Critter API</h1>
 					<!-- <p>This pane is to give you some reminders about the Critter API.</p> -->
@@ -135,7 +146,7 @@
 						</tr>
 						<tr>
 							<td>SOUTH</td>
-							<td>The direction below the critter</td>
+							<td>The absolute direction below the critter</td>
 						</tr>
 						<tr>
 							<td>EAST</td>
@@ -290,9 +301,6 @@
 							<td>Exit Multi-selection</td>
 						</tr>
 					</table>
-				</div>
-				<div class="tab">
-					<h1>Other Stuff</h1>
 				</div>
 				<div class="clear"></div>
 			</div>
