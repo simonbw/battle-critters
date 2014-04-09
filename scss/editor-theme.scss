@@ -1,37 +1,29 @@
 @import "mixins";
+@import "fonts";
 
 .cm-s-custom_theme.CodeMirror {
 	background: $dark_bg; 
 	color: $main_text2;
 	border-right: 1px solid $gutter_bg;
 
-	// Only works in chrome
+	font: {
+		family: $font_monospace;
+		size: 13px;
+	}
+
 	::-webkit-scrollbar {
+		box-sizing: content-box;
 		width: 10px;
 		padding-right: 2px;
+		padding: 2px;
 	}
-	::-webkit-scrollbar-button {
-
-	}
-	::-webkit-scrollbar-track        {
-		background: black;
-	}
-	::-webkit-scrollbar-track-piece  {
-
-	}
-	::-webkit-scrollbar-thumb        {
-		width: 3px;
+	::-webkit-scrollbar-thumb {
+		box-sizing: content-box;
 		border-radius: 10px;
 		background: $accent1;
-		// box-shadow: inset 0px 0px 6px $accent1;
+		border: 1px solid $dark_bg;
+		// box-shadow: inset -2px -2px 4px darken($accent1, 10%);
 	}
-	::-webkit-scrollbar-corner       {
-
-	}
-	::-webkit-resizer                {
-
-	}
-	// end of sketchy stuff
 } 
 
 .cm-s-custom_theme {
@@ -44,6 +36,10 @@
 	}
 	.CodeMirror-linenumber {
 		color: $gutter_text;
+		font: {
+			family: $font_monospace;
+			size: 13px;
+		}
 	}
 	.CodeMirror-cursor {
 		border-left: 1px solid white !important;

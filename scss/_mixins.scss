@@ -19,10 +19,6 @@ $toolbar_text = $main_text2;
 
 $gutter_bg = $dark_bg_highlight;
 $gutter_text = $accent3;
-$toolbar_font = "Lucida Sans Unicode", "Lucida Grande", sans-serif;
-
-$main_font = Helvetica;
-
 
 @mixin unselectable() {
 	-moz-user-select: none;

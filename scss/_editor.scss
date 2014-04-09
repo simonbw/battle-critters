@@ -4,6 +4,9 @@
 		left: 100px;
 		right:100px;
 	}
+
+	box-shadow: 0px 3px 16px black;
+
 	#toolbar, #statusbar {
 		padding:  {
 			top: 4px;
@@ -16,7 +19,7 @@
 		background: $toolbar_bg;
 		color: $toolbar_text;
 		font: {
-			family: $toolbar_font;
+			family: $font_toolbar;
 			size: 12px;
 		}
 
@@ -41,7 +44,7 @@
 			-moz-box-sizing: border-box;
 			border-bottom: 1px solid white;
 			margin: {
-				top: 0px;
+				top: 2px;
 				left: 0px;
 				right: 0px;
 				bottom: 0px;
@@ -51,7 +54,7 @@
 				right: 0px;
 			}
 			font: {
-				family: $main_font;
+				family: $font_title;
 				size : 32px;
 			}
 		}
@@ -60,8 +63,22 @@
 			box-sizing: border-box;
 			-moz-box-sizing: border-box;
 			width: 100%;
+			margin: {
+				top: 2px;
+			}
 		}
 		.item {
+			margin: 0px;
+			padding: 0px;
+			display: inline;
+			margin-right: 1px;
+			box-sizing: border-box;
+			-moz-box-sizing: border-box;
+			font: {
+				family: $font_toolbar;
+				size: 12px;
+			}
+
 			&.left {
 				float: left;
 			}
@@ -69,16 +86,13 @@
 				float: right;
 			}
 
-			padding: 0px;
-			margin: 0px;
-			display: inline;
-			margin-right: 1px;
-			box-sizing: border-box;
-			box-sizing: border-box;
-
 			a {
-				padding-right: 6px;
-				padding-left: 6px;
+				padding: {
+					left: 6px;
+					right: 6px;
+					top: 2px;
+					bottom: 1px;
+				}
 				margin:0px;
 				cursor: pointer;
 				text-decoration: none;
@@ -132,7 +146,7 @@
 			max-height: 200px;
 			overflow-y: auto;
 			font: {
-				family: monospace;
+				family: $font_monospace;
 				size: 12px;
 			}
 		}
@@ -148,33 +162,24 @@
 	width: 30%;
 	overflow-y: auto;
 	box-sizing: border-box;
+	-moz-box-sizing: border-box;
 	padding: 10px;
 
-	// Only works in chrome
 	&::-webkit-scrollbar {
 		width: 12px;
 	}
-	&::-webkit-scrollbar-button {
-
+	&::-webkit-scrollbar-track {
 	}
-	&::-webkit-scrollbar-track        {
-		width: 12px;
-	}
-	&::-webkit-scrollbar-track-piece  {
-
-	}
-	&::-webkit-scrollbar-thumb        {
+	&::-webkit-scrollbar-thumb {
 		// border-radius: 10px;
 		background: $light_bg2;
 		// box-shadow: inset 0px 0px 6px $accent1;
 	}
-	&::-webkit-scrollbar-corner       {
 
+	font: {
+		family: $font_main;
+		size: 14px;
 	}
-	&::-webkit-resizer                {
-
-	}
-	// end of sketchy stuff
 
 	p {
 		padding: 0px;
@@ -183,9 +188,16 @@
 			top: 2px;
 			bottom: 2px;
 		}
+		// line-height: 100%;
+		// letter-spacing: -1px;
+		// word-spacing: 2px;
 	}
 	h1 {
-		font-size: 22px;
+		font: {
+			family: $font_heading;
+			size: 22px;
+			weight: normal;
+		}
 		margin: {
 			left: 0px;
 			right: 0px;
@@ -194,7 +206,11 @@
 		};
 	}
 	h2 {
-		font-size: 16px;
+		font: {
+			family: $font_subheading;
+			size: 16px;
+			weight: normal;
+		}
 		margin: {
 			top: 10px;
 			bottom: 4px;
@@ -208,6 +224,7 @@
 		width: 100%;
 		margin: 0px;
 		box-sizing: border-box;
+		-moz-box-sizing: border-box;
 		background: $light_bg3;
 		font-size: 12px;
 		border-collapse: collapse;
@@ -227,7 +244,7 @@
 		td:first-child {
 			font-weight: bold;
 			padding-right: 8px;
-			font-family: monospace;
+			font-family: $font_monospace;
 		}
 	}
 
@@ -269,13 +286,13 @@
 	}
 }
 
-//
+// Stuff to change the editor
 .CodeMirror {
 	height: auto;
-	font-size: 13px;
 	width: 70%;
 	float:left;
 	box-sizing: border-box;
+	-moz-box-sizing: border-box;
 
 	.compile-error {
 		background: $dark_bg + #400;
@@ -287,32 +304,12 @@
 	min-height: 10px;
 	max-height: 300px;
 	box-sizing: border-box;
+	-moz-box-sizing: border-box;
 
-	// Only works in chrome
-	&::-webkit-scrollbar {
-		width: 12px;
+	font: {
+		family: $font_monospace;
+		size: 13px;
 	}
-	&::-webkit-scrollbar-button {
-
-	}
-	&::-webkit-scrollbar-track        {
-		width: 12px;
-	}
-	&::-webkit-scrollbar-track-piece  {
-
-	}
-	&::-webkit-scrollbar-thumb        {
-		// border-radius: 10px;
-		background: $light_bg2;
-		// box-shadow: inset 0px 0px 6px $accent1;
-	}
-	&::-webkit-scrollbar-corner       {
-
-	}
-	&::-webkit-resizer                {
-
-	}
-	// end of sketchy stuff
 }
 
 // Find/Replace bar
@@ -342,7 +339,7 @@
 	background: transparent;
 	width: 20em;
 	color: inherit;
-	font-family: monospace;
+	font-family: $font_monospace;
 }
 
 .CodeMirror-dialog button {

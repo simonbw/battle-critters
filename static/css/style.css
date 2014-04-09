@@ -9,26 +9,29 @@
         color: black;
         cursor: default; }
 
-  .clear {
-    clear: both; }
+  code {
+    font-family: Inconsolas, monospace; }
 
-    body {
-      background: url('/static/images/background2.png');
-      padding: 0px;
-      font-family: Helvetica;
-      font-size: 15px; }
+    .clear {
+      clear: both; }
 
-      #flashes {
-        margin: auto;
-        margin-bottom: 20px;
-        background: #FFFF00;
-        border-top: 1px dotted #FF0000;
-        border-bottom: 1px dotted #FF0000;
-        color: #FF0000;
-        padding: 4px; }
-        #flashes li {
-          margin-left: 20px;
-          list-style: none; }
+      body {
+        background: url('/static/images/background2.png');
+        padding: 0px;
+        font-family: Gen-light, Helvetica, sans-serif;
+        font-size: 15px; }
+
+        #flashes {
+          margin: auto;
+          margin-bottom: 20px;
+          background: #FFFF00;
+          border-top: 1px dotted #FF0000;
+          border-bottom: 1px dotted #FF0000;
+          color: #FF0000;
+          padding: 4px; }
+          #flashes li {
+            margin-left: 20px;
+            list-style: none; }
 
   #bodybox {
     background: #CFCFCF;
@@ -39,6 +42,7 @@
     padding-bottom: 10px;
     margin-left: 100px;
     margin-right: 100px;
+    font-family: Gen-light, Helvetica, sans-serif;
     border-bottom-left-radius: 8px;
     border-bottom-right-radius: 8px; }
     #bodybox h1 {
@@ -52,53 +56,140 @@
       padding-right 20px;
       padding-top: 5px;
       padding-bottom: 5px;
-      font-size: 40px; }
+      font-size: 40px;
+      font-family: Orbitron-black, serif;
+      font-weight: normal; }
       #bodybox h2 {
         margin: 0px;
-        font-size: 20px; }
+        font-size: 20px;
+        font-family: Orbitron, Helvetica, sans-serif;
+        font-weight: normal; }
         #bodybox h3 {
           margin: 0px; }
           #bodybox h3 font {
-            size: 15px; }
+            size: 15px;
+            family: Anonymous, Helvetica, sans-serif;
+            weight: normal; }
     #bodybox h4 {
-      margin: 0px; }
-      #bodybox h4 font {
-        size: 12px; }
-    #bodybox p {
-      padding: 0px;
-      margin-top: 0px;
-      margin-left: 0px;
-      margin-right: 0px;
-      margin-bottom: 6px; }
-      #bodybox section {
-        margin-top: 14px;
-        margin-bottom: 14px;
-        padding-left: 14px;
-        padding-right: 14px; }
-        #bodybox .module {
-          float: left;
+      margin: 0px;
+      font-size: 12px;
+      font-weight: normal; }
+      #bodybox p {
+        padding: 0px;
+        margin-top: 0px;
+        margin-left: 0px;
+        margin-right: 0px;
+        margin-bottom: 6px; }
+        #bodybox section {
           margin-top: 14px;
-          margin-left: 14px;
-          margin-bottom: 0px;
-          margin-right: 0px;
-          padding: 16px;
-          background: #AAA;
-          border-radius: 8px; }
-          #bodybox .news {
-            max-width: 400px; }
-            #bodybox .modulebox {
-              padding-top: 0px;
-              padding-left: 0px;
-              padding-right: 14px;
-              padding-bottom: 14px; }
-              #bodybox ul.list {
-                list-style: none;
-                margin: 0px;
-                padding-left: 10px;
-                li-list-style: none; }
+          margin-bottom: 14px;
+          padding-left: 14px;
+          padding-right: 14px; }
+          #bodybox .module {
+            float: left;
+            margin-top: 14px;
+            margin-left: 14px;
+            margin-bottom: 0px;
+            margin-right: 0px;
+            padding: 16px;
+            background: #AAA;
+            border-radius: 8px; }
+            #bodybox .news {
+              max-width: 400px; }
+              #bodybox .modulebox {
+                padding-top: 0px;
+                padding-left: 0px;
+                padding-right: 14px;
+                padding-bottom: 14px; }
+                #bodybox ul.list {
+                  list-style: none;
+                  margin: 0px;
+                  padding-left: 10px;
+                  li-list-style: none; }
 
   .right {
     float: right; }
+@font-face {
+  font-family: HansKendrick;
+  src: url('/static/fonts/HansKendrick-Regular.ttf'); }
+
+  @font-face {
+    font-family: Inconsolata;
+    src: url('/static/fonts/Inconsolata-dz.otf'); }
+
+    @font-face {
+      font-family: Orbitron-black;
+      src: url('/static/fonts/orbitron-black-webfont.woff');
+      font-weight: normal; }
+
+      @font-face {
+        font-family: Orbitron;
+        src: url('/static/fonts/orbitron-bold-webfont.woff');
+        font-weight: normal; }
+
+        @font-face {
+          font-family: Orbitron-light;
+          src: url('/static/fonts/orbitron-light-webfont.woff');
+          font-weight: normal; }
+
+          @font-face {
+            font-family: Raleway;
+            src: url('/static/fonts/raleway_thin-webfont.woff'); }
+
+            @font-face {
+              font-family: Gen;
+              src: url('/static/fonts/Gen-Regular.otf'); }
+
+              @font-face {
+                font-family: Gen-light;
+                src: url('/static/fonts/Gen-Light.otf'); }
+
+                @font-face {
+                  font-family: Anonymous;
+                  src: url('/static/fonts/Anonymous_Pro.ttf');
+                  font-weight: normal; }
+
+                  @font-face {
+                    font-family: Anonymous;
+                    src: url('/static/fonts/Anonymous_Pro_I.ttf');
+                    font-weight: normal;
+                    font-style: italic; }
+
+                    @font-face {
+                      font-family: Anonymous;
+                      src: url('/static/fonts/Anonymous_Pro_B.ttf');
+                      font-weight: bold;
+                      font-style: normal; }
+
+                      @font-face {
+                        font-family: Anonymous;
+                        src: url('/static/fonts/Anonymous_Pro_BI.ttf');
+                        font-weight: bold;
+                        font-style: italic; }
+
+                        @font-face {
+                          font-family: LeagueGothic;
+                          src: url('/static/fonts/leaguegothic-regular-webfont.woff');
+                          font-weight: normal;
+                          font-style: normal; }
+
+                          @font-face {
+                            font-family: LeagueGothic;
+                            src: url('/static/fonts/leaguegothic-italic-webfont.woff');
+                            font-weight: normal;
+                            font-style: italic; }
+
+                            @font-face {
+                              font-family: LeagueGothicCondensed;
+                              src: url('/static/fonts/leaguegothic-condensed-regular-webfont.woff');
+                              font-weight: normal;
+                              font-style: normal; }
+
+                              @font-face {
+                                font-family: LeagueGothicCondensed;
+                                src: url('/static/fonts/leaguegothic-condensed-italic-webfont.woff');
+                                font-weight: normal;
+                                font-style: italic; }
 #abovebar {
   background: #AAA;
   padding: 4px;
@@ -164,7 +255,8 @@
 #editorbox {
   margin-top: 50px;
   margin-left: 100px;
-  margin-right: 100px; }
+  margin-right: 100px;
+  box-shadow: 0px 3px 16px black; }
   #editorbox #toolbar, #editorbox #statusbar {
     padding-top: 4px;
     padding-bottom: 4px;
@@ -172,7 +264,7 @@
     padding-right: 10px;
     background: #8B8B8B;
     color: #FAFAFA;
-    font-family: "Lucida Sans Unicode", "Lucida Grande", sans-serif;
+    font-family: Orbitron-light, "Lucida Sans Unicode", "Lucida Grande", sans-serif;
     font-size: 12px; }
     #editorbox #toolbar a, #editorbox #statusbar a {
       color: #DCCC22; }
@@ -189,32 +281,37 @@
       box-sizing: border-box;
       -moz-box-sizing: border-box;
       border-bottom: 1px solid white;
-      margin-top: 0px;
+      margin-top: 2px;
       margin-left: 0px;
       margin-right: 0px;
       margin-bottom: 0px;
       padding-left: 30px;
       padding-right: 0px;
-      font-family: Helvetica;
+      font-family: Orbitron-black, serif;
       font-size: 32px; }
       #editorbox #toolbar .items {
         box-sizing: border-box;
         -moz-box-sizing: border-box;
-        width: 100%; }
+        width: 100%;
+        margin-top: 2px; }
         #editorbox #toolbar .item {
-          padding: 0px;
           margin: 0px;
+          padding: 0px;
           display: inline;
           margin-right: 1px;
           box-sizing: border-box;
-          box-sizing: border-box; }
+          -moz-box-sizing: border-box;
+          font-family: Orbitron-light, "Lucida Sans Unicode", "Lucida Grande", sans-serif;
+          font-size: 12px; }
           #editorbox #toolbar .item.left {
             float: left; }
             #editorbox #toolbar .item.right {
               float: right; }
               #editorbox #toolbar .item a {
-                padding-right: 6px;
                 padding-left: 6px;
+                padding-right: 6px;
+                padding-top: 2px;
+                padding-bottom: 1px;
                 margin: 0px;
                 cursor: pointer;
                 text-decoration: none;
@@ -246,7 +343,7 @@
               color: black;
               max-height: 200px;
               overflow-y: auto;
-              font-family: monospace;
+              font-family: Inconsolas, monospace;
               font-size: 12px; }
   #editorbox #editor {
     height: auto; }
@@ -257,50 +354,56 @@
   width: 30%;
   overflow-y: auto;
   box-sizing: border-box;
-  padding: 10px; }
+  -moz-box-sizing: border-box;
+  padding: 10px;
+  font-family: Gen-light, Helvetica, sans-serif;
+  font-size: 14px; }
   #helpbox::-webkit-scrollbar {
     width: 12px; }
-    #helpbox::-webkit-scrollbar-track {
-      width: 12px; }
-      #helpbox::-webkit-scrollbar-thumb {
-        background: #AAA; }
-        #helpbox p {
-          padding: 0px;
-          text-indent: 20px;
-          margin-top: 2px;
-          margin-bottom: 2px; }
-          #helpbox h1 {
-            font-size: 22px;
-            margin-left: 0px;
-            margin-right: 0px;
-            margin-top: 12px;
-            margin-bottom: 8px; }
-            #helpbox h2 {
-              font-size: 16px;
-              margin-top: 10px;
-              margin-bottom: 4px;
-              border-bottom: 1px dashed #AAA; }
-              #helpbox ul {
-                margin: 0px; }
-                #helpbox table {
-                  width: 100%;
-                  margin: 0px;
-                  box-sizing: border-box;
-                  background: #EEE;
-                  font-size: 12px;
-                  border-collapse: collapse; }
-                  #helpbox table tr {
-                    border-top: 1px dotted #CFCFCF; }
-                    #helpbox table tr:first-child {
-                      border-top: none; }
-                      #helpbox table td {
-                        padding-top: 2px;
-                        padding-left: 4px;
-                        padding-right: 4px; }
-                        #helpbox table td:first-child {
-                          font-weight: bold;
-                          padding-right: 8px;
-                          font-family: monospace; }
+    #helpbox::-webkit-scrollbar-thumb {
+      background: #AAA; }
+      #helpbox p {
+        padding: 0px;
+        text-indent: 20px;
+        margin-top: 2px;
+        margin-bottom: 2px; }
+        #helpbox h1 {
+          font-family: Orbitron, Helvetica, sans-serif;
+          font-size: 22px;
+          font-weight: normal;
+          margin-left: 0px;
+          margin-right: 0px;
+          margin-top: 12px;
+          margin-bottom: 8px; }
+          #helpbox h2 {
+            font-family: Anonymous, Helvetica, sans-serif;
+            font-size: 16px;
+            font-weight: normal;
+            margin-top: 10px;
+            margin-bottom: 4px;
+            border-bottom: 1px dashed #AAA; }
+            #helpbox ul {
+              margin: 0px; }
+              #helpbox table {
+                width: 100%;
+                margin: 0px;
+                box-sizing: border-box;
+                -moz-box-sizing: border-box;
+                background: #EEE;
+                font-size: 12px;
+                border-collapse: collapse; }
+                #helpbox table tr {
+                  border-top: 1px dotted #CFCFCF; }
+                  #helpbox table tr:first-child {
+                    border-top: none; }
+                    #helpbox table td {
+                      padding-top: 2px;
+                      padding-left: 4px;
+                      padding-right: 4px; }
+                      #helpbox table td:first-child {
+                        font-weight: bold;
+                        padding-right: 8px;
+                        font-family: Inconsolas, monospace; }
   #helpbox #tabbuttonbar {
     background: #AAA;
     width: 100%; }
@@ -328,57 +431,54 @@
 
 .CodeMirror {
   height: auto;
-  font-size: 13px;
   width: 70%;
   float: left;
-  box-sizing: border-box; }
+  box-sizing: border-box;
+  -moz-box-sizing: border-box; }
   .CodeMirror .compile-error {
     background: #581414; }
 
 .CodeMirror-scroll {
   min-height: 10px;
   max-height: 300px;
-  box-sizing: border-box; }
-  .CodeMirror-scroll::-webkit-scrollbar {
-    width: 12px; }
-    .CodeMirror-scroll::-webkit-scrollbar-track {
-      width: 12px; }
-      .CodeMirror-scroll::-webkit-scrollbar-thumb {
-        background: #AAA; }
+  box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  font-family: Inconsolas, monospace;
+  font-size: 13px; }
 
-.CodeMirror-dialog {
-  position: absolute;
-  left: 0px;
-  right: 0px;
-  bottom: 0px;
-  background: #141414;
-  color: #888;
-  z-index: 15;
-  padding: 0.1em 0.8em;
-  overflow: hidden; }
+  .CodeMirror-dialog {
+    position: absolute;
+    left: 0px;
+    right: 0px;
+    bottom: 0px;
+    background: #141414;
+    color: #888;
+    z-index: 15;
+    padding: 0.1em 0.8em;
+    overflow: hidden; }
 
-  .CodeMirror-dialog-top {
-    border-top: 1px solid #888; }
+    .CodeMirror-dialog-top {
+      border-top: 1px solid #888; }
 
-    .CodeMirror-dialog-bottom {
-      bottom: 0; }
+      .CodeMirror-dialog-bottom {
+        bottom: 0; }
 
-      .CodeMirror-dialog input {
-        border: none;
-        outline: none;
-        background: transparent;
-        width: 20em;
-        color: inherit;
-        font-family: monospace; }
+        .CodeMirror-dialog input {
+          border: none;
+          outline: none;
+          background: transparent;
+          width: 20em;
+          color: inherit;
+          font-family: Inconsolas, monospace; }
 
-        .CodeMirror-dialog button {
-          height: 100%;
-          background: none;
-          border: 1px solid #3A3A3A;
-          color: #888; }
-          .CodeMirror-dialog button:focus {
-            background: #3A3A3A;
-            color: #BBB; }
+          .CodeMirror-dialog button {
+            height: 100%;
+            background: none;
+            border: 1px solid #3A3A3A;
+            color: #888; }
+            .CodeMirror-dialog button:focus {
+              background: #3A3A3A;
+              color: #BBB; }
 #faqlist {
   background: #EEE;
   box-sizing: border-box;
@@ -472,31 +572,36 @@
   padding: 4px;
   background: #CCCCCC; }
   #newsbox article {
-    width: 400px; }
+    width: 400px;
+    font-family: Gen-light, Helvetica, sans-serif; }
     #newsbox article h1 {
-      font-size: 16px;
+      font-family: HansKendrick, Helvetica, sans-serif;
+      font-size: 18px;
+      font-weight: normal;
       margin: 0px;
       padding: 0px;
       background: none; }
       #newsbox article h2 {
+        font-family: Anonymous, Helvetica, sans-serif;
         font-size: 12px;
+        font-weight: normal;
         margin: 0px;
         padding: 0px;
         padding-left: 16px;
         font-style: italic;
         background: none; }
 #titlebar {
-  padding: 4px;
+  padding: 6px;
   top: 0px;
   left: 0px;
   width: 100%;
   box-sizing: border-box;
   -moz-box-sizing: border-box;
-  height: 26px;
   position: absolute;
   background: #8B8B8B;
   box-shadow: 0px 0px 3px 3px rgba(0, 0, 0, 0.6);
-  color: #FAFAFA; }
+  color: #FAFAFA;
+  font-family: Orbitron-light, Helvetica, sans-serif; }
   #titlebar a {
     color: #EAEAEA; }
     #titlebar a:hover {
@@ -507,7 +612,12 @@
       float: left;
       margin-left: 20px; }
       #titlebar .left .item {
-        float: left; }
+        float: left;
+        padding-left: 5px;
+        margin-left: 5px;
+        border-left: 1px solid #FFF; }
+        #titlebar .left .item:first-child {
+          border-left: none; }
   #titlebar .right {
     float: right;
     margin-right: 20px; }
@@ -516,3 +626,5 @@
       padding-right: 5px;
       margin-right: 5px;
       border-right: 1px solid #FFF; }
+      #titlebar .right .item:first-child {
+        border-right: none; }

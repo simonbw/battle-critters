@@ -5,15 +5,27 @@
 	
 	article {
 		width: 400px;
+		font: {
+			family: $font_main; 
+		}
+
 		h1 {
-			font-size: 16px;
+			font: {
+				family: $font_accent; 
+				size: 18px;
+				weight: normal;
+			}
 			margin: 0px;
 			padding: 0px;
 			background: none;
 			
 		}
 		h2 {
-			font-size: 12px;
+			font: {
+				family: $font_subheading; 
+				size: 12px;
+				weight: normal;
+			}
 			margin: 0px;
 			padding: 0px;
 			padding-left: 16px;
