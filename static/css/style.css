@@ -5,9 +5,9 @@
     button {
       cursor: default; }
       button a {
-        text-decoration: none;
         color: black;
-        cursor: default; }
+        cursor: default;
+        text-decoration: none; }
 
   code {
     font-family: Inconsolas, monospace; }
@@ -22,53 +22,53 @@
         font-size: 15px; }
 
         #flashes {
-          margin: auto;
-          margin-bottom: 20px;
           background: #FFFF00;
-          border-top: 1px dotted #FF0000;
           border-bottom: 1px dotted #FF0000;
+          border-top: 1px dotted #FF0000;
           color: #FF0000;
+          margin-bottom: 20px;
+          margin: auto;
           padding: 4px; }
           #flashes li {
-            margin-left: 20px;
-            list-style: none; }
+            list-style: none;
+            margin-left: 20px; }
 
   #bodybox {
     background: #CFCFCF;
+    border-bottom-left-radius: 8px;
+    border-bottom-right-radius: 8px;
     color: #111111;
-    padding-top: 40px;
-    padding-left: 0px;
-    padding-right: 0px;
-    padding-bottom: 10px;
+    font-family: Gen-light, Helvetica, sans-serif;
     margin-left: 100px;
     margin-right: 100px;
-    font-family: Gen-light, Helvetica, sans-serif;
-    border-bottom-left-radius: 8px;
-    border-bottom-right-radius: 8px; }
+    padding-bottom: 10px;
+    padding-left: 0px;
+    padding-right: 0px;
+    padding-top: 40px; }
     #bodybox h1 {
+      -moz-box-sizing: border-box;
+      background: #AAA;
+      box-sizing: border-box;
       display: block;
       margin: 0px;
       width: 100%;
-      box-sizing: border-box;
-      -moz-box-sizing: border-box;
-      background: #AAA;
+      font-family: Orbitron-black, serif;
+      font-size: 40px;
+      font-weight: normal;
       padding-left: 20px;
       padding-right 20px;
       padding-top: 5px;
-      padding-bottom: 5px;
-      font-size: 40px;
-      font-family: Orbitron-black, serif;
-      font-weight: normal; }
+      padding-bottom: 5px; }
       #bodybox h2 {
         margin: 0px;
-        font-size: 20px;
         font-family: Orbitron, Helvetica, sans-serif;
+        font-size: 20px;
         font-weight: normal; }
         #bodybox h3 {
           margin: 0px; }
           #bodybox h3 font {
-            size: 15px;
             family: Anonymous, Helvetica, sans-serif;
+            size: 15px;
             weight: normal; }
     #bodybox h4 {
       margin: 0px;
@@ -76,31 +76,31 @@
       font-weight: normal; }
       #bodybox p {
         padding: 0px;
-        margin-top: 0px;
+        margin-bottom: 6px;
         margin-left: 0px;
         margin-right: 0px;
-        margin-bottom: 6px; }
+        margin-top: 0px; }
         #bodybox section {
-          margin-top: 14px;
           margin-bottom: 14px;
+          margin-top: 14px;
           padding-left: 14px;
           padding-right: 14px; }
           #bodybox .module {
-            float: left;
-            margin-top: 14px;
-            margin-left: 14px;
-            margin-bottom: 0px;
-            margin-right: 0px;
-            padding: 16px;
             background: #AAA;
-            border-radius: 8px; }
+            border-radius: 8px;
+            float: left;
+            padding: 16px;
+            margin-bottom: 0px;
+            margin-left: 14px;
+            margin-right: 0px;
+            margin-top: 14px; }
             #bodybox .news {
               max-width: 400px; }
               #bodybox .modulebox {
-                padding-top: 0px;
+                padding-bottom: 14px;
                 padding-left: 0px;
                 padding-right: 14px;
-                padding-bottom: 14px; }
+                padding-top: 0px; }
                 #bodybox ul.list {
                   list-style: none;
                   margin: 0px;

@@ -6,6 +6,7 @@
 @import "faq";
 @import "footer";
 @import "login";
+@import "newbattle";
 @import "news";
 @import "titlebar";
 
@@ -17,9 +18,9 @@
 button {
 	cursor: default;
 	a {
-		text-decoration: none;
 		color: black;
 		cursor: default;
+		text-decoration: none;
 	}
 }
 code {
@@ -37,70 +38,68 @@ body {
 	}
 }
 #flashes {
-	margin:auto;
-	margin-bottom: 20px;
 	background: #FFFF00;
-	border-top: 1px dotted #FF0000;
 	border-bottom: 1px dotted #FF0000;
+	border-top: 1px dotted #FF0000;
 	color: #FF0000; 
+	margin-bottom: 20px;
+	margin:auto;
 	padding: 4px;
 
 	li {
-		margin-left: 20px;
 		list-style: none;
+		margin-left: 20px;
 	}
 }
 #bodybox {
 	background: $light_bg;
+	border-bottom-left-radius: $module_radius;
+	border-bottom-right-radius: $module_radius;
 	color: $main_text;
-	padding:  {
-		top: 40px;
-		left: 0px;
-		right: 0px;
-		bottom: 10px;
-	}
+	font-family: $font_main;
 	margin: {
 		left: 100px;
 		right: 100px;
 	}
-
-	font-family: $font_main;
-
-	border-bottom-left-radius: $module_radius;
-	border-bottom-right-radius: $module_radius;
+	padding:  {
+		bottom: 10px;
+		left: 0px;
+		right: 0px;
+		top: 40px;
+	}
 
 	h1 {
+		-moz-box-sizing: border-box;
+		background: $light_bg2;
+		box-sizing: border-box;
 		display: block;
 		margin: 0px;
 		width: 100%;
-		box-sizing: border-box;
-		-moz-box-sizing: border-box;
-		background: $light_bg2;
+		font: {
+			family: $font_title;
+			size : 40px;
+			weight: normal;
+		}
 		padding:  {
 			left: 20px;
 			right 20px;
 			top: 5px;
 			bottom: 5px;
 		}
-		font: {
-			size : 40px;
-			family: $font_title;
-			weight: normal;
-		}
 	}
 	h2 {
 		margin: 0px;
 		font: {
-			size: 20px;
 			family: $font_heading;
+			size: 20px;
 			weight: normal;
 		}
 	}
 	h3 {
 		margin: 0px;
 		font {
-			size: 15px;
 			family: $font_subheading;
+			size: 15px;
 			weight: normal;
 		}
 	}
@@ -115,15 +114,15 @@ body {
 		padding: 0px;
 		margin:
 		{
-			top: 0px;
+			bottom: 6px;
 			left: 0px;
 			right: 0px;
-			bottom: 6px;
+			top: 0px;
 		}
 	} section {
 		margin: {
-			top: $module_spacing;
 			bottom: $module_spacing;
+			top: $module_spacing;
 		}
 		padding: {
 			left: $module_spacing;
@@ -131,16 +130,16 @@ body {
 		}
 	}
 	.module {
-		float: left;
-		margin:  {
-			top: $module_spacing;
-			left: $module_spacing;
-			bottom: 0px;
-			right: 0px;
-		}
-		padding: 16px;
 		background: $light_bg2;
 		border-radius: $module_radius;
+		float: left;
+		padding: 16px;
+		margin:  {
+			bottom: 0px;
+			left: $module_spacing;
+			right: 0px;
+			top: $module_spacing;
+		}
 	}
 	.news {
 		max-width: 400px;
@@ -150,10 +149,10 @@ body {
 	}
 	.modulebox {
 		padding: {
-			top: 0px;
+			bottom: $module_spacing + 0px;
 			left: 0px;
 			right: $module_spacing + 0px;
-			bottom: $module_spacing + 0px;
+			top: 0px;
 		}
 	}
 	ul.list {
@@ -162,6 +161,7 @@ body {
 		padding: {
 			left: 10px;
 		}
+		
 		li: {
 			list-style: none;
 		}
