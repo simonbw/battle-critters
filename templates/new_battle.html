@@ -3,31 +3,68 @@
 {% block scripts %}
 {{super()}}
 <script type="text/javascript">
-CRITTER_LINK = "{{ url_for('editor_app.view_file', owner='insertownerhere', filename='insertfilenamehere') }}";
-VIEW_BATTLE_URL = "{{ url_for('battles_app.view_battle', battle_id=999999999) }}";
-NEW_BATTLE_URL = "{{url_for('battles_app.new_battle_page')}}";
+	CRITTER_LINK = "{{ url_for('editor_app.view_file', owner='insertownerhere', filename='insertfilenamehere') }}";
+	VIEW_BATTLE_URL = "{{ url_for('battles_app.view_battle', battle_id=999999999) }}";
+	NEW_BATTLE_URL = "{{url_for('battles_app.new_battle_page')}}";
 </script>
 <script src="{{url_for('static', filename='js/new_battle.js')}}"></script>
 {% endblock %}
 {% block body %}
 <h1>Custom Battle</h1>
-<div class="modulebox">
-	<div class="module">
+<section>
+	<div id="battlesettings">
+		<h2>Settings</h2>
+		Number of Frames <br />
+		Height <br />
+		Width <br />
+	</div>
+	<div id="critterbox">
 		<h2>Critters</h2>
 		<ul id="critterlist">
+			<li>Critter1 <a class="remove">X</a></li>
+			<li>Critter2 <a class="remove">X</a></li>
+			<li>Critter3 <a class="remove">X</a></li>
 		</ul>
-		<button id="newcritterbutton">Add Critter</button>
+		<div id="critterselection">
+			<div id="tabbuttonbar">
+				<a class="tabbutton">My Critters</a>
+				<a class="tabbutton">Recently Battled</a>
+				<div class="clear"></div>
+			</div>
+			<table>
+				<tr>
+					<th>Critter</th>
+					<th>Owner</th>
+					<th>Rank</th>
+					<th>Add</th>
+				</tr>
+				<tr>
+					<td>Husky</td>
+					<td>Simon</td>
+					<td>264</td>
+					<td><a>Add</a></td>
+				</tr>
+				<tr>
+					<td>Husky</td>
+					<td>Simon</td>
+					<td>264</td>
+					<td><a>Add</a></td>
+				</tr>
+				<tr>
+					<td>Husky</td>
+					<td>Simon</td>
+					<td>264</td>
+					<td><a>Add</a></td>
+				</tr>
+				<tr>
+					<td>Husky</td>
+					<td>Simon</td>
+					<td>264</td>
+					<td><a>Add</a></td>
+				</tr>
+			</table>
+		</div>
 	</div>
-	<div class="module">
-		<h2>Settings</h2>
-		<ul class="list">
-			<li>length <input id="length" type="number" value="2000" min="1" max="5000" step="1"></input></li>
-			<li>width <input id="width" type="range" value="100" min="10" max="300" step="1"></input></li>
-			<li>height <input id="height" type="range" value="100" min="10" max="300" step="1"></input></li>
-		</ul>
-	</div>
-	<div class="module">
-		<button id="createbutton">Create!</button>
-	</div>
-</div>
+</section>
+<a id="createbutton">Create</a>
 {% endblock %}

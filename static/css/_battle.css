@@ -1,0 +1,148 @@
+@font-face {
+  font-family: HansKendrick;
+  src: url('/static/fonts/HansKendrick-Regular.ttf'); }
+
+  @font-face {
+    font-family: Inconsolata;
+    src: url('/static/fonts/Inconsolata-dz.otf'); }
+
+    @font-face {
+      font-family: Orbitron-black;
+      src: url('/static/fonts/orbitron-black-webfont.woff');
+      font-weight: normal; }
+
+      @font-face {
+        font-family: Orbitron;
+        src: url('/static/fonts/orbitron-bold-webfont.woff');
+        font-weight: normal; }
+
+        @font-face {
+          font-family: Orbitron-light;
+          src: url('/static/fonts/orbitron-light-webfont.woff');
+          font-weight: normal; }
+
+          @font-face {
+            font-family: Raleway;
+            src: url('/static/fonts/raleway_thin-webfont.woff'); }
+
+            @font-face {
+              font-family: Gen;
+              src: url('/static/fonts/Gen-Regular.otf'); }
+
+              @font-face {
+                font-family: Gen-light;
+                src: url('/static/fonts/Gen-Light.otf'); }
+
+                @font-face {
+                  font-family: Gen-light;
+                  src: url('/static/fonts/Gen-Regular.otf');
+                  font-weight: bold; }
+
+                  @font-face {
+                    font-family: Anonymous;
+                    src: url('/static/fonts/Anonymous_Pro.ttf');
+                    font-weight: normal; }
+
+                    @font-face {
+                      font-family: Anonymous;
+                      src: url('/static/fonts/Anonymous_Pro_I.ttf');
+                      font-weight: normal;
+                      font-style: italic; }
+
+                      @font-face {
+                        font-family: Anonymous;
+                        src: url('/static/fonts/Anonymous_Pro_B.ttf');
+                        font-weight: bold;
+                        font-style: normal; }
+
+                        @font-face {
+                          font-family: Anonymous;
+                          src: url('/static/fonts/Anonymous_Pro_BI.ttf');
+                          font-weight: bold;
+                          font-style: italic; }
+
+                          @font-face {
+                            font-family: LeagueGothic;
+                            src: url('/static/fonts/leaguegothic-regular-webfont.woff');
+                            font-weight: normal;
+                            font-style: normal; }
+
+                            @font-face {
+                              font-family: LeagueGothic;
+                              src: url('/static/fonts/leaguegothic-italic-webfont.woff');
+                              font-weight: normal;
+                              font-style: italic; }
+
+                              @font-face {
+                                font-family: LeagueGothicCondensed;
+                                src: url('/static/fonts/leaguegothic-condensed-regular-webfont.woff');
+                                font-weight: normal;
+                                font-style: normal; }
+
+                                @font-face {
+                                  font-family: LeagueGothicCondensed;
+                                  src: url('/static/fonts/leaguegothic-condensed-italic-webfont.woff');
+                                  font-weight: normal;
+                                  font-style: italic; }
+#abovebar {
+  background: #AAA;
+  padding: 4px;
+  margin: 0px; }
+  #abovebar a {
+    cursor: pointer;
+    float: left;
+    margin: 0px;
+    background: none;
+    border: 1px solid #AAA;
+    font-size: 13px;
+    color: #3A3A3A;
+    -moz-user-select: none;
+    -webkit-user-select: none;
+    -ms-user-select: none;
+    padding-top: 2px;
+    padding-bottom: 2px;
+    padding-left: 6px;
+    padding-right: 6px; }
+    #abovebar a.active {
+      background: #EEE; }
+      #abovebar a:hover {
+        color: #EEE; }
+
+#belowbar {
+  background: #AAA;
+  padding: 4px;
+  margin: 0px;
+  clear: both; }
+
+  #loadcounter {
+    font-size: 12px; }
+
+    #framecounter {
+      text-align: center;
+      display: block;
+      float: left;
+      height: 100%;
+      background: #EEE;
+      color: #3A3A3A;
+      vertical-align: middle;
+      padding-top: 2px;
+      padding-bottom: 2px;
+      padding-left: 6px;
+      padding-right: 6px; }
+
+      #battlefield {
+        border: 2px solid #000000;
+        background: #FFF;
+        margin: 0px;
+        padding: 0px;
+        float: left; }
+
+        #sidebar {
+          float: left;
+          padding: 10px; }
+
+          .critterlabel {
+            padding: 4px;
+            background: #666; }
+            .critterlabel.winner {
+              border: 2px solid #FFF; }

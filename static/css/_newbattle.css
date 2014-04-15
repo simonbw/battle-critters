@@ -1,0 +1,198 @@
+@font-face {
+  font-family: HansKendrick;
+  src: url('/static/fonts/HansKendrick-Regular.ttf'); }
+
+  @font-face {
+    font-family: Inconsolata;
+    src: url('/static/fonts/Inconsolata-dz.otf'); }
+
+    @font-face {
+      font-family: Orbitron-black;
+      src: url('/static/fonts/orbitron-black-webfont.woff');
+      font-weight: normal; }
+
+      @font-face {
+        font-family: Orbitron;
+        src: url('/static/fonts/orbitron-bold-webfont.woff');
+        font-weight: normal; }
+
+        @font-face {
+          font-family: Orbitron-light;
+          src: url('/static/fonts/orbitron-light-webfont.woff');
+          font-weight: normal; }
+
+          @font-face {
+            font-family: Raleway;
+            src: url('/static/fonts/raleway_thin-webfont.woff'); }
+
+            @font-face {
+              font-family: Gen;
+              src: url('/static/fonts/Gen-Regular.otf'); }
+
+              @font-face {
+                font-family: Gen-light;
+                src: url('/static/fonts/Gen-Light.otf'); }
+
+                @font-face {
+                  font-family: Gen-light;
+                  src: url('/static/fonts/Gen-Regular.otf');
+                  font-weight: bold; }
+
+                  @font-face {
+                    font-family: Anonymous;
+                    src: url('/static/fonts/Anonymous_Pro.ttf');
+                    font-weight: normal; }
+
+                    @font-face {
+                      font-family: Anonymous;
+                      src: url('/static/fonts/Anonymous_Pro_I.ttf');
+                      font-weight: normal;
+                      font-style: italic; }
+
+                      @font-face {
+                        font-family: Anonymous;
+                        src: url('/static/fonts/Anonymous_Pro_B.ttf');
+                        font-weight: bold;
+                        font-style: normal; }
+
+                        @font-face {
+                          font-family: Anonymous;
+                          src: url('/static/fonts/Anonymous_Pro_BI.ttf');
+                          font-weight: bold;
+                          font-style: italic; }
+
+                          @font-face {
+                            font-family: LeagueGothic;
+                            src: url('/static/fonts/leaguegothic-regular-webfont.woff');
+                            font-weight: normal;
+                            font-style: normal; }
+
+                            @font-face {
+                              font-family: LeagueGothic;
+                              src: url('/static/fonts/leaguegothic-italic-webfont.woff');
+                              font-weight: normal;
+                              font-style: italic; }
+
+                              @font-face {
+                                font-family: LeagueGothicCondensed;
+                                src: url('/static/fonts/leaguegothic-condensed-regular-webfont.woff');
+                                font-weight: normal;
+                                font-style: normal; }
+
+                                @font-face {
+                                  font-family: LeagueGothicCondensed;
+                                  src: url('/static/fonts/leaguegothic-condensed-italic-webfont.woff');
+                                  font-weight: normal;
+                                  font-style: italic; }
+#battlesettings {
+  box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  float: left;
+  margin: 0px;
+  width: 200px; }
+
+  #critterbox {
+    box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    float: left;
+    list-style: none;
+    margin: 0px;
+    padding: 0px 16px;
+    width: calc(100% - 200px); }
+    #critterbox ul#critterlist {
+      -moz-user-select: none;
+      -webkit-user-select: none;
+      -ms-user-select: none;
+      cursor: default;
+      float: left;
+      list-style: none;
+      margin: 0px;
+      padding: 0px;
+      width: 35%; }
+      #critterbox ul#critterlist li {
+        background: #EEE;
+        border-bottom: 1px dashed #BBB;
+        padding: 8px; }
+        #critterbox ul#critterlist li:hover {
+          background: #e1e1e1; }
+          #critterbox ul#critterlist li .remove {
+            color: #DD0000;
+            cursor: pointer;
+            float: right;
+            text-decoration: none; }
+            #critterbox ul#critterlist li .remove:hover {
+              text-decoration: underline; }
+    #critterbox #critterselection {
+      box-sizing: border-box;
+      -moz-box-sizing: border-box;
+      float: left;
+      margin: 0px;
+      min-width: 300px;
+      padding-left: 14px;
+      width: 65%; }
+      #critterbox #critterselection #tabbuttonbar {
+        background: #AAA; }
+        #critterbox #critterselection #tabbuttonbar .tabbutton {
+          -moz-user-select: none;
+          -webkit-user-select: none;
+          -ms-user-select: none;
+          cursor: default;
+          background: none;
+          color: #3A3A3A;
+          cursor: pointer;
+          float: left;
+          font-size: 13px;
+          margin: 0px;
+          padding-top: 2px;
+          padding-bottom: 2px;
+          padding-left: 8px;
+          padding-right: 8px; }
+          #critterbox #critterselection #tabbuttonbar .tabbutton.active {
+            cursor: default;
+            background: #EEE; }
+            #critterbox #critterselection #tabbuttonbar .tabbutton.active:hover {
+              color: #3A3A3A; }
+          #critterbox #critterselection #tabbuttonbar .tabbutton:hover {
+            color: #EEE; }
+      #critterbox #critterselection table {
+        -moz-user-select: none;
+        -webkit-user-select: none;
+        -ms-user-select: none;
+        cursor: default;
+        background: #EEE;
+        width: 100%;
+        border: 1px solid #888; }
+        #critterbox #critterselection table th {
+          font-weight: bold;
+          padding: 2px;
+          text-align: left; }
+          #critterbox #critterselection table tr {
+            border: none;
+            margin: 0px;
+            padding: 0px; }
+            #critterbox #critterselection table tr:hover {
+              background: #e1e1e1; }
+        #critterbox #critterselection table tr:first-child {
+          border-bottom: 1px solid #888;
+          background: #CFCFCF; }
+          #critterbox #critterselection table tr:first-child:hover {
+            background: #CFCFCF; }
+        #critterbox #critterselection table td {
+          padding: 2px;
+          margin: 0px; }
+
+#createbutton {
+  border-radius: 16px;
+  background: #AAA;
+  clear: both;
+  cursor: pointer;
+  display: block;
+  margin: auto;
+  padding: 10px 0px;
+  text-align: center;
+  text-decoration: underline;
+  width: 200px;
+  font-family: Orbitron-light, "Lucida Sans Unicode", "Lucida Grande", sans-serif;
+  font-size: 1.5em; }
+  #createbutton:hover {
+    background: #9d9d9d; }

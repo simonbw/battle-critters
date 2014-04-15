@@ -34,32 +34,61 @@
                 src: url('/static/fonts/Gen-Light.otf'); }
 
                 @font-face {
-                  font-family: Anonymous;
-                  src: url('/static/fonts/Anonymous_Pro.ttf');
-                  font-weight: normal; }
+                  font-family: Gen-light;
+                  src: url('/static/fonts/Gen-Regular.otf');
+                  font-weight: bold; }
 
                   @font-face {
                     font-family: Anonymous;
-                    src: url('/static/fonts/Anonymous_Pro_I.ttf');
-                    font-weight: normal;
-                    font-style: italic; }
+                    src: url('/static/fonts/Anonymous_Pro.ttf');
+                    font-weight: normal; }
 
                     @font-face {
                       font-family: Anonymous;
-                      src: url('/static/fonts/Anonymous_Pro_B.ttf');
-                      font-weight: bold;
-                      font-style: normal; }
+                      src: url('/static/fonts/Anonymous_Pro_I.ttf');
+                      font-weight: normal;
+                      font-style: italic; }
 
                       @font-face {
                         font-family: Anonymous;
-                        src: url('/static/fonts/Anonymous_Pro_BI.ttf');
+                        src: url('/static/fonts/Anonymous_Pro_B.ttf');
                         font-weight: bold;
-                        font-style: italic; }
+                        font-style: normal; }
+
+                        @font-face {
+                          font-family: Anonymous;
+                          src: url('/static/fonts/Anonymous_Pro_BI.ttf');
+                          font-weight: bold;
+                          font-style: italic; }
+
+                          @font-face {
+                            font-family: LeagueGothic;
+                            src: url('/static/fonts/leaguegothic-regular-webfont.woff');
+                            font-weight: normal;
+                            font-style: normal; }
+
+                            @font-face {
+                              font-family: LeagueGothic;
+                              src: url('/static/fonts/leaguegothic-italic-webfont.woff');
+                              font-weight: normal;
+                              font-style: italic; }
+
+                              @font-face {
+                                font-family: LeagueGothicCondensed;
+                                src: url('/static/fonts/leaguegothic-condensed-regular-webfont.woff');
+                                font-weight: normal;
+                                font-style: normal; }
+
+                                @font-face {
+                                  font-family: LeagueGothicCondensed;
+                                  src: url('/static/fonts/leaguegothic-condensed-italic-webfont.woff');
+                                  font-weight: normal;
+                                  font-style: italic; }
 .cm-s-custom_theme.CodeMirror {
   background: #141414;
   color: #FAFAFA;
   border-right: 1px solid #2A2A2A;
-  font-family: Anonymous, monospace;
+  font-family: Inconsolas, monospace;
   font-size: 13px; }
   .cm-s-custom_theme.CodeMirror ::-webkit-scrollbar {
     box-sizing: content-box;
@@ -79,7 +108,7 @@
     border-right: 1px solid #888; }
     .cm-s-custom_theme .CodeMirror-linenumber {
       color: #BBB;
-      font-family: Anonymous, monospace;
+      font-family: Inconsolas, monospace;
       font-size: 13px; }
       .cm-s-custom_theme .CodeMirror-cursor {
         border-left: 1px solid white !important; }

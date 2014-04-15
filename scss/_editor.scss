@@ -1,3 +1,6 @@
+@import 'mixins';
+@import 'fonts';
+
 #editorbox {
 	margin: {
 		top: 50px;
@@ -38,11 +41,14 @@
 		border-top-right-radius: $module_radius;
 
 		h1 {
+			@include borderbox();
+			border-bottom: 1px solid white;
 			color: #FFF;
 			width: 100%;
-			box-sizing: border-box;
-			-moz-box-sizing: border-box;
-			border-bottom: 1px solid white;
+			font: {
+				family: $font_title;
+				size : 32px;
+			}
 			margin: {
 				top: 2px;
 				left: 0px;
@@ -52,10 +58,6 @@
 			padding: {
 				left: 30px;
 				right: 0px;
-			}
-			font: {
-				family: $font_title;
-				size : 32px;
 			}
 		}
 

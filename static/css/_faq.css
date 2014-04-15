@@ -1,0 +1,112 @@
+@font-face {
+  font-family: HansKendrick;
+  src: url('/static/fonts/HansKendrick-Regular.ttf'); }
+
+  @font-face {
+    font-family: Inconsolata;
+    src: url('/static/fonts/Inconsolata-dz.otf'); }
+
+    @font-face {
+      font-family: Orbitron-black;
+      src: url('/static/fonts/orbitron-black-webfont.woff');
+      font-weight: normal; }
+
+      @font-face {
+        font-family: Orbitron;
+        src: url('/static/fonts/orbitron-bold-webfont.woff');
+        font-weight: normal; }
+
+        @font-face {
+          font-family: Orbitron-light;
+          src: url('/static/fonts/orbitron-light-webfont.woff');
+          font-weight: normal; }
+
+          @font-face {
+            font-family: Raleway;
+            src: url('/static/fonts/raleway_thin-webfont.woff'); }
+
+            @font-face {
+              font-family: Gen;
+              src: url('/static/fonts/Gen-Regular.otf'); }
+
+              @font-face {
+                font-family: Gen-light;
+                src: url('/static/fonts/Gen-Light.otf'); }
+
+                @font-face {
+                  font-family: Gen-light;
+                  src: url('/static/fonts/Gen-Regular.otf');
+                  font-weight: bold; }
+
+                  @font-face {
+                    font-family: Anonymous;
+                    src: url('/static/fonts/Anonymous_Pro.ttf');
+                    font-weight: normal; }
+
+                    @font-face {
+                      font-family: Anonymous;
+                      src: url('/static/fonts/Anonymous_Pro_I.ttf');
+                      font-weight: normal;
+                      font-style: italic; }
+
+                      @font-face {
+                        font-family: Anonymous;
+                        src: url('/static/fonts/Anonymous_Pro_B.ttf');
+                        font-weight: bold;
+                        font-style: normal; }
+
+                        @font-face {
+                          font-family: Anonymous;
+                          src: url('/static/fonts/Anonymous_Pro_BI.ttf');
+                          font-weight: bold;
+                          font-style: italic; }
+
+                          @font-face {
+                            font-family: LeagueGothic;
+                            src: url('/static/fonts/leaguegothic-regular-webfont.woff');
+                            font-weight: normal;
+                            font-style: normal; }
+
+                            @font-face {
+                              font-family: LeagueGothic;
+                              src: url('/static/fonts/leaguegothic-italic-webfont.woff');
+                              font-weight: normal;
+                              font-style: italic; }
+
+                              @font-face {
+                                font-family: LeagueGothicCondensed;
+                                src: url('/static/fonts/leaguegothic-condensed-regular-webfont.woff');
+                                font-weight: normal;
+                                font-style: normal; }
+
+                                @font-face {
+                                  font-family: LeagueGothicCondensed;
+                                  src: url('/static/fonts/leaguegothic-condensed-italic-webfont.woff');
+                                  font-weight: normal;
+                                  font-style: italic; }
+#faqlist {
+  background: #EEE;
+  box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  border-radius: 8px;
+  margin-left: 160px;
+  margin-right: 160px;
+  padding-top: 1px;
+  padding-bottom: 1px;
+  padding-left: 20px;
+  padding-right: 20px; }
+  #faqlist li {
+    border-bottom: 1px dotted grey;
+    list-style: none;
+    padding-bottom: 10px;
+    padding-top: 0px;
+    padding-left: 0px;
+    padding-right: 0px;
+    margin-top: 20px;
+    margin-bottom: 10px; }
+    #faqlist li:last-child {
+      border-bottom: none; }
+      #faqlist li .question {
+        font-size: 20px;
+        font-weight: bold;
+        cursor: pointer; }

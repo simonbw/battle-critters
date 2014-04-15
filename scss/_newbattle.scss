@@ -1,0 +1,146 @@
+@import 'fonts';
+@import 'mixins';
+
+#battlesettings {
+	@include borderbox();
+	float: left;
+	margin: 0px;
+	width: 200px;
+}
+
+#critterbox {
+	@include borderbox();
+	float: left;
+	list-style: none;
+	margin: 0px;
+	padding: 0px 16px;
+	width: unquote("calc(100% - 200px)");
+
+	ul#critterlist {
+		@include unselectable();
+		float: left;
+		list-style: none;
+		margin: 0px;
+		padding: 0px;
+		width: 35%;
+		li {
+			background: $light_bg3;
+			border-bottom: 1px dashed $accent3;
+			padding: 8px;
+
+			&:hover {
+				background: darken($light_bg3, 5%);
+			}
+
+			.remove {
+				color: #DD0000;
+				cursor: pointer;
+				float: right;
+				text-decoration: none;
+
+				&:hover {
+					text-decoration: underline;
+				}
+			}
+		}
+	}
+
+	#critterselection {
+		@include borderbox();
+		float: left;
+		margin: 0px;
+		min-width: 300px;
+		padding-left: $module_spacing;
+		width: 65%;
+
+		#tabbuttonbar {
+			background: $light_bg2;
+
+			.tabbutton {
+				@include unselectable();
+				background: none;
+				color: $accent1;
+				cursor: pointer;
+				float:left;
+				font-size: 13px;
+				margin: 0px;
+
+				padding: {
+					top: 2px;
+					bottom: 2px;
+					left: 8px;
+					right: 8px;
+				}
+
+
+				&.active {
+					cursor: default;
+					background: $light_bg3;
+
+					&:hover {
+						color: $accent1;
+					}
+				}
+				&:hover {
+					color: #EEE;
+				}
+			}
+		}
+
+		table {
+			@include unselectable();
+			background: $light_bg3;
+			width: 100%;
+			border: 1px solid $accent2;
+
+			th {
+				font-weight: bold;
+				padding: 2px;
+				text-align: left;
+			}
+			tr {
+				border: none;
+				margin: 0px;
+				padding: 0px;
+				&:hover {
+					background: darken($light_bg3, 5%);
+				}
+			}
+			tr:first-child {
+				border-bottom: 1px solid $accent2;
+				background: $light_bg;
+				&:hover {
+					background: $light_bg;
+				}
+			}
+			td {
+				padding: 2px;
+				margin: 0px;
+			}
+		}
+	}
+}
+
+
+
+#createbutton {
+	border-radius: 16px;
+	background: $light_bg2;
+	clear: both;
+	cursor: pointer;
+	display: block;
+	margin: auto;
+	padding: 10px 0px;
+	text-align: center;
+	text-decoration: underline;
+	width: 200px;
+
+	font: {
+		family: $font_toolbar;
+		size: 1.5em;
+	}
+	&:hover {
+		background: darken($light_bg2, 5%);
+	}
+}
+

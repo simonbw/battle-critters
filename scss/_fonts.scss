@@ -38,6 +38,11 @@
 	font-family: Gen-light;
 	src: url('/static/fonts/Gen-Light.otf');
 }
+@font-face {
+	font-family: Gen-light;
+	src: url('/static/fonts/Gen-Regular.otf');
+	font-weight: bold;
+}
 
 @font-face {
 	font-family: Anonymous;
@@ -89,11 +94,11 @@
 	font-style: italic;
 }
 
-$font_title = Orbitron-black, serif;
-$font_main = Gen-light, Helvetica, sans-serif;
-$font_heading = Orbitron, Helvetica, sans-serif;
-$font_subheading = Anonymous, Helvetica, sans-serif;
-$font_accent = HansKendrick, Helvetica, sans-serif;
-$font_toolbar = Orbitron-light, "Lucida Sans Unicode", "Lucida Grande", sans-serif;
-$font_titlebar = Orbitron-light, Helvetica, sans-serif;
-$font_monospace = Inconsolas, monospace;
+$font_title: Orbitron-black, serif;
+$font_main: Gen-light, Helvetica, sans-serif;
+$font_heading: Orbitron, Helvetica, sans-serif;
+$font_subheading: Anonymous, Helvetica, sans-serif;
+$font_accent: HansKendrick, Helvetica, sans-serif;
+$font_toolbar: Orbitron-light, "Lucida Sans Unicode", "Lucida Grande", sans-serif;
+$font_titlebar: Orbitron-light, Helvetica, sans-serif;
+$font_monospace: Inconsolas, monospace;

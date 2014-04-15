@@ -82,13 +82,14 @@ body {
 		}
 		padding:  {
 			left: 20px;
-			right 20px;
+			right: 20px;
 			top: 5px;
 			bottom: 5px;
 		}
 	}
 	h2 {
 		margin: 0px;
+		margin-bottom: 4px;
 		font: {
 			family: $font_heading;
 			size: 20px;
@@ -120,6 +121,7 @@ body {
 			top: 0px;
 		}
 	} section {
+		overflow: hidden;
 		margin: {
 			bottom: $module_spacing;
 			top: $module_spacing;
@@ -172,6 +174,6 @@ body {
 .right {
 	float: right;
 }
-.left: {
+.left {
 	float: left;
 }
