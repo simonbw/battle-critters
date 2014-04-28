@@ -3,12 +3,12 @@
 {% block scripts %}
 {{super()}}
 <script type="text/javascript">
-	CRITTER_LINK = "{{ url_for('editor_app.view_file', owner='insertownerhere', filename='insertfilenamehere') }}";
-	VIEW_BATTLE_URL = "{{ url_for('battles_app.view_battle', battle_id=999999999) }}";
-	NEW_BATTLE_URL = "{{url_for('battles_app.new_battle_page')}}";
 	CRITTER_JSON_URL = "{{url_for('editor_app.get_critters_json')}}";
-	CRITTER_USER_IDS_URL = "{{url_for('editor_app.get_user_critter_ids')}}";
+	CRITTER_LINK = "{{ url_for('editor_app.view_file', owner='insertownerhere', filename='insertfilenamehere') }}";
 	CRITTER_RANDOM_IDS_URL = "{{url_for('editor_app.get_random_critter_ids')}}";
+	CRITTER_USER_IDS_URL = "{{url_for('editor_app.get_user_critter_ids')}}";
+	NEW_BATTLE_URL = "{{url_for('battles_app.new_battle_page')}}";
+	VIEW_BATTLE_URL = "{{ url_for('battles_app.view_battle', battle_id=999999999) }}";
 </script>
 <script src="{{url_for('static', filename='js/new_battle.js')}}"></script>
 {% endblock %}
@@ -17,9 +17,10 @@
 <section>
 	<div id="battlesettings">
 		<h2>Settings</h2>
-		Number of Frames <br />
-		Height <br />
-		Width <br />
+		Steps <input id="battlelength" type="number" value="2000" min="1" max="5000" step="1" /><br />
+		Size 
+		<input id="battlewidth" type="number" value="100" min="30" max="300" step="1" /> x
+		<input id="battleheight" type="number" value="100" min="30" max="300" step="1" /><br />
 	</div>
 	<div id="critterbox">
 		<h2>Critters</h2>

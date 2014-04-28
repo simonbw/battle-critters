@@ -50,7 +50,7 @@ class Critter():
 	@staticmethod
 	def from_id(id):
 		"""Load a critter from id"""
-		row = g.db.execute("SELECT id, name, owner_id, creation_time, last_save_time, score FROM critters WHERE id=?", (id,)).fetchone()
+		row = g.db.execute("SELECT * FROM critters WHERE id=?", (id,)).fetchone()
 		if row is None:
 			raise LookupError("Critter not found: " + str(id))
 		return Critter(row)
@@ -60,9 +60,9 @@ class Critter():
 		self.id = row['id']
 		self.name = row['name']
 		if ('content' in row):
-			self.content = row['content']
+			self._content = row['content']
 		else:
-			self.content = None
+			self._content = None
 		# self.content = zlib.decompress(self.content)
 		self.owner_id = row['owner_id']
 		self._owner = None
@@ -81,7 +81,7 @@ class Critter():
 	def content(self):
 		"""Lazy load the content of this Critter"""
 		if self._content == None:
-			self._content = g.db.execute("SELECT content FROM critters WHERE id=?", (id,)).fetchone()['content']
+			self._content = g.db.execute("SELECT content FROM critters WHERE id=?", (self.id,)).fetchone()['content']
 		return self._content
 
 	def get_all_battles(self):
@@ -300,19 +300,22 @@ def create_file(owner, filename, content=None):
 
 def compile_file_actual(critter):
 	"""Actually compiles a file"""
-	temp_name = os.path.join('.', 'java','temp_critters', critter.name + '.java')
-	content = process_file(critter.content, critter.owner.name, critter.name)
-	with open(temp_name, 'w') as f:
-		f.write(content)
-	command = "javac -cp {cp} -d {d} {filename}".format(
-		cp=os.path.join('.', 'java','bin'),
-		d=os.path.join('.', 'java', 'bin'),
-		filename=temp_name)
 	try:
-		subprocess.check_output(command, stderr=subprocess.STDOUT, shell=True)
-		return "success"
-	except subprocess.CalledProcessError as e:
-		return Markup(format_compiler_output(e.output))
+		temp_name = os.path.join('.', 'java','temp_critters', critter.name + '.java')
+		content = process_file(critter.content, critter.owner.username, critter.name)
+		with open(temp_name, 'w') as f:
+			f.write(content)
+		command = "javac -cp {cp} -d {d} {filename}".format(
+			cp=os.path.join('.', 'java','bin'),
+			d=os.path.join('.', 'java', 'bin'),
+			filename=temp_name)
+		try:
+			subprocess.check_output(command, stderr=subprocess.STDOUT, shell=True)
+			return "success"
+		except subprocess.CalledProcessError as e:
+			return Markup(format_compiler_output(e.output))
+	except Exception as e:
+		print e
 
 def process_file(content, owner, filename):
 	"""Process a raw code file to be compiled."""

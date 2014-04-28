@@ -201,9 +201,9 @@ $(function() {
 		var request_data = {
 			critters: critters,
 			owners: owners,
-			height: $("#battlesettings #height").val(),
-			width: $("#battlesettings #width").val(),
-			length: $("#battlesettings #length").val()
+			height: $("#battleheight").val(),
+			width: $("#battlewidth").val(),
+			length: $("#battlelength").val()
 		};
 		console.log(request_data);
 		$.post(NEW_BATTLE_URL, request_data, function(data) {
