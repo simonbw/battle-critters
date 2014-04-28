@@ -146,233 +146,159 @@
             background: #666; }
             .critterlabel.winner {
               border: 2px solid #FFF; }
-#editorbox {
-  margin-top: 50px;
-  margin-left: 100px;
-  margin-right: 100px;
-  box-shadow: 0px 3px 16px black; }
-  #editorbox #toolbar, #editorbox #statusbar {
-    padding-top: 4px;
-    padding-bottom: 4px;
-    padding-left: 10px;
-    padding-right: 10px;
-    background: #8B8B8B;
-    color: #FAFAFA;
-    font-family: Orbitron-light, "Lucida Sans Unicode", "Lucida Grande", sans-serif;
-    font-size: 12px; }
-    #editorbox #toolbar a, #editorbox #statusbar a {
-      color: #DCCC22; }
-      #editorbox #toolbar a:hover, #editorbox #statusbar a:hover {
-        color: #FDDD33; }
-        #editorbox #toolbar a:active, #editorbox #statusbar a:active {
-          color: #FDDD33; }
-  #editorbox #toolbar {
-    border-top-left-radius: 8px;
-    border-top-right-radius: 8px; }
-    #editorbox #toolbar h1 {
-      box-sizing: border-box;
-      -moz-box-sizing: border-box;
-      border-bottom: 1px solid white;
-      color: #FFF;
-      width: 100%;
-      font-family: Orbitron-black, serif;
-      font-size: 32px;
-      margin-top: 2px;
-      margin-left: 0px;
-      margin-right: 0px;
-      margin-bottom: 0px;
-      padding-left: 30px;
-      padding-right: 0px; }
-      #editorbox #toolbar .items {
-        box-sizing: border-box;
-        -moz-box-sizing: border-box;
-        width: 100%;
-        margin-top: 2px; }
-        #editorbox #toolbar .item {
-          margin: 0px;
-          padding: 0px;
-          display: inline;
-          margin-right: 1px;
-          box-sizing: border-box;
-          -moz-box-sizing: border-box;
-          font-family: Orbitron-light, "Lucida Sans Unicode", "Lucida Grande", sans-serif;
-          font-size: 12px; }
-          #editorbox #toolbar .item.left {
-            float: left; }
-            #editorbox #toolbar .item.right {
-              float: right; }
-              #editorbox #toolbar .item a {
-                padding-left: 6px;
-                padding-right: 6px;
-                padding-top: 2px;
-                padding-bottom: 1px;
-                margin: 0px;
-                cursor: pointer;
-                text-decoration: none;
-                background: #666; }
-                #editorbox #toolbar .item a:hover {
-                  background: #666; }
-                  #editorbox #toolbar .item a:active {
-                    background: #606060; }
-  #editorbox #middlebox {
-    background: #CFCFCF; }
-    #editorbox #statusbar {
-      border-bottom-left-radius: 8px;
-      border-bottom-right-radius: 8px; }
-      #editorbox #statusbar.error {
-        background: #B33; }
-        #editorbox #statusbar.compiling {
-          background: #AA8; }
-          #editorbox #statusbar li {
-            list-style: none;
-            padding: 0px;
-            margin: 0px;
-            display: inline;
-            border-right: 1px solid #FFF;
-            padding-right: 6px;
-            margin-left: 6px; }
-            #editorbox #statusbar #errordisplay {
-              margin: auto;
-              background: white;
-              color: black;
-              max-height: 200px;
-              overflow-y: auto;
-              font-family: Inconsolas, monospace;
-              font-size: 12px; }
-  #editorbox #editor {
-    height: auto; }
+@font-face {
+  font-family: HansKendrick;
+  src: url("/static/fonts/HansKendrick-Regular.ttf"); }
 
-#helpbox {
-  margin: 0px;
-  float: right;
-  width: 30%;
-  overflow-y: auto;
-  box-sizing: border-box;
-  -moz-box-sizing: border-box;
-  padding: 10px;
-  font-family: Gen-light, Helvetica, sans-serif;
-  font-size: 14px; }
-  #helpbox::-webkit-scrollbar {
-    width: 12px; }
-    #helpbox::-webkit-scrollbar-thumb {
-      background: #AAA; }
-      #helpbox p {
-        padding: 0px;
-        text-indent: 20px;
-        margin-top: 2px;
-        margin-bottom: 2px; }
-        #helpbox h1 {
-          font-family: Orbitron, Helvetica, sans-serif;
-          font-size: 22px;
-          font-weight: normal;
-          margin-left: 0px;
-          margin-right: 0px;
-          margin-top: 12px;
-          margin-bottom: 8px; }
-          #helpbox h2 {
-            font-family: Anonymous, Helvetica, sans-serif;
-            font-size: 16px;
-            font-weight: normal;
-            margin-top: 10px;
-            margin-bottom: 4px;
-            border-bottom: 1px dashed #AAA; }
-            #helpbox ul {
-              margin: 0px; }
-              #helpbox table {
-                width: 100%;
-                margin: 0px;
-                box-sizing: border-box;
-                -moz-box-sizing: border-box;
-                background: #EEE;
-                font-size: 12px;
-                border-collapse: collapse; }
-                #helpbox table tr {
-                  border-top: 1px dotted #CFCFCF; }
-                  #helpbox table tr:first-child {
-                    border-top: none; }
-                    #helpbox table td {
-                      padding-top: 2px;
-                      padding-left: 4px;
-                      padding-right: 4px; }
-                      #helpbox table td:first-child {
+  @font-face {
+    font-family: Inconsolata;
+    src: url("/static/fonts/Inconsolata-dz.otf"); }
+
+    @font-face {
+      font-family: Orbitron-black;
+      src: url("/static/fonts/orbitron-black-webfont.woff");
+      font-weight: normal; }
+
+      @font-face {
+        font-family: Orbitron;
+        src: url("/static/fonts/orbitron-bold-webfont.woff");
+        font-weight: normal; }
+
+        @font-face {
+          font-family: Orbitron-light;
+          src: url("/static/fonts/orbitron-light-webfont.woff");
+          font-weight: normal; }
+
+          @font-face {
+            font-family: Raleway;
+            src: url("/static/fonts/raleway_thin-webfont.woff"); }
+
+            @font-face {
+              font-family: Gen;
+              src: url("/static/fonts/Gen-Regular.otf"); }
+
+              @font-face {
+                font-family: Gen-light;
+                src: url("/static/fonts/Gen-Light.otf"); }
+
+                @font-face {
+                  font-family: Gen-light;
+                  src: url("/static/fonts/Gen-Regular.otf");
+                  font-weight: bold; }
+
+                  @font-face {
+                    font-family: Anonymous;
+                    src: url("/static/fonts/Anonymous_Pro.ttf");
+                    font-weight: normal; }
+
+                    @font-face {
+                      font-family: Anonymous;
+                      src: url("/static/fonts/Anonymous_Pro_I.ttf");
+                      font-weight: normal;
+                      font-style: italic; }
+
+                      @font-face {
+                        font-family: Anonymous;
+                        src: url("/static/fonts/Anonymous_Pro_B.ttf");
                         font-weight: bold;
-                        padding-right: 8px;
-                        font-family: Inconsolas, monospace; }
-  #helpbox #tabbuttonbar {
-    background: #AAA;
-    width: 100%; }
-    #helpbox #tabbuttonbar .tabbutton {
-      cursor: pointer;
-      float: left;
-      margin: 0px;
-      background: none;
-      font-size: 13px;
-      color: #3A3A3A;
-      -moz-user-select: none;
-      -webkit-user-select: none;
-      -ms-user-select: none;
-      padding-top: 2px;
-      padding-bottom: 2px;
-      padding-left: 8px;
-      padding-right: 8px; }
-      #helpbox #tabbuttonbar .tabbutton.active {
-        cursor: default;
-        background: #EEE; }
-        #helpbox #tabbuttonbar .tabbutton.active:hover {
-          color: #3A3A3A; }
-      #helpbox #tabbuttonbar .tabbutton:hover {
-        color: #EEE; }
+                        font-style: normal; }
 
-.CodeMirror {
-  height: auto;
-  width: 70%;
-  float: left;
-  box-sizing: border-box;
-  -moz-box-sizing: border-box; }
-  .CodeMirror .compile-error {
-    background: #581414; }
+                        @font-face {
+                          font-family: Anonymous;
+                          src: url("/static/fonts/Anonymous_Pro_BI.ttf");
+                          font-weight: bold;
+                          font-style: italic; }
 
-.CodeMirror-scroll {
-  min-height: 10px;
-  max-height: 300px;
-  box-sizing: border-box;
-  -moz-box-sizing: border-box;
-  font-family: Inconsolas, monospace;
-  font-size: 13px; }
+                          @font-face {
+                            font-family: LeagueGothic;
+                            src: url("/static/fonts/leaguegothic-regular-webfont.woff");
+                            font-weight: normal;
+                            font-style: normal; }
 
-  .CodeMirror-dialog {
-    position: absolute;
-    left: 0px;
-    right: 0px;
-    bottom: 0px;
-    background: #141414;
-    color: #888;
-    z-index: 15;
-    padding: 0.1em 0.8em;
-    overflow: hidden; }
+                            @font-face {
+                              font-family: LeagueGothic;
+                              src: url("/static/fonts/leaguegothic-italic-webfont.woff");
+                              font-weight: normal;
+                              font-style: italic; }
 
-    .CodeMirror-dialog-top {
-      border-top: 1px solid #888; }
+                              @font-face {
+                                font-family: LeagueGothicCondensed;
+                                src: url("/static/fonts/leaguegothic-condensed-regular-webfont.woff");
+                                font-weight: normal;
+                                font-style: normal; }
 
-      .CodeMirror-dialog-bottom {
-        bottom: 0; }
+                                @font-face {
+                                  font-family: LeagueGothicCondensed;
+                                  src: url("/static/fonts/leaguegothic-condensed-italic-webfont.woff");
+                                  font-weight: normal;
+                                  font-style: italic; }
 
-        .CodeMirror-dialog input {
-          border: none;
-          outline: none;
-          background: transparent;
-          width: 20em;
-          color: inherit;
-          font-family: Inconsolas, monospace; }
+                                  #abovebar {
+                                    background: #aaaaaa;
+                                    padding: 4px;
+                                    margin: 0px; }
 
-          .CodeMirror-dialog button {
-            height: 100%;
-            background: none;
-            border: 1px solid #3A3A3A;
-            color: #888; }
-            .CodeMirror-dialog button:focus {
-              background: #3A3A3A;
-              color: #BBB; }
+                                    #abovebar a {
+                                      cursor: pointer;
+                                      float: left;
+                                      margin: 0px;
+                                      background: none;
+                                      border: 1px solid #aaaaaa;
+                                      font-size: 13px;
+                                      color: #3a3a3a;
+                                      -moz-user-select: none;
+                                      -webkit-user-select: none;
+                                      -ms-user-select: none;
+                                      padding-top: 2px;
+                                      padding-bottom: 2px;
+                                      padding-left: 6px;
+                                      padding-right: 6px; }
+
+                                      #abovebar a.active {
+                                        background: #eeeeee; }
+
+                                        #abovebar a:hover {
+                                          color: #EEE; }
+
+                                          #belowbar {
+                                            background: #aaaaaa;
+                                            padding: 4px;
+                                            margin: 0px;
+                                            clear: both; }
+
+                                            #loadcounter {
+                                              font-size: 12px; }
+
+                                              #framecounter {
+                                                text-align: center;
+                                                display: block;
+                                                float: left;
+                                                height: 100%;
+                                                background: #eeeeee;
+                                                color: #3a3a3a;
+                                                vertical-align: middle;
+                                                padding-top: 2px;
+                                                padding-bottom: 2px;
+                                                padding-left: 6px;
+                                                padding-right: 6px; }
+
+                                                #battlefield {
+                                                  border: 2px solid #000000;
+                                                  background: #FFF;
+                                                  margin: 0px;
+                                                  padding: 0px;
+                                                  float: left; }
+
+                                                  #sidebar {
+                                                    float: left;
+                                                    padding: 10px; }
+
+                                                    .critterlabel {
+                                                      padding: 4px;
+                                                      background: #666; }
+
+                                                      .critterlabel.winner {
+                                                        border: 2px solid #FFF; }
 #faqlist {
   background: #EEE;
   box-sizing: border-box;
@@ -490,23 +416,32 @@
       #critterbox ul#critterlist li {
         background: #EEE;
         border-bottom: 1px dashed #BBB;
-        padding: 8px; }
+        padding: 4px 16px; }
         #critterbox ul#critterlist li:hover {
           background: #e1e1e1; }
-          #critterbox ul#critterlist li .remove {
-            color: #DD0000;
-            cursor: pointer;
-            float: right;
-            text-decoration: none; }
-            #critterbox ul#critterlist li .remove:hover {
-              text-decoration: underline; }
+          #critterbox ul#critterlist li:last-of-type {
+            border-bottom: none; }
+            #critterbox ul#critterlist li .ownername {
+              font-size: 0.8em;
+              padding-left: 10px; }
+              #critterbox ul#critterlist li .ownername:after {
+                content: ")"; }
+                #critterbox ul#critterlist li .ownername:before {
+                  content: "("; }
+        #critterbox ul#critterlist li .remove {
+          color: #DD0000;
+          cursor: pointer;
+          float: right;
+          text-decoration: none; }
+          #critterbox ul#critterlist li .remove:hover {
+            text-decoration: underline; }
     #critterbox #critterselection {
       box-sizing: border-box;
       -moz-box-sizing: border-box;
       float: left;
       margin: 0px;
       min-width: 300px;
-      padding-left: 14px;
+      padding-right: 14px;
       width: 65%; }
       #critterbox #critterselection #tabbuttonbar {
         background: #AAA; }
@@ -532,32 +467,87 @@
               color: #3A3A3A; }
           #critterbox #critterselection #tabbuttonbar .tabbutton:hover {
             color: #EEE; }
-      #critterbox #critterselection table {
-        -moz-user-select: none;
-        -webkit-user-select: none;
-        -ms-user-select: none;
-        cursor: default;
+      #critterbox #critterselection .tablebox {
         background: #EEE;
-        width: 100%;
-        border: 1px solid #888; }
-        #critterbox #critterselection table th {
-          font-weight: bold;
-          padding: 2px;
-          text-align: left; }
-          #critterbox #critterselection table tr {
+        border: 1px solid #888;
+        display: block;
+        max-height: 400px;
+        overflow-y: auto;
+        width: 100%; }
+        #critterbox #critterselection .tablebox::-webkit-scrollbar {
+          width: 12px; }
+          #critterbox #critterselection .tablebox::-webkit-scrollbar-track {
+            background: #CFCFCF; }
+            #critterbox #critterselection .tablebox::-webkit-scrollbar-thumb {
+              background: #AAA; }
+              #critterbox #critterselection .tablebox div:first-child {
+                border-bottom: 1px solid #888;
+                font-weight: bold;
+                overflow: hidden;
+                padding: 4px; }
+                #critterbox #critterselection .tablebox div:first-child span {
+                  display: block;
+                  float: left;
+                  width: 32%; }
+        #critterbox #critterselection .tablebox ul {
+          list-style: none;
+          margin: 0px;
+          max-height: 400px;
+          overflow: auto;
+          padding: 0px;
+          width: 100%; }
+          #critterbox #critterselection .tablebox ul li {
+            -moz-user-select: none;
+            -webkit-user-select: none;
+            -ms-user-select: none;
+            cursor: default;
+            cursor: pointer;
+            display: block;
+            margin: 0px;
+            overflow: hidden;
+            padding: 4px;
+            width: 100%; }
+            #critterbox #critterselection .tablebox ul li:hover {
+              background: #f0f0d6; }
+              #critterbox #critterselection .tablebox ul li.selected {
+                background: #dbdbef; }
+            #critterbox #critterselection .tablebox ul li:nth-child(even) {
+              background: #e1e1e1; }
+              #critterbox #critterselection .tablebox ul li:nth-child(even):hover {
+                background: #e4e4cb; }
+                #critterbox #critterselection .tablebox ul li:nth-child(even).selected {
+                  background: #d4d4e8; }
+            #critterbox #critterselection .tablebox ul li span {
+              display: block;
+              float: left;
+              width: 32%; }
+        #critterbox #critterselection .tablebox table {
+          -moz-user-select: none;
+          -webkit-user-select: none;
+          -ms-user-select: none;
+          cursor: default;
+          background: #EEE;
+          border: 1px solid #888;
+          max-height: 200px;
+          width: 100%; }
+          #critterbox #critterselection .tablebox table th {
+            font-weight: bold;
+            padding: 2px;
+            text-align: left; }
+          #critterbox #critterselection .tablebox table tr {
             border: none;
             margin: 0px;
             padding: 0px; }
-            #critterbox #critterselection table tr:hover {
+            #critterbox #critterselection .tablebox table tr:hover {
               background: #e1e1e1; }
-        #critterbox #critterselection table tr:first-child {
-          border-bottom: 1px solid #888;
-          background: #CFCFCF; }
-          #critterbox #critterselection table tr:first-child:hover {
-            background: #CFCFCF; }
-        #critterbox #critterselection table td {
-          padding: 2px;
-          margin: 0px; }
+          #critterbox #critterselection .tablebox table td {
+            padding: 2px;
+            margin: 0px; }
+            #critterbox #critterselection .tablebox table thead tr {
+              border-bottom: 1px solid #888;
+              background: #CFCFCF; }
+              #critterbox #critterselection .tablebox table thead tr:hover {
+                background: #CFCFCF; }
 
 #createbutton {
   border-radius: 16px;

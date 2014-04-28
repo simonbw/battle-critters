@@ -6,6 +6,9 @@
 	CRITTER_LINK = "{{ url_for('editor_app.view_file', owner='insertownerhere', filename='insertfilenamehere') }}";
 	VIEW_BATTLE_URL = "{{ url_for('battles_app.view_battle', battle_id=999999999) }}";
 	NEW_BATTLE_URL = "{{url_for('battles_app.new_battle_page')}}";
+	CRITTER_JSON_URL = "{{url_for('editor_app.get_critters_json')}}";
+	CRITTER_USER_IDS_URL = "{{url_for('editor_app.get_user_critter_ids')}}";
+	CRITTER_RANDOM_IDS_URL = "{{url_for('editor_app.get_random_critter_ids')}}";
 </script>
 <script src="{{url_for('static', filename='js/new_battle.js')}}"></script>
 {% endblock %}
@@ -20,50 +23,27 @@
 	</div>
 	<div id="critterbox">
 		<h2>Critters</h2>
-		<ul id="critterlist">
-			<li>Critter1 <a class="remove">X</a></li>
-			<li>Critter2 <a class="remove">X</a></li>
-			<li>Critter3 <a class="remove">X</a></li>
-		</ul>
 		<div id="critterselection">
 			<div id="tabbuttonbar">
-				<a class="tabbutton">My Critters</a>
-				<a class="tabbutton">Recently Battled</a>
+				<a class="tabbutton" id="selectuser">My Critters</a>
+				<!-- <a class="tabbutton" id="selectrecent">Recently Battled</a> -->
+				<a class="tabbutton" id="selectrandom">Random</a>
 				<div class="clear"></div>
 			</div>
-			<table>
-				<tr>
-					<th>Critter</th>
-					<th>Owner</th>
-					<th>Rank</th>
-					<th>Add</th>
-				</tr>
-				<tr>
-					<td>Husky</td>
-					<td>Simon</td>
-					<td>264</td>
-					<td><a>Add</a></td>
-				</tr>
-				<tr>
-					<td>Husky</td>
-					<td>Simon</td>
-					<td>264</td>
-					<td><a>Add</a></td>
-				</tr>
-				<tr>
-					<td>Husky</td>
-					<td>Simon</td>
-					<td>264</td>
-					<td><a>Add</a></td>
-				</tr>
-				<tr>
-					<td>Husky</td>
-					<td>Simon</td>
-					<td>264</td>
-					<td><a>Add</a></td>
-				</tr>
-			</table>
+			<div class="tablebox">
+				<div>
+					<span class="crittername">Critter Name</span>
+					<span class="critterowner">Owner</span>
+					<span class="critterrank">Rank</span>
+				</div>
+				<ul>
+					loading...
+				</ul>
+			</div>
 		</div>
+		<ul id="critterlist">
+			<span>No critters selected</span>
+		</ul>
 	</div>
 </section>
 <a id="createbutton">Create</a>

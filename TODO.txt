@@ -50,3 +50,14 @@ Communications
 ---- THE PLAN ----
 ==================
 
+New Battle Page
+	in python:
+		webservice for getting critter info as JSON
+		webservice for sending critter ids for user, random, recent, and search?
+		
+		have battle run in separate thread <== this might be hard
+	in javascript:
+		request critters from server
+		parse returned JSON into objects
+		cache objects by id
+		list critters that are cached by some sort of sorting/filtering

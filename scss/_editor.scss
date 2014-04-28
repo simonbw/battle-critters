@@ -1,357 +1,149 @@
-@import 'mixins';
-@import 'fonts';
+@font-face {
+  font-family: HansKendrick;
+  src: url("/static/fonts/HansKendrick-Regular.ttf"); }
 
-#editorbox {
-	margin: {
-		top: 50px;
-		left: 100px;
-		right:100px;
-	}
+@font-face {
+  font-family: Inconsolata;
+  src: url("/static/fonts/Inconsolata-dz.otf"); }
 
-	box-shadow: 0px 3px 16px black;
+@font-face {
+  font-family: Orbitron-black;
+  src: url("/static/fonts/orbitron-black-webfont.woff");
+  font-weight: normal; }
 
-	#toolbar, #statusbar {
-		padding:  {
-			top: 4px;
-			bottom: 4px;
-			left: 10px;
-			right: 10px;
-		}
+@font-face {
+  font-family: Orbitron;
+  src: url("/static/fonts/orbitron-bold-webfont.woff");
+  font-weight: normal; }
 
+@font-face {
+  font-family: Orbitron-light;
+  src: url("/static/fonts/orbitron-light-webfont.woff");
+  font-weight: normal; }
 
-		background: $toolbar_bg;
-		color: $toolbar_text;
-		font: {
-			family: $font_toolbar;
-			size: 12px;
-		}
+@font-face {
+  font-family: Raleway;
+  src: url("/static/fonts/raleway_thin-webfont.woff"); }
 
-		a {
-			color: #DCCC22;
-			&:hover {
-				color: #FDDD33;
-			}
-			&:active {
-				color: #FDDD33;
-			}
-		}
-	}
-	#toolbar {
-		border-top-left-radius: $module_radius;
-		border-top-right-radius: $module_radius;
+@font-face {
+  font-family: Gen;
+  src: url("/static/fonts/Gen-Regular.otf"); }
 
-		h1 {
-			@include borderbox();
-			border-bottom: 1px solid white;
-			color: #FFF;
-			width: 100%;
-			font: {
-				family: $font_title;
-				size : 32px;
-			}
-			margin: {
-				top: 2px;
-				left: 0px;
-				right: 0px;
-				bottom: 0px;
-			}
-			padding: {
-				left: 30px;
-				right: 0px;
-			}
-		}
+@font-face {
+  font-family: Gen-light;
+  src: url("/static/fonts/Gen-Light.otf"); }
 
-		.items {
-			box-sizing: border-box;
-			-moz-box-sizing: border-box;
-			width: 100%;
-			margin: {
-				top: 2px;
-			}
-		}
-		.item {
-			margin: 0px;
-			padding: 0px;
-			display: inline;
-			margin-right: 1px;
-			box-sizing: border-box;
-			-moz-box-sizing: border-box;
-			font: {
-				family: $font_toolbar;
-				size: 12px;
-			}
+@font-face {
+  font-family: Gen-light;
+  src: url("/static/fonts/Gen-Regular.otf");
+  font-weight: bold; }
 
-			&.left {
-				float: left;
-			}
-			&.right {
-				float: right;
-			}
+@font-face {
+  font-family: Anonymous;
+  src: url("/static/fonts/Anonymous_Pro.ttf");
+  font-weight: normal; }
 
-			a {
-				padding: {
-					left: 6px;
-					right: 6px;
-					top: 2px;
-					bottom: 1px;
-				}
-				margin:0px;
-				cursor: pointer;
-				text-decoration: none;
-				background: #666;
-				&:hover {
-					background: #666;
-				}
-				&:active {
-					background: #606060;
-				}
-			}
-		}
-	}
-	#middlebox {
-		background: $light_bg;
-	}
-	#statusbar {
-		border-bottom-left-radius: $module_radius;
-		border-bottom-right-radius: $module_radius;
+@font-face {
+  font-family: Anonymous;
+  src: url("/static/fonts/Anonymous_Pro_I.ttf");
+  font-weight: normal;
+  font-style: italic; }
 
-		&.error {
-			background: #B33;
-		}
+@font-face {
+  font-family: Anonymous;
+  src: url("/static/fonts/Anonymous_Pro_B.ttf");
+  font-weight: bold;
+  font-style: normal; }
 
-		&.compiling {
-			background: #AA8;
-		}
+@font-face {
+  font-family: Anonymous;
+  src: url("/static/fonts/Anonymous_Pro_BI.ttf");
+  font-weight: bold;
+  font-style: italic; }
 
-		li {
-			list-style: none;
-			padding: 0px;
-			margin: 0px;
-			display: inline;
-			border-right: 1px solid #FFF;
-			padding-right: 6px;
-			margin-left: 6px;
-		}
+@font-face {
+  font-family: LeagueGothic;
+  src: url("/static/fonts/leaguegothic-regular-webfont.woff");
+  font-weight: normal;
+  font-style: normal; }
 
-		#savestatus {
+@font-face {
+  font-family: LeagueGothic;
+  src: url("/static/fonts/leaguegothic-italic-webfont.woff");
+  font-weight: normal;
+  font-style: italic; }
 
-		}
+@font-face {
+  font-family: LeagueGothicCondensed;
+  src: url("/static/fonts/leaguegothic-condensed-regular-webfont.woff");
+  font-weight: normal;
+  font-style: normal; }
 
-		#compilestatus {
+@font-face {
+  font-family: LeagueGothicCondensed;
+  src: url("/static/fonts/leaguegothic-condensed-italic-webfont.woff");
+  font-weight: normal;
+  font-style: italic; }
 
-		}
+#abovebar {
+  background: #aaaaaa;
+  padding: 4px;
+  margin: 0px; }
+  #abovebar a {
+    cursor: pointer;
+    float: left;
+    margin: 0px;
+    background: none;
+    border: 1px solid #aaaaaa;
+    font-size: 13px;
+    color: #3a3a3a;
+    -moz-user-select: none;
+    -webkit-user-select: none;
+    -ms-user-select: none;
+    padding-top: 2px;
+    padding-bottom: 2px;
+    padding-left: 6px;
+    padding-right: 6px; }
+    #abovebar a.active {
+      background: #eeeeee; }
+    #abovebar a:hover {
+      color: #EEE; }
 
-		#errordisplay {
-			margin:auto;
-			background: white;
-			color: black;
-			max-height: 200px;
-			overflow-y: auto;
-			font: {
-				family: $font_monospace;
-				size: 12px;
-			}
-		}
-	}
-	#editor {
-		height: auto;
-	}
-}
+#belowbar {
+  background: #aaaaaa;
+  padding: 4px;
+  margin: 0px;
+  clear: both; }
 
-#helpbox {
-	margin: 0px;
-	float: right;
-	width: 30%;
-	overflow-y: auto;
-	box-sizing: border-box;
-	-moz-box-sizing: border-box;
-	padding: 10px;
+#loadcounter {
+  font-size: 12px; }
 
-	&::-webkit-scrollbar {
-		width: 12px;
-	}
-	&::-webkit-scrollbar-track {
-	}
-	&::-webkit-scrollbar-thumb {
-		// border-radius: 10px;
-		background: $light_bg2;
-		// box-shadow: inset 0px 0px 6px $accent1;
-	}
+#framecounter {
+  text-align: center;
+  display: block;
+  float: left;
+  height: 100%;
+  background: #eeeeee;
+  color: #3a3a3a;
+  vertical-align: middle;
+  padding-top: 2px;
+  padding-bottom: 2px;
+  padding-left: 6px;
+  padding-right: 6px; }
 
-	font: {
-		family: $font_main;
-		size: 14px;
-	}
+#battlefield {
+  border: 2px solid #000000;
+  background: #FFF;
+  margin: 0px;
+  padding: 0px;
+  float: left; }
 
-	p {
-		padding: 0px;
-		text-indent: 20px;
-		margin: {
-			top: 2px;
-			bottom: 2px;
-		}
-		// line-height: 100%;
-		// letter-spacing: -1px;
-		// word-spacing: 2px;
-	}
-	h1 {
-		font: {
-			family: $font_heading;
-			size: 22px;
-			weight: normal;
-		}
-		margin: {
-			left: 0px;
-			right: 0px;
-			top: 12px;
-			bottom: 8px;
-		};
-	}
-	h2 {
-		font: {
-			family: $font_subheading;
-			size: 16px;
-			weight: normal;
-		}
-		margin: {
-			top: 10px;
-			bottom: 4px;
-		}
-		border-bottom: 1px dashed $light_bg2;
-	}
-	ul {
-		margin: 0px;
-	}
-	table {
-		width: 100%;
-		margin: 0px;
-		box-sizing: border-box;
-		-moz-box-sizing: border-box;
-		background: $light_bg3;
-		font-size: 12px;
-		border-collapse: collapse;
-		tr {
-			border-top: 1px dotted $light_bg;
-		}
-		tr:first-child {
-			border-top: none;
-		}
-		td {
-			padding: {
-				top: 2px;
-				left: 4px;
-				right: 4px;
-			}
-		}
-		td:first-child {
-			font-weight: bold;
-			padding-right: 8px;
-			font-family: $font_monospace;
-		}
-	}
+#sidebar {
+  float: left;
+  padding: 10px; }
 
-	#tabbuttonbar {
-		background: $light_bg2;
-		width: 100%;
-
-		.tabbutton {
-			cursor: pointer;
-			float:left;
-			margin: 0px;
-			background: none;
-			font-size: 13px;
-			color: $accent1;
-			-moz-user-select: none;
-			-webkit-user-select: none;
-			-ms-user-select: none;
-
-			padding: {
-				top: 2px;
-				bottom: 2px;
-				left: 8px;
-				right: 8px;
-			}
-
-
-			&.active {
-				cursor: default;
-				background: $light_bg3;
-
-				&:hover {
-					color: $accent1;
-				}
-			}
-			&:hover {
-				color: #EEE;
-			}
-		}
-	}
-}
-
-// Stuff to change the editor
-.CodeMirror {
-	height: auto;
-	width: 70%;
-	float:left;
-	box-sizing: border-box;
-	-moz-box-sizing: border-box;
-
-	.compile-error {
-		background: $dark_bg + #400;
-	}
-
-
-}
-.CodeMirror-scroll {
-	min-height: 10px;
-	max-height: 300px;
-	box-sizing: border-box;
-	-moz-box-sizing: border-box;
-
-	font: {
-		family: $font_monospace;
-		size: 13px;
-	}
-}
-
-// Find/Replace bar
-.CodeMirror-dialog {
-	position: absolute;
-	left: 0px; right: 0px;
-	bottom: 0px;
-	background: $dark_bg;
-	color: $accent2;
-	z-index: 15;
-	padding: .1em .8em;
-	overflow: hidden;
-}
-
-.CodeMirror-dialog-top {
-	border-top: 1px solid $accent2;
-}
-
-.CodeMirror-dialog-bottom {
-	// border-top: 1px solid $accent2;
-	bottom: 0;
-}
-
-.CodeMirror-dialog input {
-	border: none;
-	outline: none;
-	background: transparent;
-	width: 20em;
-	color: inherit;
-	font-family: $font_monospace;
-}
-
-.CodeMirror-dialog button {
-	height: 100%;
-	background: none;
-	border: 1px solid $accent1;
-	color: $accent2;
-
-	&:focus {
-		background: $accent1 ;
-		color: $accent3;
-	}
-}
+.critterlabel {
+  padding: 4px;
+  background: #666; }
+  .critterlabel.winner {
+    border: 2px solid #FFF; }

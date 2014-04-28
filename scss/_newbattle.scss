@@ -23,13 +23,39 @@
 		margin: 0px;
 		padding: 0px;
 		width: 35%;
+
+		&>span { // "no critters selected"
+			
+		}
+
 		li {
 			background: $light_bg3;
 			border-bottom: 1px dashed $accent3;
-			padding: 8px;
+			padding: 4px 16px;
 
 			&:hover {
 				background: darken($light_bg3, 5%);
+			}
+
+			&:last-of-type {
+				border-bottom: none;
+			}
+
+			.ownername {
+				font-size: 0.8em;
+				padding-left: 10px;
+
+				&:after {
+					content: ")";
+				} // this comment is here so sublime's reindenter works
+				
+				&:before {
+					content: "(";
+				}
+			}
+
+			.crittername {
+				// color: blue;
 			}
 
 			.remove {
@@ -50,7 +76,7 @@
 		float: left;
 		margin: 0px;
 		min-width: 300px;
-		padding-left: $module_spacing;
+		padding-right: $module_spacing;
 		width: 65%;
 
 		#tabbuttonbar {
@@ -86,36 +112,131 @@
 				}
 			}
 		}
-
-		table {
-			@include unselectable();
+		.tablebox {
 			background: $light_bg3;
-			width: 100%;
 			border: 1px solid $accent2;
+			display: block;
+			max-height: 400px;
+			overflow-y: auto;	
+			width: 100%;
 
-			th {
-				font-weight: bold;
-				padding: 2px;
-				text-align: left;
+			&::-webkit-scrollbar {
+				width: 12px;
 			}
-			tr {
-				border: none;
-				margin: 0px;
-				padding: 0px;
-				&:hover {
-					background: darken($light_bg3, 5%);
-				}
-			}
-			tr:first-child {
-				border-bottom: 1px solid $accent2;
+			&::-webkit-scrollbar-track {
 				background: $light_bg;
-				&:hover {
-					background: $light_bg;
+			}
+			&::-webkit-scrollbar-thumb {
+				background: $light_bg2;
+			}
+
+			// heading
+			div:first-child {
+				border-bottom: 1px solid $accent2;
+				font-weight: bold;
+				overflow: hidden;
+				padding: 4px;
+
+				span {
+					display: block;
+					float: left;
+					width: 32%;
 				}
 			}
-			td {
-				padding: 2px;
+
+			// content box
+			ul {
+				list-style: none;
 				margin: 0px;
+				max-height: 400px;
+				overflow: auto;
+				padding: 0px;
+				width: 100%;
+
+				li {
+					@include unselectable();
+					cursor: pointer;
+					display: block;
+					margin: 0px;
+					overflow: hidden;
+					padding: 4px;
+					width: 100%;
+
+					&:hover {
+						background: mix($light_bg3, yellow, 90%);
+					}
+
+					&.selected {
+						background: mix($light_bg3, blue, 92%);
+						&:hover {
+							// background: darken(mix($light_bg3, blue, 92%), 3%);
+						}
+					}
+
+					&:nth-child(even) {
+						background: darken($light_bg3, 5%);
+						&:hover {
+							background: mix(darken($light_bg3, 5%), yellow, 90%);
+						}
+						&.selected {
+							background: mix(darken($light_bg3, 3%), blue, 92%);
+							&:hover {
+								// background: darken(mix($light_bg3, blue, 92%), 5%);
+							}
+						}
+					}
+
+
+					span {
+						display: block;
+						float: left;
+						width: 32%;
+					}
+				}
+			}
+
+			table {
+				@include unselectable();
+				background: $light_bg3;
+				border: 1px solid $accent2;
+				max-height: 200px;
+				width: 100%;
+
+				th {
+					font-weight: bold;
+					padding: 2px;
+					text-align: left;
+
+					tr {
+					}
+				}
+				tr {
+					border: none;
+					margin: 0px;
+					padding: 0px;
+					&:hover {
+						background: darken($light_bg3, 5%);
+					}
+				}
+				td {
+					padding: 2px;
+					margin: 0px;
+				}
+
+				thead {
+					tr {
+						border-bottom: 1px solid $accent2;
+						background: $light_bg;
+						&:hover {
+							background: $light_bg;
+						}
+					}
+
+				}
+
+				tbody {
+
+				}
 			}
 		}
 	}

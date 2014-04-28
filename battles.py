@@ -57,6 +57,8 @@ class Battle():
 
 		# TODO: PLEASE REMOVE THIS. THIS IS JUST TO SIMULATE LATENCY
 		time.sleep(0.1)
+		# TODO: PLEASE REMOVE THIS. THIS IS JUST TO SIMULATE LATENCY
+		
 		return "\n".join(lines)
 
 	def get_frame_url(self):

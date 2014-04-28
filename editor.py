@@ -12,7 +12,7 @@ import traceback
 import zlib
 
 import sqlite3
-from flask import Flask, g, redirect, request, session, render_template, Blueprint, url_for, Markup, abort
+from flask import Flask, g, redirect, request, session, render_template, Blueprint, url_for, Markup, abort, jsonify
 
 import users
 import ranking
@@ -50,7 +50,7 @@ class Critter():
 	@staticmethod
 	def from_id(id):
 		"""Load a critter from id"""
-		row = g.db.execute("SELECT * FROM critters WHERE id=?", (id,)).fetchone()
+		row = g.db.execute("SELECT id, name, owner_id, creation_time, last_save_time, score FROM critters WHERE id=?", (id,)).fetchone()
 		if row is None:
 			raise LookupError("Critter not found: " + str(id))
 		return Critter(row)
@@ -59,13 +59,16 @@ class Critter():
 		"""Create a new critter from a database row"""
 		self.id = row['id']
 		self.name = row['name']
-		self.content = row['content']
+		if ('content' in row):
+			self.content = row['content']
+		else:
+			self.content = None
 		# self.content = zlib.decompress(self.content)
 		self.owner_id = row['owner_id']
+		self._owner = None
 		self.creation_time = row['creation_time']
 		self.last_save_time = row['last_save_time']
 		self.score = row['score']
-		self._owner = None
 
 	@property
 	def owner(self):
@@ -73,14 +76,25 @@ class Critter():
 		if self._owner == None:
 			self._owner = users.User.from_id(self.owner_id)
 		return self._owner
+	
+	@property
+	def content(self):
+		"""Lazy load the content of this Critter"""
+		if self._content == None:
+			self._content = g.db.execute("SELECT content FROM critters WHERE id=?", (id,)).fetchone()['content']
+		return self._content
 
 	def get_all_battles(self):
-		"""Return the number of battles this critter has won"""
+		"""Return the list of battles this critter been in"""
 		return map(battles.Battle.from_id, [row.id for row in g.db.execute("SELECT battle_id FROM battle_critters WHERE critter_id = ?", (self.id,)).fetchall()])
 
 	def get_winning_battles(self):
-		"""Return the number of battles this critter has won"""
+		"""Return the list of battles this critter has won"""
 		return map(battles.Battle.from_id, [row.id for row in g.db.execute("SELECT battle_id FROM battle_critters WHERE critter_id = ? AND winner = 1", (self.id,)).fetchall()])
+	
+	def get_losing_battles(self):
+		"""Return the list of battles this critter has not won"""
+		return map(battles.Battle.from_id, [row.id for row in g.db.execute("SELECT battle_id FROM battle_critters WHERE critter_id = ? AND winner = 0", (self.id,)).fetchall()])
 
 	def get_url(self, action="view"):
 		if action == 'view':
@@ -131,8 +145,54 @@ def critter_list_page():
 	critters = map(Critter, rows)
 	return render_template('list_all_critters.html', critters=critters)
 
+@editor_app.route('/json')
+def get_critters_json():
+	"""Returns a JSON object containing a map of critter id to information such as name, owner_name, and owner_id."""
+	# TODO: PLEASE REMOVE THIS. THIS IS JUST TO SIMULATE LATENCY
+	time.sleep(0.1)
+	# TODO: PLEASE REMOVE THIS. THIS IS JUST TO SIMULATE LATENCY
+	
+	r = {}
+	for critter_id in request.args.getlist('ids[]'):
+		c = Critter.from_id(critter_id)
+		data = {}
+		data['name'] = c.name
+		data['owner_name'] = c.owner.username
+		data['owner_id'] = c.owner.id
+		r[c.id] = data
+	return jsonify(r)
+
+@editor_app.route('/get_ids/user')
+def get_user_critter_ids():
+	"""Return a JSON list of critter ids"""
+	try:
+		limit = request.args['limit']
+		print "limit", limit
+		owner_id = g.user.id
+		query = "SELECT id FROM critters WHERE owner_id=? ORDER BY id LIMIT ?"
+		rows = g.db.execute(query, (owner_id,limit)).fetchall()
+		ids = [row['id'] for row in rows]
+		return jsonify({'ids': ids})
+	except Exception as e:
+		print e
+		return "error"
+
+@editor_app.route('/get_ids/random')
+def get_random_critter_ids():
+	"""Return a JSON list of critter ids"""
+	try:
+		limit = request.args['limit']
+		owner_id = g.user.id
+		rows = g.db.execute("SELECT id FROM critters ORDER BY RANDOM() LIMIT ?", (limit,)).fetchall()
+		ids = [row['id'] for row in rows]
+		return jsonify({'ids': ids})
+	except Exception as e:
+		print e
+		return "error"
+
 @editor_app.route('/get')
 def get_critter_list():
+	"""Page that lists all critters. Can specify an owner."""
 	if request.args['username']:
 		u = users.User.from_username(request.args['username'])
 		rows = g.db.execute('SELECT * FROM critters WHERE owner_id=?',(u.id,)).fetchall()
@@ -196,26 +256,12 @@ def delete_file(owner, filename):
 
 @editor_app.route('/<owner>/<filename>/compile', methods=["GET","POST"])
 def compile_file(owner, filename):
-	"""Compile a file. User must be the owner of the critter or an admin. Returns 'success', else returns compiler error message."""
+	"""This is sketchy if multiple files are being compiled at once.
+	Compile a file. User must be the owner of the critter or an admin. Returns 'success', else returns compiler error message."""
 	if (g.user.username != owner and not g.user.admin):
 		raise Exception("You don't have permission to do that")
 	critter = Critter.from_name(filename, owner_name=owner)
-	temp_name = os.path.join('.', 'java','temp_critters', filename + '.java')
-	print "full path:", os.path.abspath(temp_name)
-	content = process_file(critter.content, owner, filename)
-	with open(temp_name, 'w') as f:
-		f.write(content)
-	command = "javac -cp {cp} -d {d} {filename}".format(
-		cp=os.path.join('.', 'java','bin'),
-		d=os.path.join('.', 'java', 'bin'),
-		filename=temp_name)
-	print command
-
-	try:
-		subprocess.check_output(command, stderr=subprocess.STDOUT, shell=True)
-		return "success"
-	except subprocess.CalledProcessError as e:
-		return Markup(format_compiler_output(e.output))
+	return compile_file_actual(critter)
 
 @editor_app.route('/<owner>/<filename>/new', methods=["POST", "PUT"])
 def new_file(owner, filename):
@@ -252,9 +298,21 @@ def create_file(owner, filename, content=None):
 	g.db.execute(query, (current_time, current_time, filename, owner.id, content, ranking.DEFAULT_SCORE))
 	g.db.commit()
 
-def compile_file_actual():
+def compile_file_actual(critter):
 	"""Actually compiles a file"""
-	pass
+	temp_name = os.path.join('.', 'java','temp_critters', critter.name + '.java')
+	content = process_file(critter.content, critter.owner.name, critter.name)
+	with open(temp_name, 'w') as f:
+		f.write(content)
+	command = "javac -cp {cp} -d {d} {filename}".format(
+		cp=os.path.join('.', 'java','bin'),
+		d=os.path.join('.', 'java', 'bin'),
+		filename=temp_name)
+	try:
+		subprocess.check_output(command, stderr=subprocess.STDOUT, shell=True)
+		return "success"
+	except subprocess.CalledProcessError as e:
+		return Markup(format_compiler_output(e.output))
 
 def process_file(content, owner, filename):
 	"""Process a raw code file to be compiled."""
@@ -279,6 +337,7 @@ def check_filename(filename):
 	return True
 
 def format_compiler_output(s):
+	"""Formats the output of the java compiler to be displayed in the editor."""
 	# Remove filepaths
 	search = r'\./java/temp_critters/(\w*.java)'
 	replace = r'\1'
