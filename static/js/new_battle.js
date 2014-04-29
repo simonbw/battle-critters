@@ -177,6 +177,7 @@ function deselectCritter(id) {
 		}
 	}
 
+	// deselect last critter
 	if (critters_selected.length == 0) {
 		$("#critterlist").html("No critters selected");
 	}
@@ -199,17 +200,18 @@ $(function() {
 		$(this).prop('disabled', true);
 		// should only send critter id's
 		var request_data = {
-			critters: critters,
-			owners: owners,
+			critters: critters_selected,
 			height: $("#battleheight").val(),
 			width: $("#battlewidth").val(),
 			length: $("#battlelength").val()
 		};
 		console.log(request_data);
 		$.post(NEW_BATTLE_URL, request_data, function(data) {
-			alert(data);
-			var battle_id = parseInt(data);
-			window.location.href = VIEW_BATTLE_URL.replace('999999999', battle_id);
+			if (data.success) {
+				window.location.href = data.url;
+			} else {
+				alert(data.error);
+			}
 		});
 	});
 });

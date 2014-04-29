@@ -292,30 +292,32 @@ def create_file(owner, filename, content=None):
 	print "creating new critter: " + filename + ", owner id: " + str(owner.id)
 	if content == None:
 		content = DEFAULT_CONTENT.replace('{name}', filename)
-	if (Critter.from_name(filename, owner_id=owner.id, fail_silent=True)) != None:
+	critter = Critter.from_name(filename, owner_id=owner.id, fail_silent=True)
+	if critter != None:
 		raise Exception("That Critter already exists")
 	query = "INSERT INTO critters (creation_time, last_save_time, name, owner_id, content, score) VALUES (?, ?, ?, ?, ?, ?)"
 	g.db.execute(query, (current_time, current_time, filename, owner.id, content, ranking.DEFAULT_SCORE))
 	g.db.commit()
 
+	# compile the critter
+	critter = Critter.from_name(filename, owner_id=owner.id)
+	compile_file_actual(critter)
+
 def compile_file_actual(critter):
 	"""Actually compiles a file"""
+	temp_name = os.path.join('.', 'java','temp_critters', critter.name + '.java')
+	content = process_file(critter.content, critter.owner.username, critter.name)
+	with open(temp_name, 'w') as f:
+		f.write(content)
+	command = "javac -cp {cp} -d {d} {filename}".format(
+		cp=os.path.join('.', 'java','bin'),
+		d=os.path.join('.', 'java', 'bin'),
+		filename=temp_name)
 	try:
-		temp_name = os.path.join('.', 'java','temp_critters', critter.name + '.java')
-		content = process_file(critter.content, critter.owner.username, critter.name)
-		with open(temp_name, 'w') as f:
-			f.write(content)
-		command = "javac -cp {cp} -d {d} {filename}".format(
-			cp=os.path.join('.', 'java','bin'),
-			d=os.path.join('.', 'java', 'bin'),
-			filename=temp_name)
-		try:
-			subprocess.check_output(command, stderr=subprocess.STDOUT, shell=True)
-			return "success"
-		except subprocess.CalledProcessError as e:
-			return Markup(format_compiler_output(e.output))
-	except Exception as e:
-		print e
+		subprocess.check_output(command, stderr=subprocess.STDOUT, shell=True)
+		return "success"
+	except subprocess.CalledProcessError as e:
+		return Markup(format_compiler_output(e.output))
 
 def process_file(content, owner, filename):
 	"""Process a raw code file to be compiled."""

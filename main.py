@@ -49,7 +49,7 @@ def start_java_server():
 def before_request():
 	"""Called before the request is routed. Sets up the link to the database and java server."""
 
-	# Compile SCSS. THIS SHOULDN'T BE HERE
+	# Compile SCSS. THIS SHOULDN'T BE HERE IN PRODUCTION
 	app.scss.update_scss()
 
 	# link to the java server

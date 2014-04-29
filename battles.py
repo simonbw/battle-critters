@@ -8,7 +8,7 @@ import time
 import traceback
 
 import sqlite3
-from flask import Flask, g, redirect, request, session, render_template, Blueprint, url_for, Markup, abort
+from flask import Flask, g, redirect, request, session, render_template, Blueprint, url_for, Markup, abort, jsonify
 
 import users
 import util
@@ -54,11 +54,6 @@ class Battle():
 		query = "SELECT * FROM battle_frames WHERE battle_id=? AND frame_number>=? AND frame_number<=?;"
 		rows = g.db.execute(query, (self.id, start, end)).fetchall()
 		lines = ["FRAME " + str(row['frame_number']) + "\n" + row['data'] for row in rows]
-
-		# TODO: PLEASE REMOVE THIS. THIS IS JUST TO SIMULATE LATENCY
-		time.sleep(0.1)
-		# TODO: PLEASE REMOVE THIS. THIS IS JUST TO SIMULATE LATENCY
-		
 		return "\n".join(lines)
 
 	def get_frame_url(self):
@@ -96,6 +91,10 @@ def view_battle(battle_id):
 def get_frames(battle_id):
 	"""Return data for certain frames of a battle.
 	request.args['start'] and request.args['end'] should be set."""
+	# TODO: PLEASE REMOVE THIS. THIS IS JUST TO SIMULATE LATENCY
+	time.sleep(0.1)
+	# TODO: PLEASE REMOVE THIS. THIS IS JUST TO SIMULATE LATENCY
+
 	battle = Battle.from_id(battle_id)
 	start = int(request.args['start'])
 	end = int(request.args['end'])
@@ -113,14 +112,13 @@ def new_battle_page():
 			height = request.form['height']
 			ranked = True #bool(request.form['ranked'])
 
-			critters = []
-			for owner_name, critter_name in zip(request.form.getlist('owners[]'), request.form.getlist('critters[]')):
-				critters.append(Critter.from_name(critter_name, owner_name=owner_name))
+			critters = [Critter.from_id(critter_id) for critter_id in request.form.getlist('critters[]')]
 
-			return create_battle(length, width, height, critters, ranked)
+			battle_id = create_battle(length, width, height, critters, ranked)
+			return jsonify({'success': True, 'battle_id': battle_id, 'url': url_for('battles_app.view_battle', battle_id=battle_id)})
 		except Exception as e:
 			traceback.print_exc(file=sys.stdout)
-			return Markup("ERROR: " + repr(e))
+			return jsonify({'success': False, 'error': repr(e)})
 
 def create_battle(length, height, width, critters, ranked):
 	"""Actually create a new battle"""
@@ -172,4 +170,4 @@ def create_battle(length, height, width, critters, ranked):
 	
 	g.db.commit()
 
-	return str(battle_id)
+	return battle_id
