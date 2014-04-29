@@ -60,10 +60,9 @@ class Critter():
 		self.id = row['id']
 		self.name = row['name']
 		if ('content' in row):
-			self._content = row['content']
+			self._content = zlib.decompress(row['content'])
 		else:
 			self._content = None
-		# self.content = zlib.decompress(self.content)
 		self.owner_id = row['owner_id']
 		self._owner = None
 		self.creation_time = row['creation_time']
@@ -77,12 +76,20 @@ class Critter():
 			self._owner = users.User.from_id(self.owner_id)
 		return self._owner
 	
+	@owner.setter
+	def owner(self, value):
+		self._owner = value
+
 	@property
 	def content(self):
 		"""Lazy load the content of this Critter"""
 		if self._content == None:
-			self._content = g.db.execute("SELECT content FROM critters WHERE id=?", (self.id,)).fetchone()['content']
+			self._content = zlib.decompress(g.db.execute("SELECT content FROM critters WHERE id=?", (self.id,)).fetchone()['content'])
 		return self._content
+
+	@content.setter
+	def content(self, value):
+		self._content = value
 
 	def get_all_battles(self):
 		"""Return the list of battles this critter been in"""
@@ -117,11 +124,29 @@ class Critter():
 	def save(self):
 		"""Save the current content of the critter in the database."""
 		current_time = time.time()
-		# content = zlib.compress(self.content, COMPRESSION_LEVEL)
+		zcontent = zlib.compress(self.content, COMPRESSION_LEVEL)
 		g.db.execute("UPDATE critters SET content=?, last_save_time=? WHERE name = ? AND owner_id = ?;", (
-					self.content, current_time, self.name, self.owner_id))
+					zcontent, current_time, self.name, self.owner_id))
 		g.db.commit()
 		return current_time
+
+	def compile(self):
+		"""Compile the critter."""
+		temp_name = os.path.join('.', 'java','temp_critters', self.name + '.java')
+		content = process_file(self.content, self.owner.username, self.name)
+		with open(temp_name, 'w') as f:
+			f.write(content)
+		command = "javac -cp {cp} -d {d} {filename}".format(
+			cp=os.path.join('.', 'java','bin'),
+			d=os.path.join('.', 'java', 'bin'),
+			filename=temp_name)
+		try:
+			subprocess.check_output(command, stderr=subprocess.STDOUT, shell=True)
+			# save stuff
+			return "success"
+		except subprocess.CalledProcessError as e:
+			return Markup(format_compiler_output(e.output))
+
 
 	def reload(self):
 		"""Reload all the data from this critter out of the database.""" 
@@ -261,7 +286,7 @@ def compile_file(owner, filename):
 	if (g.user.username != owner and not g.user.admin):
 		raise Exception("You don't have permission to do that")
 	critter = Critter.from_name(filename, owner_name=owner)
-	return compile_file_actual(critter)
+	return critter.compile()
 
 @editor_app.route('/<owner>/<filename>/new', methods=["POST", "PUT"])
 def new_file(owner, filename):
@@ -292,6 +317,9 @@ def create_file(owner, filename, content=None):
 	print "creating new critter: " + filename + ", owner id: " + str(owner.id)
 	if content == None:
 		content = DEFAULT_CONTENT.replace('{name}', filename)
+
+	content = zlib.compress(content, COMPRESSION_LEVEL)
+
 	critter = Critter.from_name(filename, owner_id=owner.id, fail_silent=True)
 	if critter != None:
 		raise Exception("That Critter already exists")
@@ -299,25 +327,7 @@ def create_file(owner, filename, content=None):
 	g.db.execute(query, (current_time, current_time, filename, owner.id, content, ranking.DEFAULT_SCORE))
 	g.db.commit()
 
-	# compile the critter
-	critter = Critter.from_name(filename, owner_id=owner.id)
-	compile_file_actual(critter)
-
-def compile_file_actual(critter):
-	"""Actually compiles a file"""
-	temp_name = os.path.join('.', 'java','temp_critters', critter.name + '.java')
-	content = process_file(critter.content, critter.owner.username, critter.name)
-	with open(temp_name, 'w') as f:
-		f.write(content)
-	command = "javac -cp {cp} -d {d} {filename}".format(
-		cp=os.path.join('.', 'java','bin'),
-		d=os.path.join('.', 'java', 'bin'),
-		filename=temp_name)
-	try:
-		subprocess.check_output(command, stderr=subprocess.STDOUT, shell=True)
-		return "success"
-	except subprocess.CalledProcessError as e:
-		return Markup(format_compiler_output(e.output))
+	Critter.from_name(filename, owner_id=owner.id).compile()
 
 def process_file(content, owner, filename):
 	"""Process a raw code file to be compiled."""

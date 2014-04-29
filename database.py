@@ -10,7 +10,10 @@ DATABASE = 'database.db'
 
 def connect_db():
 	"""Returns a connection to the database"""
-	return sqlite3.connect(DATABASE)
+	connection = sqlite3.connect(DATABASE)
+	connection.row_factory = sqlite3.Row
+	connection.text_factory = str
+	return connection
 
 def init_db(app):
 	"""Creates and resets all the tables in the database."""

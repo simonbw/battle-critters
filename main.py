@@ -60,7 +60,6 @@ def before_request():
 	
 	# prepare the database
 	g.db = database.connect_db()
-	g.db.row_factory = sqlite3.Row
 
 	# since User object is not serializable
 	if ('username' in session):
