@@ -67,7 +67,7 @@ public class Battle {
 
 	/**
 	 * Create a new battle with custom length.
-	 * 
+	 *
 	 * @param maxFrame
 	 *            length in frames of the battle.
 	 */
@@ -77,7 +77,7 @@ public class Battle {
 
 	/**
 	 * Create a new battle with custom length and dimensions
-	 * 
+	 *
 	 * @param maxFrame
 	 *            length in frames of the battle.
 	 * @param width
@@ -99,7 +99,7 @@ public class Battle {
 
 	/**
 	 * Add a critter class to the battle.
-	 * 
+	 *
 	 * @param ownerName
 	 * @param critterName
 	 */
@@ -107,18 +107,27 @@ public class Battle {
 		if (frame >= 0) {
 			throw new IllegalStateException("Cannot add Critters once the battle has begun");
 		}
-
 		String className = "battlecritters.critters." + ownerName + "." + critterName;
-		Class<? extends Critter> critter = (new CritterClassLoader()).loadClass(className).asSubclass(Critter.class);
-		critterCompression.put(critter, critterCompression.size());
-		critterNames.put(critter, ownerName + "." + critterName);
-		critters.add(critter);
+
+		Class<? extends Critter> critter = null;
+		try {
+			CritterClassLoader loader = new CritterClassLoader(className);
+			critter = loader.loadClass(className).asSubclass(Critter.class);
+		} catch (ClassNotFoundException e) {
+			System.out.println(e);
+		}
+		if (critter != null) {
+			critterCompression.put(critter, critterCompression.size());
+			critterNames.put(critter, ownerName + "." + critterName);
+			critters.add(critter);
+		}
 	}
 
 	/**
 	 * Initialize the battle.
 	 */
 	public void start() {
+		System.out.println("Battle Starting");
 		frame = 0;
 
 		int number = 30;
@@ -150,7 +159,7 @@ public class Battle {
 
 	/**
 	 * Create a critter of the given class.
-	 * 
+	 *
 	 * @param critter
 	 * @return
 	 * @throws Exception
@@ -162,7 +171,7 @@ public class Battle {
 
 	/**
 	 * Advance to the next frame of the battle.
-	 * 
+	 *
 	 * @return
 	 */
 	public void nextFrame() {
@@ -266,7 +275,7 @@ public class Battle {
 
 	/**
 	 * Returns True if the position is on the grid.
-	 * 
+	 *
 	 * @param x
 	 * @param y
 	 * @return True if position is on the grid
@@ -277,7 +286,7 @@ public class Battle {
 
 	/**
 	 * Returns True if the position is on the grid.
-	 * 
+	 *
 	 * @param p
 	 * @return True if position is on the grid
 	 */
@@ -287,7 +296,7 @@ public class Battle {
 
 	/**
 	 * Returns the direction directly clockwise from d
-	 * 
+	 *
 	 * @param d
 	 * @return
 	 */
@@ -308,7 +317,7 @@ public class Battle {
 
 	/**
 	 * Returns the point one coordinate away from p in direction d.
-	 * 
+	 *
 	 * @param p
 	 *            starting point
 	 * @param d
@@ -332,7 +341,7 @@ public class Battle {
 
 	/**
 	 * Return the type of neighbor for a critter at a point.
-	 * 
+	 *
 	 * @param p
 	 *            point
 	 * @param original
@@ -352,7 +361,7 @@ public class Battle {
 
 	/**
 	 * Returns the info to pass to a given critter.
-	 * 
+	 *
 	 * @param data
 	 * @param original
 	 * @return

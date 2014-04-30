@@ -11,81 +11,76 @@ import java.io.IOException;
  */
 public class CritterClassLoader extends ClassLoader {
 
-	boolean active;
 	/**
-	 * The loader to use when this one fails.
+	 * The whitelist of name prefixes allowed for default loading. Allowing reflect might be unsafe, but it seemed to be needed for something.
 	 */
-	private ClassLoader fallback;
+	static final String[] ALLOWED_PACKAGES = { "java.lang", "battlecritters.battle", "sun.reflect" };
 
 	/**
-	 * Create a new Reloader using the system class loader as a fallback.
+	 * The package that this
 	 */
-	public CritterClassLoader() {
-		this(ClassLoader.getSystemClassLoader());
+	String localPackage;
+
+	public CritterClassLoader(String critterName) {
+		super(CritterClassLoader.class.getClassLoader());
+		localPackage = critterName.substring(0, critterName.lastIndexOf("."));
+		System.out.println("new critter loader with local package: " + localPackage);
 	}
 
 	/**
-	 * Create a new reloader with a custom fallback loader.
-	 * 
-	 * @param fallback
-	 *            custom fallback loader to use.
+	 * Load a class.
+	 * @param  name full name of the class
+	 * @return      the class
 	 */
-	public CritterClassLoader(ClassLoader fallback) {
-		super();
-		this.fallback = fallback;
-		active = true;
-	}
+	public Class loadClass(String name) throws ClassNotFoundException {
+		System.out.println("loading:" + name + " ...");
 
-	@Override
-	public Class<?> loadClass(String s) {
-		return findClass(s);
-	}
-
-	@Override
-	public Class<?> findClass(String s) {
-		if (active && s.startsWith("battlecritters.critters")) {
+		// Access the critter and custom load
+		if (name.startsWith(localPackage)) {
+			System.out.println("using custom loading");
 			try {
-				byte[] bytes = loadClassData(s);
-				return defineClass(s, bytes, 0, bytes.length);
-			} catch (IOException ioe) {
-				try {
-					System.out.println("Using fallback loader");
-					return fallback.loadClass(s);
-				} catch (ClassNotFoundException ignore) {
-				}
-				ioe.printStackTrace(System.out);
-				return null;
-			}
-		} else {
-			try {
-				return fallback.loadClass(s);
-			} catch (ClassNotFoundException e) {
-				e.printStackTrace();
-				return null;
+				byte[] data = loadClassData(name);
+				return defineClass(name, data, 0, data.length);
+			} catch (IOException e) {
+				throw new ClassNotFoundException("class " + name + " not found: " + e.toString());
 			}
 		}
+		// Use default loading on standard packages
+		for (String allowedPackage : ALLOWED_PACKAGES) {
+			if (name.startsWith(allowedPackage)) {
+				System.out.println("using standard loading");
+				return super.loadClass(name);
+			}
+		}
+		// otherwise, not allowed
+		System.out.println("could not load class: " + name);
+		throw new ClassNotFoundException("class " + name + " is unavailable");
 	}
 
 	/**
-	 * Load class data based on the class name.
-	 * 
-	 * @param className
-	 * @return class data
-	 * @throws IOException
+	 * Return a byte array for a specific class name.
+	 *
+	 * @param   name    The class name
+	 * @return  The class info as byte data
+	 * @throws  IOException when file not found
 	 */
-	private byte[] loadClassData(String className) throws IOException {
-		File f = new File("java\\bin\\" + className.replaceAll("\\.", "/") + ".class");
-		System.out.println(f.getAbsolutePath());
-		int size = (int) f.length();
-		byte buff[] = new byte[size];
-		FileInputStream fis = new FileInputStream(f);
-		DataInputStream dis = new DataInputStream(fis);
-		dis.readFully(buff);
-		dis.close();
-		return buff;
+	private byte[] loadClassData(String name) throws IOException {
+		File f = getClassFile(name);
+		byte buffer[] = new byte[(int) f.length()];
+		DataInputStream dataStream = new DataInputStream(new FileInputStream(f));
+		dataStream.readFully(buffer);
+		dataStream.close();
+		return buffer;
 	}
 
-	public String toString() {
-		return "<Custom (Re)Loader>";
+	/**
+	 * Returns a file for the given class name, assuming the class
+	 * @param  name the class name
+	 * @return      the file containing the class
+	 */
+	private File getClassFile(String name) {
+		String path = "java" + File.separator + "bin" + File.separator + name.replace(".", File.separator) + ".class";
+		return new File(path);
 	}
+
 }
