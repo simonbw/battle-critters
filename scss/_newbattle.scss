@@ -6,6 +6,9 @@
 	float: left;
 	margin: 0px;
 	width: 250px;
+	background: $light_bg2;
+	padding: $module_spacing;
+	border-radius: $module_radius;
 }
 
 #critterbox {
@@ -263,6 +266,15 @@
 	}
 	&:hover {
 		background: darken($light_bg2, 5%);
+	}
+	&.disabled {
+		cursor: default;
+		text-decoration: none;
+		background: lighten($light_bg2, 5%);
+		color: $accent2;
+		&:hover {
+			background: lighten($light_bg2, 5%);
+		}
 	}
 }
 

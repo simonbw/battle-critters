@@ -8,7 +8,6 @@
 	CRITTER_RANDOM_IDS_URL = "{{url_for('editor_app.get_random_critter_ids')}}";
 	CRITTER_USER_IDS_URL = "{{url_for('editor_app.get_user_critter_ids')}}";
 	NEW_BATTLE_URL = "{{url_for('battles_app.new_battle_page')}}";
-	VIEW_BATTLE_URL = "{{ url_for('battles_app.view_battle', battle_id=999999999) }}";
 </script>
 <script src="{{url_for('static', filename='js/new_battle.js')}}"></script>
 {% endblock %}

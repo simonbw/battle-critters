@@ -1,15 +1,20 @@
 // number of critters to request
 var LOADING_LIMIT = 32;
+// if currently waiting for 
+var request_out = false;
+
 
 var active_tab;
 var tab_info = {};
 tab_info['user'] = {
 	'list': [],
-	'url': CRITTER_USER_IDS_URL
+	'url': CRITTER_USER_IDS_URL,
+	'sorting': null
 }
 tab_info['random'] = {
 	'list': [],
 	'url': CRITTER_RANDOM_IDS_URL
+	'sorting': null
 }
 // map critter ids to critter datas
 var critters_loaded = [];
@@ -80,7 +85,7 @@ function refreshDisplay() {
 			var critter = critters_loaded[id];
 
 			var span1 = $('<span></span>', {
-				'text': '' + critter.id + ' ' + critter.name,
+				'text': critter.name,
 				'class': 'crittername'
 			});
 			var span2 = $('<span></span>', {
@@ -153,6 +158,7 @@ function selectCritter(id) {
 		}));
 		$("#critterlist").append(li);
 
+		checkCreateButton();
 		var i = tab_info[active_tab].list.indexOf(id);
 		if (i != -1) {
 			$('#critterselection .tablebox ul>li:nth-of-type(' + (i + 1) + ')').addClass('selected');
@@ -178,14 +184,32 @@ function deselectCritter(id) {
 	}
 
 	// deselect last critter
+	checkCreateButton();
 	if (critters_selected.length == 0) {
 		$("#critterlist").html("No critters selected");
+	}
+}
+
+/**
+ * Checks if the create button should be disabled and sets it accordingly.
+ * @return {bool} true if button is usable, else false
+ */
+function checkCreateButton() {
+	if (critters_selected.length && !request_out) {
+		// not disabled
+		$("#createbutton").removeClass('disabled');
+		return true;
+	} else {
+		// disabled
+		$("#createbutton").addClass('disabled');
+		return false;
 	}
 }
 
 // On load
 $(function() {
 	setTab('user');
+	checkCreateButton();
 
 	$("#selectrandom").click(function() {
 		setTab('random');
@@ -197,21 +221,26 @@ $(function() {
 
 	// Create the battle
 	$("#createbutton").click(function() {
-		$(this).prop('disabled', true);
-		// should only send critter id's
-		var request_data = {
-			critters: critters_selected,
-			height: $("#battleheight").val(),
-			width: $("#battlewidth").val(),
-			length: $("#battlelength").val()
-		};
-		console.log(request_data);
-		$.post(NEW_BATTLE_URL, request_data, function(data) {
-			if (data.success) {
-				window.location.href = data.url;
-			} else {
-				alert(data.error);
-			}
-		});
+		if (checkCreateButton()) {
+			request_out = true;
+			checkCreateButton();
+
+			var request_data = {
+				critters: critters_selected,
+				height: $("#battleheight").val(),
+				width: $("#battlewidth").val(),
+				length: $("#battlelength").val()
+			};
+			console.log(request_data);
+			$.post(NEW_BATTLE_URL, request_data, function(data) {
+				request_out = false;
+				checkCreateButton();
+				if (data.success) {
+					window.location.href = data.url;
+				} else {
+					alert(data.error);
+				}
+			});
+		}
 	});
 });
