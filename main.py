@@ -82,6 +82,7 @@ def reset_page():
 		return "success"
 	except Exception as e:
 		return Markup(e)
+
 # Start the server	
 if __name__ == "__main__":
 

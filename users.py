@@ -6,11 +6,13 @@ import os
 import re
 import shutil
 import sqlite3
+
 from flask import Flask, g, redirect, request, session, render_template, Blueprint, url_for, Markup, abort, flash
 
-import battles
+from battles import Battle
 from editor import Critter
 from password import hash_password
+import battles
 
 users_app = Blueprint('users_app', __name__, template_folder='templates')
 
@@ -76,17 +78,14 @@ class User:
 	def get_battles(self, limit=20):
 		"""Return a list of recent battles this user's critters have been in."""
 		limit = int(limit)
-		rows = g.db.execute("SELECT DISTINCT battles.id,battles.creation_time FROM battles, battle_critters, critters \
+		rows = g.db.execute("SELECT DISTINCT battles.id FROM battles, battle_critters, critters \
 			WHERE battles.id=battle_critters.battle_id \
 			AND battle_critters.critter_id=critters.id \
 			AND critters.owner_id=? \
 			ORDER BY battles.creation_time DESC \
 			LIMIT ?;", (self.id, limit)).fetchall()
 
-		results = []
-		for row in rows:
-			results.append(battles.Battle.from_id(row[0]))
-		return results
+		return [Battle.from_id(row[0]) for row in rows]
 
 	def __str__(self):
 		return "<User: {0},{1}>".format(self.id, self.username)

@@ -10,6 +10,7 @@
 	var CRITTER_JSON_URL = "{{url_for('editor_app.get_critters_json')}}";
 	var CRITTER_JSON_USER_URL = "{{url_for('editor_app.get_critters_json_user')}}";
 	var CRITTER_USER_IDS_URL = "{{url_for('editor_app.get_user_critter_ids')}}";
+	var CRITTER_RECENT_BATTLES_URL = "{{url_for('editor_app.get_critter_recent_battles')}}";
 	var USERNAME = "{{g.user.username|safe}}";
 </script>
 <script type="text/javascript" src="{{ url_for('static', filename='js/home.js') }}"></script>
@@ -32,12 +33,7 @@
 	<div class="module critters">
 		<h2>My Critters</h2>
 		<ul id="critterlist" class="list">
-			{% for critter in g.user.get_critters() %}
-			<li>
-				{{critter.get_link()|safe}}
-				<button class="deletebutton" onclick="delete_file('{{critter.name}}')">Delete</button>
-			</li>
-			{% endfor %}
+			loading...
 		</ul>
 		<button id="newfilebutton">New Critter</button>
 	</div>
