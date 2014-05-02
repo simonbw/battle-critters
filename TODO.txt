@@ -1,50 +1,55 @@
 Java Battle Server
-	Improve Dynamic Class loading
-	Security
-		File Permissions
-		Method Timeout
-		Memory Limit
+	-	Improve Dynamic Class loading
+		+-	Whitelist packages
+		- Handle all errors
+	-	Security
+		-	File Permissions
+		-	Method Timeout
+		-	Memory Limit
+	-	Add compiling from java server
 
 Web Backend
-	cleanup
- 		COMMENT EVERYTHING
- 		Throw Exceptions
- 		put templates into folders
+	-	Run battles in new thread
+	--	cleanup
+ 		-	COMMENT EVERYTHING
+ 		-	Throw Exceptions
+ 		--	put templates into folders
+
 
 Web Interface
-	New Battle Screen
-		Select Critters from list
-			my critters tab
-			search function
-			order by: name, rank, etc
-		stylize table and buttons
-		Loading Screen/Modal
-	Recent Battles Screen
-		AJAX load battles
-		Give information on critters and 
-	Home Page
-		Not Logged In
-			General Info About BattleCritters
-		Logged In
-			News
-			Recent Battles
-			My Critters
-	Critter Editor
-		consildate edit and view pages
-	Static Pages
-		About Us
-		FAQ
-		Critter Rules
+	-	New Battle Screen
+		-	Select Critters from list
+			+-	my critters tab
+			+-	random critters tab
+			-	search function
+			-	order by: name, rank, etc
+		+-	stylize table and buttons
+		-	Loading Screen/Modal
+	-	Recent Battles Screen
+		+-	AJAX load battles
+		-	Give information on critters
+		-	Show errors
+		-	Show winner 
+	-	Home Page
+		+--	Not Logged In
+			-	General Info About BattleCritters
+		-	Logged In
+			-	News
+			-	Recent Battles
+			-	My Critters
+	-	Critter Editor
+		+-	info pane
+		+-	redesign page
+		+--	consoldate edit and view pages
+	--	Static Pages
+		--	About Us
+		--	FAQ
+		--	Critter Rules
 
 Communications
-	Email Stuart Reges
-		Ask about copyright
-		Ask about cheating
-	Email Thomas
-		update on progress
-	Get battle-critters@gmail.com
-
-
-==================
----- THE PLAN ----
-==================
+	-	Email Stuart Reges
+		-	Ask about copyright
+		-	Ask about cheating
+	-	Email Thomas
+		-	update on progress
+	-	Get battle-critters@gmail.com

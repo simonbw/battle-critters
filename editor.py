@@ -31,6 +31,7 @@ editor_app = Blueprint('editor_app', __name__, template_folder='templates')
 
 class Critter():
 	"""A model for a Critter. Handles database comunication. To load a Critter, use one of the static methods."""
+
 	@staticmethod
 	def from_name(filename, owner=None, owner_id=None, owner_name=None, fail_silent=False):
 		"""Load a Critter from an owner and filename"""
@@ -39,7 +40,7 @@ class Critter():
 				owner = users.User.from_username(owner_name)
 			owner_id = owner.id
 
-		row = g.db.execute("SELECT * FROM critters WHERE owner_id=? AND name=?", (owner_id, filename)).fetchone()
+		row = g.db.execute("SELECT id, name, owner_id, creation_time, last_save_time, score FROM critters WHERE owner_id=? AND name=?", (owner_id, filename)).fetchone()
 		if row is None:
 			if fail_silent:
 				return None
@@ -50,7 +51,7 @@ class Critter():
 	@staticmethod
 	def from_id(id):
 		"""Load a critter from id"""
-		row = g.db.execute("SELECT * FROM critters WHERE id=?", (id,)).fetchone()
+		row = g.db.execute("SELECT id, name, owner_id, creation_time, last_save_time, score FROM critters WHERE id=?", (id,)).fetchone()
 		if row is None:
 			raise LookupError("Critter not found: " + str(id))
 		return Critter(row)
@@ -67,7 +68,7 @@ class Critter():
 		self._owner = None
 		self.creation_time = row['creation_time']
 		self.last_save_time = row['last_save_time']
-		self.score = row['score']
+		self._score = row['score']
 
 	@property
 	def owner(self):
@@ -90,6 +91,19 @@ class Critter():
 	@content.setter
 	def content(self, value):
 		self._content = value
+	
+	@property
+	def score(self):
+		"""Lazy load the score of this Critter"""
+		if self._score == None:
+			self._score = zlib.decompress(g.db.execute("SELECT content FROM critters WHERE id=?", (self.id,)).fetchone()['content'])
+		return self._score
+
+	@score.setter
+	def score(self, value):
+		self._score = value
+		g.db.execute("UPDATE critters SET score=? WHERE name = ? AND owner_id = ?;", (self._score, self.name, self.owner_id))
+		g.db.commit()
 
 	def get_all_battles(self):
 		"""Return the list of battles this critter been in"""
@@ -132,6 +146,7 @@ class Critter():
 
 	def compile(self):
 		"""Compile the critter."""
+		# TODO: Switch os compiling to java compiling. I think it should be faster.
 		temp_name = os.path.join('.', 'java','temp_critters', self.name + '.java')
 		content = process_file(self.content, self.owner.username, self.name)
 		with open(temp_name, 'w') as f:
@@ -173,10 +188,6 @@ def critter_list_page():
 @editor_app.route('/json')
 def get_critters_json():
 	"""Returns a JSON object containing a map of critter id to information such as name, owner_name, and owner_id."""
-	# TODO: PLEASE REMOVE THIS. THIS IS JUST TO SIMULATE LATENCY
-	time.sleep(0.1)
-	# TODO: PLEASE REMOVE THIS. THIS IS JUST TO SIMULATE LATENCY
-	
 	r = {}
 	for critter_id in request.args.getlist('ids[]'):
 		c = Critter.from_id(critter_id)
@@ -184,6 +195,7 @@ def get_critters_json():
 		data['name'] = c.name
 		data['owner_name'] = c.owner.username
 		data['owner_id'] = c.owner.id
+		data['score'] = c.score
 		r[c.id] = data
 	return jsonify(r)
 
@@ -216,7 +228,7 @@ def get_random_critter_ids():
 		return "error"
 
 @editor_app.route('/get')
-def get_critter_list():
+def get_critter_list_page():
 	"""Page that lists all critters. Can specify an owner."""
 	if request.args['username']:
 		u = users.User.from_username(request.args['username'])
@@ -233,13 +245,6 @@ def get_critter_list():
 		result += Markup('</li>')
 	return result
 
-@editor_app.route('/<owner>/')
-def list_user_files(owner):
-	owner = users.User.from_username(owner)
-	rows = g.db.execute('SELECT * FROM critters WHERE owner_id=?;', (owner.id,)).fetchall()
-	critters = map(Critter, rows)
-	return render_template('list_user_critters.html', critters=critters, owner=owner)
-
 @editor_app.route('/<owner>/<filename>')
 def view_file(owner, filename):
 	critter = Critter.from_name(filename, owner_name=owner)
@@ -249,7 +254,6 @@ def view_file(owner, filename):
 def save_file(owner, filename):
 	if (g.user.username != owner and not g.user.admin):
 		raise Exception("You don't have permission to do that")
-
 	try:
 		critter = Critter.from_name(filename, owner_name=owner)
 		critter.content = request.form['content']
@@ -281,7 +285,7 @@ def delete_file(owner, filename):
 
 @editor_app.route('/<owner>/<filename>/compile', methods=["GET","POST"])
 def compile_file(owner, filename):
-	"""This is sketchy if multiple files are being compiled at once.
+	"""This is sketchy if multiple files of the same name are being compiled at once.
 	Compile a file. User must be the owner of the critter or an admin. Returns 'success', else returns compiler error message."""
 	if (g.user.username != owner and not g.user.admin):
 		raise Exception("You don't have permission to do that")

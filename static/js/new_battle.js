@@ -13,7 +13,7 @@ tab_info['user'] = {
 }
 tab_info['random'] = {
 	'list': [],
-	'url': CRITTER_RANDOM_IDS_URL
+	'url': CRITTER_RANDOM_IDS_URL,
 	'sorting': null
 }
 // map critter ids to critter datas
