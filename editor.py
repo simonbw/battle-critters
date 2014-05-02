@@ -2,8 +2,10 @@
 Handles the model, as well as pages for editing and viewing, of critter code.
 """
 
+from flask import abort, Blueprint, Flask, g, jsonify, Markup, redirect, render_template, request, session, url_for
 import os
 import re
+import sqlite3
 import string
 import subprocess
 import sys
@@ -11,11 +13,11 @@ import time
 import traceback
 import zlib
 
-import sqlite3
-from flask import Flask, g, redirect, request, session, render_template, Blueprint, url_for, Markup, abort, jsonify
-
-import users
+from util import json_service, login_required, admin_required, require_user
+import battles
 import ranking
+import users
+import util
 
 JAVA_KEYWORDS = ('abstract', 'continue', 'for', 'new', 'switch', 'assert', 'default', 'goto', 'package', 'synchronized', 'boolean', 'do', 'if', 'private', 'this','break', 'double', 'implements', 'protected', 'throw', 'byte', 'else', 'import', 'public', 'throws', 'case', 'enum', 'instanceof', 'return', 'transient', 'catch', 'extends', 'int', 'short', 'try','char', 'final', 'interface', 'static', 'void', 'class', 'finally', 'long', 'strictfp', 'volatile','const', 'float', 'native', 'super', 'while')
 JAVA_LETTERS = string.ascii_letters
@@ -109,6 +111,17 @@ class Critter():
 		"""Return the list of battles this critter been in"""
 		return map(battles.Battle.from_id, [row.id for row in g.db.execute("SELECT battle_id FROM battle_critters WHERE critter_id = ?", (self.id,)).fetchall()])
 
+	def get_recent_battles(self, limit=20):
+		"""Return the list of the limit most recent battles this critter has been in."""
+		limit = int(limit)
+		rows = g.db.execute("SELECT DISTINCT battles.id FROM battles, battle_critters, critters \
+			WHERE battles.id=battle_critters.battle_id \
+			AND battle_critters.critter_id=? \
+			ORDER BY battles.creation_time DESC \
+			LIMIT ?;", (self.id, limit)).fetchall()
+		return [battles.Battle.from_id(row[0]) for row in rows]
+
+
 	def get_winning_battles(self):
 		"""Return the list of battles this critter has won"""
 		return map(battles.Battle.from_id, [row.id for row in g.db.execute("SELECT battle_id FROM battle_critters WHERE critter_id = ? AND winner = 1", (self.id,)).fetchall()])
@@ -170,9 +183,20 @@ class Critter():
 			raise LookupError("Critter not found: " + filename)
 		self.__init__(row)
 
+	def delete(self):
+		"""Delete the critter"""
+		# delete from database
+		g.db.execute("DELETE FROM critters WHERE id = ?;", (self.id,))
+		g.db.commit()
+
+		# remove compiled file
+		path = os.path.join('.', 'java', 'bin', 'critters', owner, filename + '.class')
+		os.remove(path)
+
 	def as_object(self, name=True, owner=True, score=True, url=True, content=False):
 		"""Return an object ready to be converted to json. Specify the parameters to be included."""
 		data = {}
+		data['id'] = self.id
 		if name:
 			data['name'] = self.name
 		if owner:
@@ -202,52 +226,69 @@ def critter_list_page():
 	return render_template('list_all_critters.html', critters=critters)
 
 @editor_app.route('/json')
+@json_service
 def get_critters_json():
-	"""Returns a JSON object containing a map of critter id to information such as name, owner_name, and owner_id for ids from the request."""
+	"""Returns a map of critter id to information such as name, owner_name, and owner_id for ids from the request."""
 	r = {}
 	for critter_id in request.args.getlist('ids[]'):
 		c = Critter.from_id(critter_id)
 		r[c.id] = c.as_object()
-	return jsonify(r)
+	return r
 
 @editor_app.route('/json/user')
+@json_service
 def get_critters_json_user():
-	"""Returns a JSON object containing a map of critter id to information such as name, owner_name, and owner_id."""
+	"""Returns a map of critter id to information such as name, owner_name, and owner_id."""
 	r = {'critters': []}
 	for c in g.user.get_critters():
 		r['critters'].append(c.as_object())
-	return jsonify(r)
+	return r
 
 @editor_app.route('/get_ids/user')
+@json_service
 def get_user_critter_ids():
-	"""Return a JSON list of critter ids"""
-	try:
-		limit = request.args['limit']
-		print "limit", limit
-		owner_id = g.user.id
-		query = "SELECT id FROM critters WHERE owner_id=? ORDER BY id LIMIT ?"
-		rows = g.db.execute(query, (owner_id,limit)).fetchall()
-		ids = [row['id'] for row in rows]
-		return jsonify({'ids': ids})
-	except Exception as e:
-		print e
-		return "error"
+	"""Return a list of critter ids"""
+	limit = request.args['limit']
+	print "limit", limit
+	owner_id = g.user.id
+	query = "SELECT id FROM critters WHERE owner_id=? ORDER BY id LIMIT ?"
+	rows = g.db.execute(query, (owner_id,limit)).fetchall()
+	ids = [row['id'] for row in rows]
+	return {'ids': ids}
 
 @editor_app.route('/get_ids/random')
+@json_service
 def get_random_critter_ids():
-	"""Return a JSON list of critter ids"""
-	try:
-		if 'limit' in request.args:
-			limit = request.args['limit']
-		else:
-			limit = 128
-		owner_id = g.user.id
-		rows = g.db.execute("SELECT id FROM critters ORDER BY RANDOM() LIMIT ?", (limit,)).fetchall()
-		ids = [row['id'] for row in rows]
-		return jsonify({'ids': ids})
-	except Exception as e:
-		print e
-		return "error"
+	"""Return a list of critter ids"""
+	if 'limit' in request.args:
+		limit = request.args['limit']
+	else:
+		limit = 128
+	owner_id = g.user.id
+	rows = g.db.execute("SELECT id FROM critters ORDER BY RANDOM() LIMIT ?", (limit,)).fetchall()
+	ids = [row['id'] for row in rows]
+	return {'ids': ids}
+
+@editor_app.route('/get_battles/recent')
+@json_service
+def get_critter_recent_battles():
+	"""Return a list of resent battles for the critter"""
+	r = {'battles': []}
+	if 'critter_id' in request.args:
+		critter = Critter.from_id(request.args['critter_id'])
+	else:
+		raise Exception("critter_id not specified")
+	for battle in critter.get_recent_battles():
+		data = {}
+		data['time'] = battle.creation_time
+		data['pretty_time'] = util.format_date(battle.creation_time)
+		data['height'] = battle.height
+		data['width'] = battle.width
+		data['id'] = battle.id
+		data['length'] = battle.length
+		data['url'] = battle.get_url()
+		r['battles'].append(data)
+	return r
 
 @editor_app.route('/get')
 def get_critter_list():
@@ -273,70 +314,42 @@ def view_file(owner, filename):
 	return render_template('edit_critter.html', critter=critter)
 
 @editor_app.route('/<owner>/<filename>', methods=['PUT', 'POST'])
+@json_service
 def save_file(owner, filename):
-	if (g.user.username != owner and not g.user.admin):
-		raise Exception("You don't have permission to do that")
-	try:
-		critter = Critter.from_name(filename, owner_name=owner)
-		critter.content = request.form['content']
-		critter.save();
-		return jsonify({'success': True})
-	except Exception as e:
-		return jsonify({'success': False, 'error': str(e)})
+	require_user(owner)
+	
+	critter = Critter.from_name(filename, owner_name=owner)
+	critter.content = request.form['content']
+	critter.save();
 
 @editor_app.route('/<owner>/<filename>', methods=['DELETE'])
+@json_service
 def delete_file(owner, filename):
 	"""Delete a file if it exists"""
-	try:
-		owner_id = users.User.from_username(owner).id
-		print "deleting critter: " + filename + ", " + str(owner_id)
-		# make sure it exists
-		Critter.from_name(filename, owner_id=owner_id, fail_silent=False)
-		
-		try:
-			path = os.path.join('.', 'java', 'bin', 'critters', owner, filename + '.class')
-			os.remove(path)
-		except EnvironmentError as e:
-			pass
-
-		g.db.execute("DELETE FROM critters WHERE name = ? AND owner_id = ?;", (filename, owner_id))
-		g.db.commit()
-
-		return jsonify({'success': False})
-	except Exception as e:
-		return jsonify({'success': False, 'error': str(e)})
+	owner_id = users.User.from_username(owner).id
+	print "deleting critter: " + filename + ", " + str(owner_id)
+	# throws error if it doesn't exists
+	Critter.from_name(filename, owner_id=owner_id, fail_silent=False).delete()
 
 @editor_app.route('/<owner>/<filename>/compile', methods=["GET","POST"])
 def compile_file(owner, filename):
 	""" -- This is sketchy if multiple files of the same name are being compiled at once. --
 	Compile a file. User must be the owner of the critter or an admin."""
-	if (g.user.username != owner and not g.user.admin):
-		raise Exception("You don't have permission to do that")
+	require_user(owner)
 	critter = Critter.from_name(filename, owner_name=owner)
 	return jsonify(critter.compile())
 
 @editor_app.route('/<owner>/<filename>/new', methods=["POST", "PUT"])
+@json_service
 def new_file(owner, filename):
 	"""Create a new file."""
+	require_user(owner)
+	if not check_filename(filename):
+		raise Exception("Invalid Class Name")
 	if (g.user.username != owner and not g.user.admin):
 		raise Exception("You don't have permission to do that")
-	try:
-		if not check_filename(filename):
-			raise Exception("Invalid Class Name")
-		if (g.user.username != owner and not g.user.admin):
-			raise Exception("You don't have permission to do that")
-
-		owner = users.User.from_username(owner)
-		
-		if request.form.get("content") is not None:
-			content = request.form['content']
-		else:
-			content = None
-		create_file(owner, filename, content)
-		return jsonify({'success': True})
-	except Exception as e:
-		traceback.print_exc(file=sys.stdout)
-		return jsonify({'success': False, 'error': str(e)})
+	owner = users.User.from_username(owner)
+	create_file(owner, filename, request.form.get("content"))
 
 def create_file(owner, filename, content=None):
 	"""Actually create a new critter"""
