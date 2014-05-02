@@ -4,10 +4,9 @@
 {{super()}}
 <script type="text/javascript">
 	CRITTER_JSON_URL = "{{url_for('editor_app.get_critters_json')}}";
-	CRITTER_LINK = "{{ url_for('editor_app.view_file', owner='insertownerhere', filename='insertfilenamehere') }}";
 	CRITTER_RANDOM_IDS_URL = "{{url_for('editor_app.get_random_critter_ids')}}";
 	CRITTER_USER_IDS_URL = "{{url_for('editor_app.get_user_critter_ids')}}";
-	NEW_BATTLE_URL = "{{url_for('battles_app.new_battle_page')}}";
+	NEW_BATTLE_URL = "{{url_for('battles_app.request_custom_battle')}}";
 </script>
 <script src="{{url_for('static', filename='js/new_battle.js')}}"></script>
 {% endblock %}

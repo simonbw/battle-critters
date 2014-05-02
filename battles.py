@@ -14,6 +14,11 @@ import users
 import util
 from editor import Critter
 
+RANKED_HEIGHT = 100
+RANKED_WIDTH = 100
+RANKED_LENGTH = 1000
+
+
 battles_app = Blueprint('battles_app', __name__, template_folder='templates')
 
 class Battle():
@@ -100,25 +105,43 @@ def get_frames(battle_id):
 	end = int(request.args['end'])
 	return battle.get_frames(start, end)
 	
-@battles_app.route('/new', methods=["GET", "POST"])
-def new_battle_page():
-	"""The page for creating a new battle."""
-	if request.method == "GET":
-		return render_template('new_battle.html')
-	elif request.method == "POST":
-		try:
-			length = request.form['length']
-			width = request.form['width']
-			height = request.form['height']
-			ranked = True #bool(request.form['ranked'])
+@battles_app.route('/custom')
+def custom_battle_page():
+	"""The page for creating a new custom battle."""
+	return render_template('custom_battle.html')
+	
+@battles_app.route('/ranked')
+def ranked_battle_page():
+	"""The page for creating a new ranked battle."""
+	return render_template('custom_battle.html')
 
-			critters = [Critter.from_id(critter_id) for critter_id in request.form.getlist('critters[]')]
+@battles_app.route('/request_custom', methods=["POST"])
+def request_custom_battle():
+	"""Request a new custom battle."""
+	try:
+		length = request.form['length']
+		width = request.form['width']
+		height = request.form['height']
 
-			battle_id = create_battle(length, width, height, critters, ranked)
-			return jsonify({'success': True, 'battle_id': battle_id, 'url': url_for('battles_app.view_battle', battle_id=battle_id)})
-		except Exception as e:
-			traceback.print_exc(file=sys.stdout)
-			return jsonify({'success': False, 'error': repr(e)})
+		critters = [Critter.from_id(critter_id) for critter_id in request.form.getlist('critters[]')]
+
+		battle_id = create_battle(length, width, height, critters, False)
+		return jsonify({'success': True, 'battle_id': battle_id, 'url': url_for('battles_app.view_battle', battle_id=battle_id)})
+	except Exception as e:
+		traceback.print_exc(file=sys.stdout)
+		return jsonify({'success': False, 'error': repr(e)})
+
+@battles_app.route('/request_ranked', methods=["POST"])
+def request_ranked_battle():
+	"""Request a new ranked battle."""
+	try:
+		critters = [Critter.from_id(critter_id) for critter_id in request.form.getlist('critters[]')]
+
+		battle_id = create_battle(RANKED_LENGTH, RANKED_WIDTH, RANKED_HEIGHT, critters, True)
+		return jsonify({'success': True, 'battle_id': battle_id, 'url': url_for('battles_app.view_battle', battle_id=battle_id)})
+	except Exception as e:
+		traceback.print_exc(file=sys.stdout)
+		return jsonify({'success': False, 'error': repr(e)})
 
 def create_battle(length, height, width, critters, ranked):
 	"""Actually create a new battle"""

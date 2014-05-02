@@ -3,12 +3,12 @@
 {% block scripts %}
 {{ super() }}
 <script>
-var NEWS_URL = "{{url_for('home_app.news')}}";
-var MAX_NEWS = {{max_news}};
-var DELETE_FILE_URL = "{{url_for('editor_app.delete_file', owner=g.user.username, filename='insertfilenamehere')}}";
-var NEW_FILE_URL = "{{url_for('editor_app.new_file', owner=g.user.username, filename='insertfilenamehere')}}";
-var CRITTER_LIST_URL = "{{url_for('editor_app.get_critter_list')}}";
-var USERNAME = "{{g.user.username|safe}}";
+	var NEWS_URL = "{{url_for('home_app.news')}}";
+	var MAX_NEWS = {{max_news}};
+	var DELETE_FILE_URL = "{{url_for('editor_app.delete_file', owner=g.user.username, filename='insertfilenamehere')}}";
+	var NEW_FILE_URL = "{{url_for('editor_app.new_file', owner=g.user.username, filename='insertfilenamehere')}}";
+	var CRITTER_LIST_URL = "{{url_for('editor_app.get_critter_list')}}";
+	var USERNAME = "{{g.user.username|safe}}";
 </script>
 <script type="text/javascript" src="{{ url_for('static', filename='js/home.js') }}"></script>
 <script type="text/javascript" src="{{ url_for('static', filename='js/news.js') }}"></script>
@@ -25,7 +25,7 @@ var USERNAME = "{{g.user.username|safe}}";
 			</li>
 			{% endfor %}
 		</ul>
-		<button><a href="{{url_for('battles_app.new_battle_page')}}">New Battle</a></button>
+		<button><a href="{{url_for('battles_app.custom_battle_page')}}">Custom Battle</a></button>
 	</div>
 	<div class="module critters">
 		<h2>My Critters</h2>
@@ -49,12 +49,12 @@ var USERNAME = "{{g.user.username|safe}}";
 	<div class="module admin">
 		<h2>Admin</h2>
 		<a href="{{url_for('users_app.list_users')}}">All Users</a>
-		</br>
+		<br />
 		<h3>Post News</h3>
-		<input name="title" id="newsformtitle"></input>
-		</br>
-		<textarea name="content" id="newsformcontent"></textarea>
-		</br>
+		<input name="title" id="newsformtitle" />
+		<br />
+		<textarea name="content" id="newsformcontent" />
+		<br />
 		<button id="postnewsbutton">Submit</button>
 	</div>
 	{% endif %}

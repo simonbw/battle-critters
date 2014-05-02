@@ -1,0 +1,5 @@
+*.pyc
+java/bin/battlecritters/critters
+java/temp_critters
+*.db
+log.txt
