@@ -45,8 +45,7 @@ $(document).ready(function() {
 
 	if (AUTOSAVE) {
 		$("#autosavebutton").html("Disable Autosave");
-	}
-	else {
+	} else {
 		$("#autosavebutton").html("Enable Autosave");
 	}
 	$("#autosavebutton").click(function() {
@@ -120,19 +119,19 @@ $(document).ready(function() {
 				content: editor.getValue()
 			}, function(data) {
 				saving = false;
-				if (data != "success") {
-					console.log("Save Error: " + data);
+				if (data.success) {
+					saved = true;
+					$('#savestatus').html("Last saved: " + time());
+					$('#statusbar').removeClass("unsaved");
+					resetHeight();
+				} else {
+					console.log(data.error);
 					$("#errordisplay").html(data);
 					$("#errordisplay").slideDown(150, function() {
 						resetHeight();
 					});
 					$('#savestatus').html("Error Saving");
 					$('#statusbar').addClass('error');
-				} else {
-					saved = true;
-					$('#savestatus').html("Last saved: " + time());
-					$('#statusbar').removeClass("unsaved");
-					resetHeight();
 				}
 				if (callback != undefined) {
 					callback(data);
@@ -157,16 +156,7 @@ $(document).ready(function() {
 					compiling = false;
 					editor.setOption("readOnly", false);
 					$('#statusbar').removeClass('compiling');
-					if (data != "success") {
-						// console.log("Compile Error: " + data);
-						$("#errordisplay").html(data);
-						$("#errordisplay").slideDown(150, function() {
-							resetHeight();
-						});
-						$('#compilestatus').html("Compilation Error");
-						$('#statusbar').addClass('error');
-						processCompilerOutput(data);
-					} else {
+					if (data.success) {
 						$('#compilestatus').html("Compiled Successfully");
 						$('#statusbar').addClass('compiled');
 						$('#statusbar').removeClass('error');
@@ -175,8 +165,17 @@ $(document).ready(function() {
 							resetHeight();
 						});
 						clearErrors();
+					} else {
+						// console.log("Compile Error: " + data);
+						$("#errordisplay").html(data.error);
+						$("#errordisplay").slideDown(150, function() {
+							resetHeight();
+						});
+						$('#compilestatus').html("Compilation Error");
+						$('#statusbar').addClass('error');
+						processCompilerOutput(data.error);
 					}
-				});
+				}, 'json');
 			}
 			if (saved)
 				f(null);
@@ -208,7 +207,7 @@ $(document).ready(function() {
 
 		// This is needed because it seems this function needs to be called once the DOM rebuilds itself or something
 		if (!stop) {
-			setTimeout(function(){
+			setTimeout(function() {
 				resetHeight(true);
 			}, 20);
 		}

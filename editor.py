@@ -129,10 +129,10 @@ class Critter():
 		else:
 			raise Exception("Unknown Action: " + action)
 
-	def get_link(self, action='view', text=None):
+	def get_link(self, action='view', text="{owner}.{name}"):
 		"""Return an HTML snippet with a link to the userpage. If text is none, defaults to 'ownername.name' ."""
 		url = self.get_url(action)
-		text = text if text else self.owner.username + '.' + self.name
+		text = text.format(name = self.name, owner=self.owner.username, id=self.id, url=url)
 		return Markup("<a href='{url}' class='crittername'>{text}</a>".format(url=url,text=text))
 
 	def save(self):
@@ -158,10 +158,10 @@ class Critter():
 		try:
 			subprocess.check_output(command, stderr=subprocess.STDOUT, shell=True)
 			# save stuff
-			return "success"
+			return {'success': True}
 		except subprocess.CalledProcessError as e:
-			return Markup(format_compiler_output(e.output))
-
+			output = format_compiler_output(e.output)
+			return {'success': False, 'error': output}
 
 	def reload(self):
 		"""Reload all the data from this critter out of the database.""" 
@@ -169,6 +169,22 @@ class Critter():
 		if row is None:
 			raise LookupError("Critter not found: " + filename)
 		self.__init__(row)
+
+	def as_object(self, name=True, owner=True, score=True, url=True, content=False):
+		"""Return an object ready to be converted to json. Specify the parameters to be included."""
+		data = {}
+		if name:
+			data['name'] = self.name
+		if owner:
+			data['owner_name'] = self.owner.username
+			data['owner_id'] = self.owner.id
+		if score:
+			data['score'] = self.score
+		if url:
+			data['url'] = self.get_url()
+		if content:
+			data['content'] = self.content
+		return data
 
 	def __str__(self):
 		return "<Critter: {0},{1},{2}>".format(self.id, self.name, self.owner)
@@ -187,16 +203,19 @@ def critter_list_page():
 
 @editor_app.route('/json')
 def get_critters_json():
-	"""Returns a JSON object containing a map of critter id to information such as name, owner_name, and owner_id."""
+	"""Returns a JSON object containing a map of critter id to information such as name, owner_name, and owner_id for ids from the request."""
 	r = {}
 	for critter_id in request.args.getlist('ids[]'):
 		c = Critter.from_id(critter_id)
-		data = {}
-		data['name'] = c.name
-		data['owner_name'] = c.owner.username
-		data['owner_id'] = c.owner.id
-		data['score'] = c.score
-		r[c.id] = data
+		r[c.id] = c.as_object()
+	return jsonify(r)
+
+@editor_app.route('/json/user')
+def get_critters_json_user():
+	"""Returns a JSON object containing a map of critter id to information such as name, owner_name, and owner_id."""
+	r = {'critters': []}
+	for c in g.user.get_critters():
+		r['critters'].append(c.as_object())
 	return jsonify(r)
 
 @editor_app.route('/get_ids/user')
@@ -218,7 +237,10 @@ def get_user_critter_ids():
 def get_random_critter_ids():
 	"""Return a JSON list of critter ids"""
 	try:
-		limit = request.args['limit']
+		if 'limit' in request.args:
+			limit = request.args['limit']
+		else:
+			limit = 128
 		owner_id = g.user.id
 		rows = g.db.execute("SELECT id FROM critters ORDER BY RANDOM() LIMIT ?", (limit,)).fetchall()
 		ids = [row['id'] for row in rows]
@@ -228,7 +250,7 @@ def get_random_critter_ids():
 		return "error"
 
 @editor_app.route('/get')
-def get_critter_list_page():
+def get_critter_list():
 	"""Page that lists all critters. Can specify an owner."""
 	if request.args['username']:
 		u = users.User.from_username(request.args['username'])
@@ -258,12 +280,13 @@ def save_file(owner, filename):
 		critter = Critter.from_name(filename, owner_name=owner)
 		critter.content = request.form['content']
 		critter.save();
-		return 'success'
+		return jsonify({'success': True})
 	except Exception as e:
-		return Markup("ERROR: " + str(e))
+		return jsonify({'success': False, 'error': str(e)})
 
 @editor_app.route('/<owner>/<filename>', methods=['DELETE'])
 def delete_file(owner, filename):
+	"""Delete a file if it exists"""
 	try:
 		owner_id = users.User.from_username(owner).id
 		print "deleting critter: " + filename + ", " + str(owner_id)
@@ -279,18 +302,18 @@ def delete_file(owner, filename):
 		g.db.execute("DELETE FROM critters WHERE name = ? AND owner_id = ?;", (filename, owner_id))
 		g.db.commit()
 
-		return 'success'
+		return jsonify({'success': False})
 	except Exception as e:
-		return Markup("ERROR: " + str(e))
+		return jsonify({'success': False, 'error': str(e)})
 
 @editor_app.route('/<owner>/<filename>/compile', methods=["GET","POST"])
 def compile_file(owner, filename):
-	"""This is sketchy if multiple files of the same name are being compiled at once.
-	Compile a file. User must be the owner of the critter or an admin. Returns 'success', else returns compiler error message."""
+	""" -- This is sketchy if multiple files of the same name are being compiled at once. --
+	Compile a file. User must be the owner of the critter or an admin."""
 	if (g.user.username != owner and not g.user.admin):
 		raise Exception("You don't have permission to do that")
 	critter = Critter.from_name(filename, owner_name=owner)
-	return critter.compile()
+	return jsonify(critter.compile())
 
 @editor_app.route('/<owner>/<filename>/new', methods=["POST", "PUT"])
 def new_file(owner, filename):
@@ -310,10 +333,10 @@ def new_file(owner, filename):
 		else:
 			content = None
 		create_file(owner, filename, content)
-		return "success"
+		return jsonify({'success': True})
 	except Exception as e:
 		traceback.print_exc(file=sys.stdout)
-		return Markup("ERROR: " + str(e))
+		return jsonify({'success': False, 'error': str(e)})
 
 def create_file(owner, filename, content=None):
 	"""Actually create a new critter"""

@@ -7,7 +7,9 @@
 	var MAX_NEWS = {{max_news}};
 	var DELETE_FILE_URL = "{{url_for('editor_app.delete_file', owner=g.user.username, filename='insertfilenamehere')}}";
 	var NEW_FILE_URL = "{{url_for('editor_app.new_file', owner=g.user.username, filename='insertfilenamehere')}}";
-	var CRITTER_LIST_URL = "{{url_for('editor_app.get_critter_list')}}";
+	var CRITTER_JSON_URL = "{{url_for('editor_app.get_critters_json')}}";
+	var CRITTER_JSON_USER_URL = "{{url_for('editor_app.get_critters_json_user')}}";
+	var CRITTER_USER_IDS_URL = "{{url_for('editor_app.get_user_critter_ids')}}";
 	var USERNAME = "{{g.user.username|safe}}";
 </script>
 <script type="text/javascript" src="{{ url_for('static', filename='js/home.js') }}"></script>

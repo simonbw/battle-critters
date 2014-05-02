@@ -4,6 +4,7 @@ Create and view battles.
 
 import random
 import sys
+import threading
 import time
 import traceback
 
@@ -17,6 +18,12 @@ from editor import Critter
 RANKED_HEIGHT = 100
 RANKED_WIDTH = 100
 RANKED_LENGTH = 1000
+MAX_LENGTH = 10000
+MAX_HEIGHT = 500
+MAX_WIDTH = 500
+MIN_LENGTH = 1
+MIN_HEIGHT = 10
+MIN_WIDTH = 10
 
 
 battles_app = Blueprint('battles_app', __name__, template_folder='templates')
@@ -119,9 +126,17 @@ def ranked_battle_page():
 def request_custom_battle():
 	"""Request a new custom battle."""
 	try:
-		length = request.form['length']
-		width = request.form['width']
-		height = request.form['height']
+		length = int(request.form['length'])
+		width = int(request.form['width'])
+		height = int(request.form['height'])
+
+		# check values
+		if (length < MIN_LENGTH or length > MAX_LENGTH):
+			raise ValueError("length must be between {min} and {max}".format(min=MIN_LENGTH, max=MAX_LENGTH))
+		if (height < MIN_HEIGHT or height > MAX_HEIGHT):
+			raise ValueError("height must be between {min} and {max}".format(min=MIN_HEIGHT, max=MAX_HEIGHT))
+		if (width < MIN_WIDTH or width > MAX_WIDTH):
+			raise ValueError("width must be between {min} and {max}".format(min=MIN_WIDTH, max=MAX_WIDTH))
 
 		critters = [Critter.from_id(critter_id) for critter_id in request.form.getlist('critters[]')]
 
