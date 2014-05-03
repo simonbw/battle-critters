@@ -2,6 +2,7 @@
 @import "mixins";
 
 @import "battle";
+@import "home";
 @import "editor";
 @import "faq";
 @import "footer";
@@ -87,6 +88,7 @@ body {
 			bottom: 5px;
 		}
 	}
+	
 	h2 {
 		margin: 0px;
 		margin-bottom: 4px;
@@ -96,6 +98,7 @@ body {
 			weight: normal;
 		}
 	}
+
 	h3 {
 		margin: 0px;
 		font {
@@ -104,6 +107,7 @@ body {
 			weight: normal;
 		}
 	}
+
 	h4 {
 		margin: 0px;
 		font: {
@@ -111,6 +115,7 @@ body {
 			weight: normal;
 		} 
 	}
+
 	p {
 		padding: 0px;
 		margin:
@@ -120,7 +125,9 @@ body {
 			right: 0px;
 			top: 0px;
 		}
-	} section {
+	}
+
+	section {
 		overflow: hidden;
 		margin: {
 			bottom: $module_spacing;
@@ -130,33 +137,12 @@ body {
 			left: $module_spacing;
 			right: $module_spacing;
 		}
-	}
-	.module {
-		background: $light_bg2;
-		border-radius: $module_radius;
-		float: left;
-		padding: 16px;
-		margin:  {
-			bottom: 0px;
-			left: $module_spacing;
-			right: 0px;
-			top: $module_spacing;
+
+		&.admin {
+			background: $light_bg2;
 		}
 	}
-	.news {
-		max-width: 400px;
-	}
-	.recent_battles {
-		
-	}
-	.modulebox {
-		padding: {
-			bottom: $module_spacing + 0px;
-			left: 0px;
-			right: $module_spacing + 0px;
-			top: 0px;
-		}
-	}
+
 	ul.list {
 		list-style: none;
 		margin: 0px;

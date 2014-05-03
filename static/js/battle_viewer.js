@@ -58,7 +58,6 @@ function load_chunk(start, end) {
 		},
 		function(data) {
 			chunks_loaded++;
-			console.log(data);
 			parse_frame_data(data);
 			if (chunks_loaded == 1) {
 				render_frame();

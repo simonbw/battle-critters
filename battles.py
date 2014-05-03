@@ -45,6 +45,7 @@ class Battle():
 		self.length = row['length']
 		self.width = row['width']
 		self.height = row['height']
+		self.ranked = row['ranked']
 
 		if self.id is None or self.creation_time is None:
 			raise ValueError("Improper row given to Battle")

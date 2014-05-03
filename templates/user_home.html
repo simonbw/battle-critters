@@ -18,7 +18,36 @@
 {% endblock scripts %}
 {% block body %}
 <h1> Home </h1>
-<div class="modulebox">
+<section id="dashboard">
+	<div class="battles">
+	<button><a href="{{url_for('battles_app.custom_battle_page')}}">Custom Battle</a></button>
+	</div>
+	<div class="critters">
+		<h2>My Critters</h2>
+		<ul id="critterlist" class="list">
+			loading...
+		</ul>
+		<button id="newfilebutton">New Critter</button>
+	</div>
+	<div class="news">
+		<p>news</p>
+	</div>
+</section>
+
+{% if (g.user.admin) %}
+<section class="admin">
+	<h2>Admin</h2>
+	<a href="{{url_for('users_app.list_users')}}">All Users</a>
+	<br />
+	<h3>Post News</h3>
+	<input name="title" id="newsformtitle" />
+	<br />
+	<textarea name="content" id="newsformcontent"></textarea>
+	<br />
+	<button id="postnewsbutton">Submit</button>
+</section>
+{% endif %}
+<!-- <div class="modulebox">
 	<div class="module recent_battles">
 		<h2>Recent Battles</h2>
 		<ul id="battlelist" class="list">
@@ -56,5 +85,5 @@
 		<button id="postnewsbutton">Submit</button>
 	</div>
 	{% endif %}
-</div>
+</div> -->
 {% endblock %}

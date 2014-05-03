@@ -12,10 +12,11 @@
 #loginform {
 	max-width: 250px;
 	fieldset {
-		border: 2px solid $accent1;
-		border-radius: $module_radius;
 		background: $light_bg3;
+		border-radius: $module_radius;
+		border: 2px solid $accent1;
 		padding: 16px;
+		text-align: center;
 
 		legend {
 			background: $light_bg3;

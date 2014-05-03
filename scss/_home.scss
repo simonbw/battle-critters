@@ -1,0 +1,30 @@
+@import 'fonts';
+@import 'mixins';
+
+#dashboard {
+	div.battles {
+		width: 200px;
+		float:left;
+	}
+
+	div.critters {
+		width: unquote("calc(100% - 400px)");
+		float:left;
+
+		#critterlist>li {
+			border-bottom: 1px dashed $accent3;
+			list-style: none;
+			padding: 4px 16px;
+			background: $light_bg3;
+		}
+	}
+	
+	div.news {
+		width: 200px;
+		float:left;
+	}
+
+	ul.battlelist {
+		list-style: none;
+	}
+}

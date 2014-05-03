@@ -11,7 +11,7 @@ import sqlite3
 import subprocess
 import sys
 import traceback
-from flask import Flask, request, g, session
+from flask import Flask, request, g, session, flash
 from flask.ext.scss import Scss
 from multiprocessing import Process
 from py4j.java_gateway import JavaGateway
@@ -50,7 +50,10 @@ def before_request():
 	"""Called before the request is routed. Sets up the link to the database and java server."""
 
 	# Compile SCSS. THIS SHOULDN'T BE HERE IN PRODUCTION
-	app.scss.update_scss()
+	try:
+		app.scss.update_scss()
+	except Exception as e:
+		flash(str(e))
 
 	# link to the java server
 	try:

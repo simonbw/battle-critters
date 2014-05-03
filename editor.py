@@ -280,13 +280,14 @@ def get_critter_recent_battles():
 		raise Exception("critter_id not specified")
 	for battle in critter.get_recent_battles():
 		data = {}
-		data['time'] = battle.creation_time
-		data['pretty_time'] = util.format_date(battle.creation_time)
 		data['height'] = battle.height
-		data['width'] = battle.width
 		data['id'] = battle.id
 		data['length'] = battle.length
+		data['pretty_time'] = util.format_date(battle.creation_time)
+		data['ranked'] = battle.ranked
+		data['time'] = battle.creation_time
 		data['url'] = battle.get_url()
+		data['width'] = battle.width
 		r['battles'].append(data)
 	return r
 

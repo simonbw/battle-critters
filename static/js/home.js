@@ -6,11 +6,11 @@ var critters_loaded = [];
  * @param  {[type]} filename [description]
  * @return {[type]}          [description]
  */
-function delete_file(filename) {
+function delete_critter(critter_name) {
 	$.ajax({
 		'type': "DELETE",
 		'dataType': 'json',
-		'url': DELETE_FILE_URL.replace('insertfilenamehere', filename),
+		'url': DELETE_FILE_URL.replace('insertfilenamehere', critter_name),
 		'complete': function(data, status) {
 			if (data.success) {
 				load_critter_list();
@@ -22,34 +22,50 @@ function delete_file(filename) {
 }
 
 /**
- * [load_critter_list description]
- * @return {[type]} [description]
  */
 function load_critter_list() {
 	$.getJSON(CRITTER_JSON_USER_URL, {}, function(response_data) {
 		$("#critterlist").empty();
-		console.log(response_data);
 		for (var i = 0; i < response_data.critters.length; i++) {
 			var critter = response_data.critters[i];
 			var li = $("<li></li>");
-			var a = $("<a></a>", {
+			li.append($("<a></a>", {
 				'text': critter['name'],
-				'href': critter['url']
+			}));
+			li.append($("<span>", {
+				'text': critter['score'],
+				'class': 'score',
+			}));
+			li.append($("<a>", {
+				'text': 'edit',
+				'href': critter['url'],
+				'class': 'edit'
+			}));
+			li.append($("<button>", {
+				'text': 'show battles',
+				'class': 'showbattles'
+			}));
+			var deletebutton = $("<button>", {
+				'text': 'delete',
+				'click': (function(critter_name) {
+					return (function() {
+						delete_critter(critter_name)
+					});
+				})(critter['name'])
 			});
 			var ul = $("<ul>", {
 				'class': 'battlelist',
-			})
-			li.append(a);
+			});
+			ul.hide();
+			li.append(deletebutton);
 			li.append(ul);
 
 			(function(ul, id) {
 				var request_data = {
 					'critter_id': id
 				};
-				console.log('request_data: ', request_data)
 				$.getJSON(CRITTER_RECENT_BATTLES_URL, request_data, function(response_data2) {
 					if (response_data2.success) {
-						console.log(response_data2);
 						for (var j = 0; j < response_data2.battles.length; j++) {
 							var battle = response_data2.battles[j];
 							ul.append($("<li>", {
@@ -69,12 +85,27 @@ function load_critter_list() {
 	});
 }
 
-function show_recent_battles() {
-
-}
-
 $(document).ready(function() {
 	load_critter_list();
+
+	// $("#critterlist").on('click', '.showbattles', function(event) {
+	// 	event.preventDefault();
+	// 	$(this).text('hide battles');
+	// 	$(this).parent().children('.battlelist').slideDown(200);
+	// 	$(this).removeClass('showbattles');
+	// 	$(this).addClass('hidebattles');
+	// });
+
+	// $("#critterlist").on('click', '.hidebattles', function(event) {
+	// 	event.preventDefault();
+	// 	$(this).text('show battles');
+	// 	$(this).parent().children('.battlelist').slideUp(200);
+	// 	$(this).removeClass('hidebattles');
+	// 	$(this).addClass('showbattles');
+	// });
+
+	$('#critterlist>li')
+
 	$("#newfilebutton").click(function() {
 		filename = prompt("Enter a name for your new critter:");
 		if (filename) {
