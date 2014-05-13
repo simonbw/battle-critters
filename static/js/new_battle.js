@@ -1,10 +1,10 @@
 // number of critters to request
 var LOADING_LIMIT = 32;
-// if currently waiting for 
+// if currently waiting for response
 var request_out = false;
-
-
+// The currently chosen tab
 var active_tab;
+// Data for all the tabs
 var tab_info = {};
 tab_info['user'] = {
 	'list': [],

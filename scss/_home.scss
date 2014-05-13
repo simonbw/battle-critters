@@ -3,28 +3,170 @@
 
 #dashboard {
 	div.battles {
-		width: 200px;
+		width: 400px;
 		float:left;
 	}
 
 	div.critters {
-		width: unquote("calc(100% - 400px)");
+		// width: unquote("calc(100% - 400px)");
+		width: 100%;
 		float:left;
 
 		#critterlist>li {
-			border-bottom: 1px dashed $accent3;
-			list-style: none;
-			padding: 4px 16px;
+			@include unselectable();
 			background: $light_bg3;
+			list-style: none;
+			overflow: hidden;
+			padding: 4px 16px;
+
+			&:not(:last-of-type) {
+				border-bottom: 1px solid darken($light_bg3, 5%);
+			}
+
+			// new critter button
+			&:last-of-type {
+				padding: 0px;
+
+				.nameinput {
+					border: 1px solid transparent;
+					display: block;
+					margin: 0px;
+					outline: none;
+					padding: 4px 16px;
+					width: 100%;
+
+					&.valid {
+						// border: 1px solid green;
+					}
+
+					&.invalid {
+						border: 1px solid red;
+					}
+				}
+
+				.newcritterbutton {
+					background: $light_bg3;
+					border: none;
+					display: block;
+					margin: 0px;
+					padding: 4px 16px;
+					width: 100%;
+					font: {
+						family: $font_main;
+						size: 15px;
+						color: $main_text;
+					}
+					&:hover {
+						background: darken($light_bg3, 2%);
+					}
+
+					&:active {
+						background: darken($light_bg3, 5%);
+						outline: none;
+					}
+				}
+			}
+
+			// the table header
+			&:first-child {
+				border-bottom: 1px solid $accent3;
+				font-weight: bold;
+			}
+
+			&.critter:hover {
+				background: darken($light_bg3, 2%);
+			}
+
+			&.critter.selected {
+				background: darken($light_bg3, 5%);
+			}
+
+			&.critter div.top {
+				clear: both;
+				cursor: pointer;
+				overflow: hidden;
+				width: 100%;
+			}
+
+			.item {
+				display: block;
+				float: left;
+			}
+
+			.name {
+				width: 70%;
+			}
+			.score, .wins, .losses {
+				width: 10%;
+				text-align: center;
+			}
+			.edit {
+			}
+			.delete {
+			}
 		}
 	}
 	
-	div.news {
-		width: 200px;
-		float:left;
-	}
-
 	ul.battlelist {
 		list-style: none;
+		float: left;
+		width: unquote("calc(100% - 200px)");
+		padding: 2px 16px;
+		margin: 0px;
+
+		li {
+			margin: 0px;
+			padding: 2px;
+
+		}
+	}
+
+	ul.actionlist {
+		list-style: none;
+		float: left;
+		width: 200px;
+		padding: 0px;
+		margin: 0px;
+
+		li {
+			background: $light_bg3;
+			border: 1px solid $accent3;
+			border-bottom: none;
+			cursor: pointer;
+			margin: 0px;
+			text-align: center;
+
+			&:last-of-type {
+				border-bottom: 1px solid $accent3;
+			}
+
+			&:last-of-type, &:last-of-type a {
+				border-bottom-left-radius: $module_radius;
+				border-bottom-right-radius: $module_radius;
+			}
+
+			&:first-of-type, &:first-of-type a {
+				border-top-left-radius: $module_radius;
+				border-top-right-radius: $module_radius;
+			}
+
+			a {
+				color: $main_text;
+				display: block;
+				padding: 2px;
+				text-decoration: none;
+				width: 100%;
+
+				&:hover {
+					background: darken($light_bg3, 2%);
+				}
+
+				&.realdelete {
+					background: #D00;
+					color: #FEFEFE;
+				}
+			}
+
+		}
 	}
 }

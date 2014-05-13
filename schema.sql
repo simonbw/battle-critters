@@ -30,7 +30,8 @@ create table battles (
 	length integer,
 	width integer,
 	height integer,
-	ranked boolean
+	ranked boolean,
+	status integer
 );
 
 drop table if exists battle_critters;
@@ -50,6 +51,15 @@ create table battle_frames (
 	battle_id integer,
 	frame_number integer,
 	data text,
+	foreign key(battle_id) references battles(id)
+);
+
+drop table if exists battle_messages;
+create table battle_messages (
+	id integer primary key autoincrement,
+	battle_id integer,
+	frame_number integer,
+	message text,
 	foreign key(battle_id) references battles(id)
 );
 

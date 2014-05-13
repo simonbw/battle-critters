@@ -256,15 +256,13 @@
 		width: 100%;
 
 		.tabbutton {
+			@include unselectable();
 			cursor: pointer;
 			float:left;
 			margin: 0px;
 			background: none;
 			font-size: 13px;
 			color: $accent1;
-			-moz-user-select: none;
-			-webkit-user-select: none;
-			-ms-user-select: none;
 
 			padding: {
 				top: 2px;

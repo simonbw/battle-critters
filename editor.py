@@ -19,10 +19,10 @@ import ranking
 import users
 import util
 
-JAVA_KEYWORDS = ('abstract', 'continue', 'for', 'new', 'switch', 'assert', 'default', 'goto', 'package', 'synchronized', 'boolean', 'do', 'if', 'private', 'this','break', 'double', 'implements', 'protected', 'throw', 'byte', 'else', 'import', 'public', 'throws', 'case', 'enum', 'instanceof', 'return', 'transient', 'catch', 'extends', 'int', 'short', 'try','char', 'final', 'interface', 'static', 'void', 'class', 'finally', 'long', 'strictfp', 'volatile','const', 'float', 'native', 'super', 'while')
-JAVA_LETTERS = string.ascii_letters
-JAVA_DIGITS = string.digits
-JAVA_LETTERS_OR_DIGITS = JAVA_LETTERS + JAVA_DIGITS
+JAVA_KEYWORDS = {'abstract', 'continue', 'for', 'new', 'switch', 'assert', 'default', 'goto', 'package', 'synchronized', 'boolean', 'do', 'if', 'private', 'this','break', 'double', 'implements', 'protected', 'throw', 'byte', 'else', 'import', 'public', 'throws', 'case', 'enum', 'instanceof', 'return', 'transient', 'catch', 'extends', 'int', 'short', 'try','char', 'final', 'interface', 'static', 'void', 'class', 'finally', 'long', 'strictfp', 'volatile','const', 'float', 'native', 'super', 'while'}
+JAVA_LETTERS = {c for c in string.ascii_letters}
+JAVA_DIGITS = {c for c in string.digits}
+JAVA_LETTERS_OR_DIGITS = JAVA_LETTERS | JAVA_DIGITS
 MAX_CLASS_NAME_LENGTH = 128
 COMPRESSION_LEVEL = 1
 DEFAULT_CONTENT = ""
@@ -51,11 +51,14 @@ class Critter():
 		return Critter(row)
 
 	@staticmethod
-	def from_id(id):
+	def from_id(id, fail_silent=False):
 		"""Load a critter from id"""
 		row = g.db.execute("SELECT id, name, owner_id, creation_time, last_save_time, score FROM critters WHERE id=?", (id,)).fetchone()
 		if row is None:
-			raise LookupError("Critter not found: " + str(id))
+			if fail_silent:
+				return None
+			else:
+				raise LookupError("Critter not found: " + str(id))
 		return Critter(row)
 	
 	def __init__(self, row):
@@ -121,7 +124,6 @@ class Critter():
 			LIMIT ?;", (self.id, limit)).fetchall()
 		return [battles.Battle.from_id(row[0]) for row in rows]
 
-
 	def get_winning_battles(self):
 		"""Return the list of battles this critter has won"""
 		return map(battles.Battle.from_id, [row.id for row in g.db.execute("SELECT battle_id FROM battle_critters WHERE critter_id = ? AND winner = 1", (self.id,)).fetchall()])
@@ -129,6 +131,22 @@ class Critter():
 	def get_losing_battles(self):
 		"""Return the list of battles this critter has not won"""
 		return map(battles.Battle.from_id, [row.id for row in g.db.execute("SELECT battle_id FROM battle_critters WHERE critter_id = ? AND winner = 0", (self.id,)).fetchall()])
+
+	def get_ranked_wins(self):
+		"""Return the number of wins in ranked battles"""
+		query = "SELECT COUNT(*) FROM battle_critters, battles \
+		WHERE battles.id = battle_critters.battle_id \
+		AND critter_id = ? AND winner = 1 AND ranked = 1"
+		row = g.db.execute(query, (self.id,)).fetchone()
+		return row[0]
+
+	def get_ranked_losses(self):
+		"""Return the number of wins in ranked battles"""
+		query = "SELECT COUNT(*) FROM battle_critters, battles \
+		WHERE battles.id = battle_critters.battle_id \
+		AND critter_id = ? AND winner = 0 AND ranked = 1"
+		row = g.db.execute(query, (self.id,)).fetchone()
+		return row[0]
 
 	def get_url(self, action="view"):
 		if action == 'view':
@@ -193,7 +211,7 @@ class Critter():
 		path = os.path.join('.', 'java', 'bin', 'critters', owner, filename + '.class')
 		os.remove(path)
 
-	def as_object(self, name=True, owner=True, score=True, url=True, content=False):
+	def as_object(self, name=True, owner=True, score=True, url=True, wins=True, losses=True, content=False):
 		"""Return an object ready to be converted to json. Specify the parameters to be included."""
 		data = {}
 		data['id'] = self.id
@@ -208,6 +226,10 @@ class Critter():
 			data['url'] = self.get_url()
 		if content:
 			data['content'] = self.content
+		if wins:
+			data['wins'] = self.get_ranked_wins()
+		if losses:
+			data['losses'] = self.get_ranked_losses()
 		return data
 
 	def __str__(self):
@@ -288,6 +310,7 @@ def get_critter_recent_battles():
 		data['time'] = battle.creation_time
 		data['url'] = battle.get_url()
 		data['width'] = battle.width
+		data['winner_id'] = battle.get_winner().id
 		r['battles'].append(data)
 	return r
 
@@ -334,21 +357,21 @@ def delete_file(owner, filename):
 
 @editor_app.route('/<owner>/<filename>/compile', methods=["GET","POST"])
 def compile_file(owner, filename):
-	""" -- This is sketchy if multiple files of the same name are being compiled at once. --
-	Compile a file. User must be the owner of the critter or an admin."""
+	"""Compile a file. User must be the owner of the critter or an admin."""
 	require_user(owner)
 	critter = Critter.from_name(filename, owner_name=owner)
 	return jsonify(critter.compile())
 
-@editor_app.route('/<owner>/<filename>/new', methods=["POST", "PUT"])
+@editor_app.route('/<owner>/create_new', methods=["POST", "PUT"])
 @json_service
-def new_file(owner, filename):
-	"""Create a new file."""
+def new_file(owner):
+	"""Create a new file. name should be specified in the request"""
 	require_user(owner)
+	if 'name' not in request.form:
+		raise Exception("No name specified")
+	filename = request.form['name']
 	if not check_filename(filename):
 		raise Exception("Invalid Class Name")
-	if (g.user.username != owner and not g.user.admin):
-		raise Exception("You don't have permission to do that")
 	owner = users.User.from_username(owner)
 	create_file(owner, filename, request.form.get("content"))
 

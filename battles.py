@@ -46,16 +46,24 @@ class Battle():
 		self.width = row['width']
 		self.height = row['height']
 		self.ranked = row['ranked']
+		self.status = row['status']
 
 		if self.id is None or self.creation_time is None:
 			raise ValueError("Improper row given to Battle")
 
+	def check_status(self):
+		"""Rechecks the status of this battle and returns it."""
+		row = g.db.execute("SELECT status FROM battles WHERE id=?", (self.id,)).fetchone()
+		self.status = row['status']
+		return self.status
+
 	def get_winner(self):
-		"""Return the Critter that won the battle."""
-		rows = g.db.execute("SELECT critter_id, winner FROM battle_critters WHERE battle_id=?", (self.id,)).fetchall()
-		for row in rows:
-			if row['winner'] == 1:
-				return Critter.from_id(row['critter_id'])
+		"""Return the Critter that won the battle, or None if no winner."""
+		rows = g.db.execute("SELECT critter_id FROM battle_critters WHERE battle_id=? AND winner=1", (self.id,)).fetchall()
+		if len(rows) > 0:
+			return Critter.from_id(rows[0]['critter_id'])
+		else:
+			return None
 
 	def get_critters(self):
 		"""Return a list of critters competing in this battle."""
@@ -64,10 +72,16 @@ class Battle():
 
 	def get_frames(self, start, end):
 		"""Return the data for the frames of the battle."""
-		query = "SELECT * FROM battle_frames WHERE battle_id=? AND frame_number>=? AND frame_number<=?;"
+		query = "SELECT frame_number, data FROM battle_frames WHERE battle_id=? AND frame_number>=? AND frame_number<=?;"
 		rows = g.db.execute(query, (self.id, start, end)).fetchall()
 		lines = ["FRAME " + str(row['frame_number']) + "\n" + row['data'] for row in rows]
 		return "\n".join(lines)
+
+	def get_messages(self):
+		"""Returns a list of messages."""
+		query = "SELECT message, frame_number FROM battle_messages WHERE battle_id=?;"
+		rows = g.db.execute(query, (self.id, start, end)).fetchall()
+		return [(row['frame_number'], row['message']) for row in rows]
 
 	def get_frame_url(self):
 		"""Return the url for getting this battle's frames"""
@@ -95,6 +109,7 @@ def recent_battles_page():
 	return render_template('recent_battles.html', battles=battles)
 
 @battles_app.route('/<int:battle_id>')
+@util.error_checked
 def view_battle(battle_id):
 	"""View a battle."""
 	battle = Battle.from_id(battle_id)
@@ -114,14 +129,22 @@ def get_frames(battle_id):
 	return battle.get_frames(start, end)
 	
 @battles_app.route('/custom')
+@util.error_checked
 def custom_battle_page():
 	"""The page for creating a new custom battle."""
-	return render_template('custom_battle.html')
+	critter_ids = []
+	if 'critters[]' in request.args:
+		critter_ids = [int(critter_id) for critter_id in request.args.getlist('critters[]') if Critter.from_id(int(critter_id), fail_silent=True) != None]
+	return render_template('custom_battle.html', critter_ids=critter_ids)
 	
 @battles_app.route('/ranked')
+@util.error_checked
 def ranked_battle_page():
 	"""The page for creating a new ranked battle."""
-	return render_template('custom_battle.html')
+	critter_ids = []
+	if 'critters[]' in request.args:
+		critter_ids = [int(critter_id) for critter_id in request.args.getlist('critters') if Critter.from_id(int(critter_id), fail_silent=True) != None]
+	return render_template('ranked_battle.html', critter_ids=critter_ids)
 
 @battles_app.route('/request_custom', methods=["POST"])
 def request_custom_battle():

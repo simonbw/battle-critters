@@ -9,6 +9,19 @@
 	NEW_BATTLE_URL = "{{url_for('battles_app.request_custom_battle')}}";
 </script>
 <script src="{{url_for('static', filename='js/new_battle.js')}}"></script>
+{% if (critter_ids) %}
+{% set critter_ids_list = critter_ids|map('string')|join(', ') %}
+<script>
+	console.log("Pre-selected Critters:", [{{critter_ids_list}}]);
+	var preselected = [{{critter_ids_list}}];
+	loadCritters(preselected, function() {
+		for (var i = 0; i < preselected.length; i++) {
+			selectCritter(preselected[i]);
+		}
+		refreshDisplay();
+	});
+</script>
+{% endif %}
 {% endblock %}
 {% block body %}
 <h1>Custom Battle</h1>

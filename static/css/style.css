@@ -147,21 +147,113 @@
             .critterlabel.winner {
               border: 2px solid #FFF; }
 #dashboard div.battles {
-  width: 200px;
+  width: 400px;
   float: left; }
   #dashboard div.critters {
-    width: calc(100% - 400px);
+    width: 100%;
     float: left; }
     #dashboard div.critters #critterlist > li {
-      border-bottom: 1px dashed #BBB;
+      -moz-user-select: none;
+      -webkit-user-select: none;
+      -ms-user-select: none;
+      cursor: default;
+      background: #EEE;
       list-style: none;
-      padding: 4px 16px;
-      background: #EEE; }
-#dashboard div.news {
+      overflow: hidden;
+      padding: 4px 16px; }
+      #dashboard div.critters #critterlist > li:not(:last-of-type) {
+        border-bottom: 1px solid #e1e1e1; }
+        #dashboard div.critters #critterlist > li:last-of-type {
+          padding: 0px; }
+          #dashboard div.critters #critterlist > li:last-of-type .nameinput {
+            border: 1px solid transparent;
+            display: block;
+            margin: 0px;
+            outline: none;
+            padding: 4px 16px;
+            width: 100%; }
+            #dashboard div.critters #critterlist > li:last-of-type .nameinput.invalid {
+              border: 1px solid red; }
+          #dashboard div.critters #critterlist > li:last-of-type .newcritterbutton {
+            background: #EEE;
+            border: none;
+            display: block;
+            margin: 0px;
+            padding: 4px 16px;
+            width: 100%;
+            font-family: Gen-light, Helvetica, sans-serif;
+            font-size: 15px;
+            font-color: #111111; }
+            #dashboard div.critters #critterlist > li:last-of-type .newcritterbutton:hover {
+              background: #e9e9e9; }
+              #dashboard div.critters #critterlist > li:last-of-type .newcritterbutton:active {
+                background: #e1e1e1;
+                outline: none; }
+      #dashboard div.critters #critterlist > li:first-child {
+        border-bottom: 1px solid #BBB;
+        font-weight: bold; }
+        #dashboard div.critters #critterlist > li.critter:hover {
+          background: #e9e9e9; }
+          #dashboard div.critters #critterlist > li.critter.selected {
+            background: #e1e1e1; }
+            #dashboard div.critters #critterlist > li.critter div.top {
+              clear: both;
+              cursor: pointer;
+              overflow: hidden;
+              width: 100%; }
+              #dashboard div.critters #critterlist > li .item {
+                display: block;
+                float: left; }
+                #dashboard div.critters #critterlist > li .name {
+                  width: 70%; }
+                  #dashboard div.critters #critterlist > li .score,
+                  #dashboard div.critters #critterlist > li .wins,
+                  #dashboard div.critters #critterlist > li .losses {
+                    width: 10%;
+                    text-align: center; }
+#dashboard ul.battlelist {
+  list-style: none;
+  float: left;
+  width: calc(100% - 200px);
+  padding: 2px 16px;
+  margin: 0px; }
+  #dashboard ul.battlelist li {
+    margin: 0px;
+    padding: 2px; }
+#dashboard ul.actionlist {
+  list-style: none;
+  float: left;
   width: 200px;
-  float: left; }
-  #dashboard ul.battlelist {
-    list-style: none; }
+  padding: 0px;
+  margin: 0px; }
+  #dashboard ul.actionlist li {
+    background: #EEE;
+    border: 1px solid #BBB;
+    border-bottom: none;
+    cursor: pointer;
+    margin: 0px;
+    text-align: center; }
+    #dashboard ul.actionlist li:last-of-type {
+      border-bottom: 1px solid #BBB; }
+      #dashboard ul.actionlist li:last-of-type,
+      #dashboard ul.actionlist li:last-of-type a {
+        border-bottom-left-radius: 8px;
+        border-bottom-right-radius: 8px; }
+        #dashboard ul.actionlist li:first-of-type,
+        #dashboard ul.actionlist li:first-of-type a {
+          border-top-left-radius: 8px;
+          border-top-right-radius: 8px; }
+          #dashboard ul.actionlist li a {
+            color: #111111;
+            display: block;
+            padding: 2px;
+            text-decoration: none;
+            width: 100%; }
+            #dashboard ul.actionlist li a:hover {
+              background: #e9e9e9; }
+              #dashboard ul.actionlist li a.realdelete {
+                background: #D00;
+                color: #FEFEFE; }
 #editorbox {
   margin-top: 50px;
   margin-left: 100px;
@@ -318,15 +410,16 @@
     background: #AAA;
     width: 100%; }
     #helpbox #tabbuttonbar .tabbutton {
+      -moz-user-select: none;
+      -webkit-user-select: none;
+      -ms-user-select: none;
+      cursor: default;
       cursor: pointer;
       float: left;
       margin: 0px;
       background: none;
       font-size: 13px;
       color: #3A3A3A;
-      -moz-user-select: none;
-      -webkit-user-select: none;
-      -ms-user-select: none;
       padding-top: 2px;
       padding-bottom: 2px;
       padding-left: 8px;

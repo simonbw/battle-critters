@@ -6,7 +6,9 @@ from flask import jsonify, session
 from functools import wraps
 import datetime
 import string
+import sys
 import time
+import traceback
 
 
 def format_date(seconds):
@@ -31,6 +33,17 @@ def json_service(f):
 			return jsonify(results)
 		except Exception as e:
 			return jsonify({'success': False, 'error': str(e)})
+	return decorated_function
+
+def error_checked(f):
+	"""Prints stack trace when the method fails."""
+	@wraps(f)
+	def decorated_function(*args, **kwargs):
+		try:
+			return f(*args, **kwargs)
+		except Exception as e:
+			traceback.print_exc(file=sys.stdout)
+			raise e
 	return decorated_function
 
 def login_required(f):

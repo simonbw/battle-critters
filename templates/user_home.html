@@ -6,11 +6,13 @@
 	var NEWS_URL = "{{url_for('home_app.news')}}";
 	var MAX_NEWS = {{max_news}};
 	var DELETE_FILE_URL = "{{url_for('editor_app.delete_file', owner=g.user.username, filename='insertfilenamehere')}}";
-	var NEW_FILE_URL = "{{url_for('editor_app.new_file', owner=g.user.username, filename='insertfilenamehere')}}";
+	var NEW_FILE_URL = "{{url_for('editor_app.new_file', owner=g.user.username)}}";
 	var CRITTER_JSON_URL = "{{url_for('editor_app.get_critters_json')}}";
 	var CRITTER_JSON_USER_URL = "{{url_for('editor_app.get_critters_json_user')}}";
 	var CRITTER_USER_IDS_URL = "{{url_for('editor_app.get_user_critter_ids')}}";
 	var CRITTER_RECENT_BATTLES_URL = "{{url_for('editor_app.get_critter_recent_battles')}}";
+	var CUSTOM_BATTLE_URL = "{{url_for('battles_app.custom_battle_page')}}";
+	var RANKED_BATTLE_URL = "{{url_for('battles_app.ranked_battle_page')}}";
 	var USERNAME = "{{g.user.username|safe}}";
 </script>
 <script type="text/javascript" src="{{ url_for('static', filename='js/home.js') }}"></script>
@@ -19,18 +21,24 @@
 {% block body %}
 <h1> Home </h1>
 <section id="dashboard">
-	<div class="battles">
-	<button><a href="{{url_for('battles_app.custom_battle_page')}}">Custom Battle</a></button>
-	</div>
+	<!-- <div class="battles">
+		<button><a href="{{url_for('battles_app.custom_battle_page')}}">Custom Battle</a></button>
+	</div> -->
 	<div class="critters">
 		<h2>My Critters</h2>
 		<ul id="critterlist" class="list">
-			loading...
+			<li>
+				<div class="top">
+					<span class="name item">Name</span>
+					<span class="score item">Score</span>
+					<span class="wins item">Wins</span>
+					<span class="losses item">Losses</span>
+				</div>
+			</li>
+			<li>
+				<button class="newcritterbutton">New Critter</button>
+			</li>
 		</ul>
-		<button id="newfilebutton">New Critter</button>
-	</div>
-	<div class="news">
-		<p>news</p>
 	</div>
 </section>
 
@@ -47,43 +55,4 @@
 	<button id="postnewsbutton">Submit</button>
 </section>
 {% endif %}
-<!-- <div class="modulebox">
-	<div class="module recent_battles">
-		<h2>Recent Battles</h2>
-		<ul id="battlelist" class="list">
-			{% for battle in g.user.get_battles() %}
-			<li>
-				{{battle.get_link()|safe}}
-			</li>
-			{% endfor %}
-		</ul>
-		<button><a href="{{url_for('battles_app.custom_battle_page')}}">Custom Battle</a></button>
-	</div>
-	<div class="module critters">
-		<h2>My Critters</h2>
-		<ul id="critterlist" class="list">
-			loading...
-		</ul>
-		<button id="newfilebutton">New Critter</button>
-	</div>
-	<div class="module news">
-		<h2>News</h2>
-		<button id="previousnews">Newer</button><button id="nextnews">Older</button>
-		<div id="newsbox">
-		</div>
-	</div>
-	{% if (g.user.admin) %}
-	<div class="module admin">
-		<h2>Admin</h2>
-		<a href="{{url_for('users_app.list_users')}}">All Users</a>
-		<br />
-		<h3>Post News</h3>
-		<input name="title" id="newsformtitle" />
-		<br />
-		<textarea name="content" id="newsformcontent"></textarea>
-		<br />
-		<button id="postnewsbutton">Submit</button>
-	</div>
-	{% endif %}
-</div> -->
 {% endblock %}
