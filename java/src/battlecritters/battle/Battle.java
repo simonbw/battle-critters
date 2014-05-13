@@ -179,7 +179,7 @@ public class Battle {
 	}
 
 	/**
-	 * Return the move of a critter.
+	 * Return the move of a critter. If the critter errors or takes too long, returns the DEFAULT_MOVE.
 	 * @param  c the critter
 	 * @return   the move
 	 */
@@ -189,7 +189,7 @@ public class Battle {
 		} catch (Exception e) {
 			return DEFAULT_ACTION;
 		}
-		
+
 		//////////////////////////////////////
 		// Uncomment this stuff for timeout //
 		//     Currently very slow          //
