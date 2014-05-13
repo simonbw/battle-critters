@@ -24,6 +24,11 @@ from home import home_app
 from login import login_app
 from users import users_app, User
 
+####################################################
+# Switch this for production vs development server #
+PRODUCTION = True
+####################################################
+
 app = Flask(__name__)
 
 app.register_blueprint(battles_app, url_prefix = '/battles')
@@ -49,11 +54,12 @@ def start_java_server():
 def before_request():
 	"""Called before the request is routed. Sets up the link to the database and java server."""
 
-	# Compile SCSS. THIS SHOULDN'T BE HERE IN PRODUCTION
-	try:
-		app.scss.update_scss()
-	except Exception as e:
-		flash(str(e))
+	# recompile the scss every request if not in production
+	if not PRODUCTION:
+		try:
+			app.scss.update_scss()
+		except Exception as e:
+			flash(str(e))
 
 	# link to the java server
 	try:
