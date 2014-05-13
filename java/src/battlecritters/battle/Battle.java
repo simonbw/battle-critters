@@ -14,8 +14,18 @@ import battlecritters.critterloader.CritterClassLoader;
  * A battle between Critters. Must add critters
  */
 public class Battle {
+	/**
+	 * Default height of the battle
+	 */
 	private static final int DEFAULT_HEIGHT = 100;
+	/**
+	 * Default width of the battle
+	 */
 	private static final int DEFAULT_WIDTH = 100;
+	/**
+	 * Action taken if the critter fails to provide one
+	 */
+	public static final Critter.Action DEFAULT_ACTION = Critter.Action.LEFT;
 
 	/**
 	 * The default length of a battle in frames.
@@ -165,14 +175,48 @@ public class Battle {
 	 * @throws Exception
 	 */
 	private Critter makeCritter(Class<? extends Critter> critter) throws Exception {
-		// Constructor<?> c = critter.;
 		return critter.newInstance();
 	}
 
 	/**
+	 * Return the move of a critter.
+	 * @param  c the critter
+	 * @return   the move
+	 */
+	private Critter.Action getMove(Critter critter, CritterInfo info) {
+		try {
+			return critter.getMove(info);
+		} catch (Exception e) {
+			return DEFAULT_ACTION;
+		}
+		
+		//////////////////////////////////////
+		// Uncomment this stuff for timeout //
+		//     Currently very slow          //
+		//////////////////////////////////////
+	
+		// CritterMoveThread thread = new CritterMoveThread(critter, info);
+
+		// thread.start();
+
+		// long endTime = System.currentTimeMillis() + 100;
+		// while (thread.isAlive()) {
+		// 	if (System.currentTimeMillis() > endTime) {
+		// 		System.out.println("Method Timed Out");
+		// 		break;
+		// 	}
+		// 	try {
+		// 		Thread.sleep(10);
+		// 	} catch (InterruptedException e) {
+		// 		// Do nothing
+		// 	}
+		// }
+
+		// return thread.move;
+	}
+
+	/**
 	 * Advance to the next frame of the battle.
-	 *
-	 * @return
 	 */
 	public void nextFrame() {
 		frame++;
@@ -186,7 +230,7 @@ public class Battle {
 
 			Point p = data.p;
 			Point p2 = pointAt(p, data.direction);
-			Critter.Action move = critter.getMove(getInfo(data, critter.getClass()));
+			Critter.Action move = getMove(critter, getInfo(data, critter.getClass()));
 			switch (move) {
 			case LEFT:
 				data.direction = rotate(rotate(rotate(data.direction)));
