@@ -31,6 +31,7 @@ PRODUCTION = True
 
 app = Flask(__name__)
 
+# register blueprints
 app.register_blueprint(battles_app, url_prefix = '/battles')
 app.register_blueprint(editor_app, url_prefix = '/critters')
 app.register_blueprint(home_app)
@@ -49,6 +50,19 @@ def start_java_server():
 	print command
 	subprocess.Popen(command, shell=False)
 	print "Java server started"
+
+@app.before_first_request
+def before_first_request():
+	"""Initialize everything"""
+	# compile scss
+	app.scss = Scss(app, static_dir='static', asset_dir='.')
+	app.scss.update_scss()
+
+	# create new process for Java server
+	p = Process(target=start_java_server)
+	p.daemon = True
+	p.start()
+	print "java server pid:", p.pid
 
 @app.before_request
 def before_request():
@@ -93,19 +107,7 @@ def reset_page():
 		return Markup(e)
 
 # Start the server	
-if __name__ == "__main__":
-
-	# compile SCSS files to CSS
-	app.scss = Scss(app, static_dir='static', asset_dir='.')
-	app.scss.update_scss()
-
-	# start java server
-	print "\n--------------------\n\n MAIN IS BEING RUN \n\n--------------------\n"
-	p = Process(target=start_java_server)
-	p.daemon = True
-	p.start()
-	print "java server pid:", p.pid
-
+if __name__ == "__main__":	
 	if not app.debug:
 		log_file = 'log.txt'
 		with open(log_file, 'w') as f:

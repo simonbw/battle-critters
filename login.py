@@ -4,7 +4,7 @@ Controls the login/logout pages.
 
 from flask import Blueprint, g, render_template, request, redirect, session, url_for, flash
 
-from users import User
+import users
 from password import hash_password
 
 login_app = Blueprint('login_app', __name__, template_folder='templates')
@@ -14,7 +14,7 @@ def login_page():
 	"""Display the login page"""
 	if request.method == 'POST':
 		try:
-			g.user = User.from_username(request.form['username'])
+			g.user = users.User.from_username(request.form['username'])
 			if g.user.password != hash_password(request.form['password'], g.user.username):
 				raise Exception("Incorrect password")
 			session['username'] = g.user.username

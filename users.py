@@ -13,6 +13,8 @@ from battles import Battle
 from editor import Critter
 from password import hash_password
 import battles
+import util
+import login
 
 users_app = Blueprint('users_app', __name__, template_folder='templates')
 
@@ -128,7 +130,7 @@ def new_user():
 			flash(Markup(str(e)))
 			return render_template('new_user.html')
 	else:
-			return render_template('new_user.html')
+		return render_template('new_user.html')
 
 def create_user(username, raw_password, admin=False):
 	"""Try to create a User."""
@@ -144,7 +146,7 @@ def create_user(username, raw_password, admin=False):
 
 		return User.from_username(username)
 	except sqlite3.IntegrityError as e:
-		raise Exception("username <i>" + username + "</i> is taken")
+		raise Exception("username <em>" + username + "</em> is taken")
 	except sqlite3.OperationalError as e:
 		raise e
 	except sqlite3.DatabaseError as e:
