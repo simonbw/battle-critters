@@ -70,3 +70,10 @@ create table news (
 	date integer,
 	content text
 );
+
+drop table if exists feedback;
+create table feedback (
+	id integer primary key autoincrement,
+	date integer,
+	content text
+);

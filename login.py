@@ -9,12 +9,19 @@ from password import hash_password
 
 login_app = Blueprint('login_app', __name__, template_folder='templates')
 
+
+def init():
+	"""Initialize the module"""
+	global User
+	User = users.User
+
+
 @login_app.route('/login', methods=['GET', 'POST'])
 def login_page():
 	"""Display the login page"""
 	if request.method == 'POST':
 		try:
-			g.user = users.User.from_username(request.form['username'])
+			g.user = User.from_username(request.form['username'])
 			if g.user.password != hash_password(request.form['password'], g.user.username):
 				raise Exception("Incorrect password")
 			session['username'] = g.user.username
@@ -39,3 +46,4 @@ def logout():
 	if ('user' in g):
 		del g.user
 	return redirect(url_for('home_app.home_page'))
+

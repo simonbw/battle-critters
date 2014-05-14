@@ -1,0 +1,15 @@
+{% extends "layout.html" %}
+{% block title %}Feedback{% endblock %}
+{% block body %}
+<h1>Feedback</h1>
+<section>
+	<ul>
+		{% for row in feedback %}
+		<li>
+			<h3>{{row['date']}}</h3>
+			<p>{{row['content']}}</p>
+		</li>
+		{% endfor %}
+	</ul>
+</section>
+{% endblock %}

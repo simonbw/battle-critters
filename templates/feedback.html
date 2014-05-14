@@ -1,0 +1,18 @@
+{% extends "layout.html" %}
+{% block title %}Feedback{% endblock %}
+{% block body %}
+<h1>Feedback</h1>
+<section>
+	<p>
+		I appreciate all sorts of feedback. If you have any compliments, comments, or critiques you'd like to share, this is the place for them. 
+	</p>
+	<form action="{{url_for('feedback_app.feedback_page')}}" method="POST">
+		<fieldset>
+			<legend>Feedback</legend>
+			<textarea name="content"></textarea>
+			<br />
+			<button type="Submit">Submit</button>
+		</fieldset>
+	</form>
+</section>
+{% endblock %}

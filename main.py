@@ -16,13 +16,19 @@ from flask.ext.scss import Scss
 from multiprocessing import Process
 from py4j.java_gateway import JavaGateway
 
-import database
-import login
 from battles import battles_app
 from editor import editor_app
+from feedback import feedback_app
 from home import home_app
 from login import login_app
 from users import users_app, User
+import battles
+import database
+import editor
+import feedback
+import home
+import login
+import users
 
 ####################################################
 # Switch this for production vs development server #
@@ -36,6 +42,7 @@ app.register_blueprint(battles_app, url_prefix = '/battles')
 app.register_blueprint(editor_app, url_prefix = '/critters')
 app.register_blueprint(home_app)
 app.register_blueprint(login_app)
+app.register_blueprint(feedback_app, url_prefix = '/feedback')
 app.register_blueprint(users_app, url_prefix = '/users')
 
 # configuration
@@ -54,15 +61,27 @@ def start_java_server():
 @app.before_first_request
 def before_first_request():
 	"""Initialize everything"""
-	# compile scss
+
+	print "initializing modules"
+	for module in (battles, editor, home, login, users):
+		try:
+			module.init()
+		except Exception as e:
+			print str(e)
+
+	print "compiling scss"
 	app.scss = Scss(app, static_dir='static', asset_dir='.')
 	app.scss.update_scss()
 
-	# create new process for Java server
+	print "creating java server"
 	p = Process(target=start_java_server)
 	p.daemon = True
 	p.start()
 	print "java server pid:", p.pid
+
+	if not PRODUCTION:
+		print "not in production mode"
+		flash("not in production mode")
 
 @app.before_request
 def before_request():
@@ -83,6 +102,9 @@ def before_request():
 	
 	# prepare the database
 	g.db = database.connect_db()
+
+	# set global settings
+	g.production = PRODUCTION
 
 	# since User object is not serializable
 	if ('username' in session):
@@ -115,6 +137,9 @@ if __name__ == "__main__":
 		file_handler = logging.FileHandler(log_file)
 		file_handler.setLevel(logging.WARNING)
 		app.logger.addHandler(file_handler)
+
+	# This only gets set in debug mode I think...
+	PRODUCTION = False
 
 	# start the python app
 	app.run(threaded=True, host="0.0.0.0")

@@ -13,7 +13,7 @@ from flask import Flask, g, redirect, request, session, render_template, Bluepri
 
 import users
 import util
-from editor import Critter
+import editor
 
 RANKED_HEIGHT = 100
 RANKED_WIDTH = 100
@@ -27,6 +27,14 @@ MIN_WIDTH = 10
 
 
 battles_app = Blueprint('battles_app', __name__, template_folder='templates')
+
+
+def init():
+	"""Initialize the module"""
+	global Critter, User
+	Critter = editor.Critter
+	User = users.User
+
 
 class Battle():
 	"""A model. Interacts with the database. Use from_id to load a battle from the database."""
@@ -119,9 +127,10 @@ def view_battle(battle_id):
 def get_frames(battle_id):
 	"""Return data for certain frames of a battle.
 	request.args['start'] and request.args['end'] should be set."""
-	# TODO: PLEASE REMOVE THIS. THIS IS JUST TO SIMULATE LATENCY
-	time.sleep(0.1)
-	# TODO: PLEASE REMOVE THIS. THIS IS JUST TO SIMULATE LATENCY
+
+	if not g.production:
+		# simulate latency on local machine
+		time.sleep(0.1)
 
 	battle = Battle.from_id(battle_id)
 	start = int(request.args['start'])

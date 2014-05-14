@@ -51,17 +51,18 @@ def reset_all():
 
 			try:
 				print "Creating default users..."
-				u = users.create_user("simon", "simon", True)
-				for name in ["bob", "joe", "example"]:
-					print name
-					u = users.create_user(name, name)
+				users.create_user("admin", "admin", True)
+				users.create_user("example", "example", False)
+				# for name in ["bob", "joe", "example"]:
+				# 	print name
+				# 	u = users.create_user(name, name)
 			except:
 				traceback.print_exc(file=sys.stdout)
 				errored = True
 
 			try:
 				print "Creating default critters..."
-				editor.create_file(users.User.from_username('simon'), 'Husky')
+				editor.create_file(users.User.from_username('example'), 'Husky')
 			except:
 				traceback.print_exc(file=sys.stdout)
 				errored = True

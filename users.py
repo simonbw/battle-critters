@@ -9,10 +9,9 @@ import sqlite3
 
 from flask import Flask, g, redirect, request, session, render_template, Blueprint, url_for, Markup, abort, flash
 
-from battles import Battle
-from editor import Critter
 from password import hash_password
 import battles
+import editor
 import util
 import login
 
@@ -20,6 +19,13 @@ users_app = Blueprint('users_app', __name__, template_folder='templates')
 
 # the regex for testing if a username is valid
 USERNAME_TEST = re.compile(r'[A-Z|a-z][\w]*')
+
+def init():
+	"""Initialize the module"""
+	global Battle, Critter
+	Battle = battles.Battle
+	Critter = editor.Critter
+
 
 class User:
 	"""A model for a user. Handles database comunication. To load a User, use one of the static methods."""

@@ -10,6 +10,12 @@ from flask import Blueprint, g, render_template, request, redirect, session, url
 
 home_app = Blueprint('home_app', __name__, template_folder='templates')
 
+
+def init():
+	"""Initialize the module"""
+	pass
+
+
 @home_app.route('/')
 @home_app.route('/home')
 @home_app.route('/index')
@@ -51,8 +57,8 @@ def news():
 		return Markup(e)
 
 
-
 #-------- STATIC PAGES --------#
+@home_app.route('/faq')
 @home_app.route('/FAQ')
 def faq_page():
 	return render_template('info/faq.html')

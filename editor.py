@@ -31,6 +31,13 @@ with open(os.path.join('static', 'default_critter.java')) as f:
 
 editor_app = Blueprint('editor_app', __name__, template_folder='templates')
 
+
+def init():
+	"""Initialize the module"""
+	global Battle, User
+	Battle = battles.Battle
+	User = users.User
+
 class Critter():
 	"""A model for a Critter. Handles database comunication. To load a Critter, use one of the static methods."""
 
