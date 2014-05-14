@@ -2,7 +2,7 @@
 Assorted Utility functions and classes for doing all sorts of things. Does not depend on any of my files.
 """
 
-from flask import jsonify, session
+from flask import abort, g, jsonify, session
 from functools import wraps
 import datetime
 import string
@@ -66,7 +66,7 @@ def admin_required(f):
 	"""Requires a user to be admin to view a page otherwise returns a 403."""
 	@wraps(f)
 	def decorated_function(*args, **kwargs):
-		if 'user' not in g or not g.user.admin:
+		if 'username' not in session or not g.user.admin:
 			abort(403)
 		return f(*args, **kwargs)
 	return decorated_function

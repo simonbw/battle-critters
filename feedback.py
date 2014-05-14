@@ -22,18 +22,19 @@ def feedback_page():
 	if request.method == 'POST':
 		if 'content' in request.form:
 			try:
-				query = "INSERT INTO feedback (content) VALUES ?"
-				g.db.execute(query, (request.form['content'],))
+				query = "INSERT INTO feedback (content, date) VALUES (?, ?)"
+				g.db.execute(query, (request.form['content'], time.time()))
+				g.db.commit()
 			except Exception as e:
-				flash("<strong>Error submitting feedback:</strong>" + e)
+				flash("<strong>Error submitting feedback:</strong>" + str(e))
 		return redirect(url_for('home_app.home_page'))
 	elif request.method == 'GET':
 		return render_template('feedback.html')
 
 @feedback_app.route('/view', methods=['GET'])
 @util.admin_required
+@util.error_checked
 def view_feedback():
 	rows = g.db.execute("SELECT * FROM feedback ORDER BY date DESC LIMIT 100").fetchall()
-	for row in rows:
-		row['date'] = util.format_date(row['date'])
-	return render_template('view_feedback.html', feedback=rows)
+	feedback = [{'date': util.format_date(row['date']), 'content': row['content'], 'id': row['id']} for row in rows]
+	return render_template('view_feedback.html', feedback=feedback)
