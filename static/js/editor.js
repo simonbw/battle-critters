@@ -31,6 +31,7 @@ function time() {
 }
 
 $(document).ready(function() {
+	// compiler errors. format: {'lineNumber': 1, 'message': 'a message'}
 	var errors = [];
 
 	$("#errordisplay").hide();
@@ -83,6 +84,7 @@ $(document).ready(function() {
 	editor = CodeMirror.fromTextArea($(EDITOR_ID).get(0), {
 		mode: 'text/x-java',
 		lineNumbers: true,
+		gutters: ["CodeMirror-linenumbers", "errormarks"],
 		lineWrapping: true,
 		indentWithTabs: true,
 		smartIndent: true,
@@ -173,7 +175,7 @@ $(document).ready(function() {
 						});
 						$('#compilestatus').html("Compilation Error");
 						$('#statusbar').addClass('error');
-						processCompilerOutput(data.error);
+						processCompilerOutput(data.errors);
 					}
 				}, 'json');
 			}
@@ -192,6 +194,8 @@ $(document).ready(function() {
 		if (edits === 0) {
 			save();
 		}
+
+		// TODO: autocompile?
 	}
 
 	/**
@@ -217,28 +221,42 @@ $(document).ready(function() {
 	 * Parses the compiler output and marks line errors.
 	 */
 	function processCompilerOutput(output) {
-		var re = /.java:(\d+)/g;
-		var matches;
-		while ((matches = re.exec(output)) !== null) {
-			markLineError(parseInt(matches[1]) - 1);
+		clearErrors();
+		for (var n in output) {
+			if (n != 'full') {
+				console.log(n, output[n]);
+				markLineError(parseInt(n - 1), output[n]);
+			}
 		}
 	}
 
 	/**
-	 * Highlights a line for error
+	 * Marks a line with an error
 	 */
-	function markLineError(n) {
+	function markLineError(n, message) {
 		editor.addLineClass(n, 'background', 'compile-error');
-		errors.push(n);
+		var marker = document.createElement("div");
+		marker.innerHTML = '●';
+		marker.title = message;
+		marker.classList.add("errormark")
+		editor.setGutterMarker(n, "errormarks", marker);
+		errors.push({
+			'lineNumber': n,
+			'message': message
+		});
+		// $('.errormarks').css('width', '10px');
 	}
 
 	/**
 	 * Removes all compile error marks
 	 */
 	function clearErrors() {
+		console.log("Clearing Errors", errors);
 		for (var i = 0; i < errors.length; i++) {
-			editor.removeLineClass(errors[i], 'background', 'compile-error');
+			editor.removeLineClass(errors[i].lineNumber, 'background', 'compile-error');
+			editor.setGutterMarker(errors[i].lineNumber, "errormarks", null);
 		}
+		// $('.errormarks').css('width', '0px');
 		errors = [];
 	}
 

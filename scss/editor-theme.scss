@@ -27,6 +27,17 @@
 } 
 
 .cm-s-custom_theme {
+	
+	// the error mark bar
+	.errormarks {
+		width: 10px;
+	}
+
+	// the actual error mark
+	.errormark {
+		color: #F00;
+	}
+
 	.CodeMirror-selected {
 		background: $accent1 !important;
 	}

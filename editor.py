@@ -19,7 +19,7 @@ import ranking
 import users
 import util
 
-JAVA_KEYWORDS = {'abstract', 'continue', 'for', 'new', 'switch', 'assert', 'default', 'goto', 'package', 'synchronized', 'boolean', 'do', 'if', 'private', 'this','break', 'double', 'implements', 'protected', 'throw', 'byte', 'else', 'import', 'public', 'throws', 'case', 'enum', 'instanceof', 'return', 'transient', 'catch', 'extends', 'int', 'short', 'try','char', 'final', 'interface', 'static', 'void', 'class', 'finally', 'long', 'strictfp', 'volatile','const', 'float', 'native', 'super', 'while'}
+JAVA_KEYWORDS = {'abstract', 'assert', 'boolean', 'break', 'byte', 'case', 'catch', 'char', 'class', 'const', 'continue', 'default', 'do', 'double', 'else', 'enum', 'extends', 'final', 'finally', 'float', 'for', 'goto', 'if', 'implements', 'import', 'instanceof', 'int', 'interface', 'long', 'native', 'new', 'package', 'private', 'protected', 'public', 'return', 'short', 'static', 'strictfp', 'super', 'switch', 'synchronized', 'this', 'throw', 'throws', 'transient', 'try', 'void', 'volatile', 'while'} 
 JAVA_LETTERS = {c for c in string.ascii_letters}
 JAVA_DIGITS = {c for c in string.digits}
 JAVA_LETTERS_OR_DIGITS = JAVA_LETTERS | JAVA_DIGITS
@@ -198,8 +198,8 @@ class Critter():
 			# save stuff
 			return {'success': True}
 		except subprocess.CalledProcessError as e:
-			output = format_compiler_output(e.output)
-			return {'success': False, 'error': output}
+			errors = parse_compiler_output(e.output)
+			return {'success': False, 'errors': errors}
 
 	def reload(self):
 		"""Reload all the data from this critter out of the database.""" 
@@ -422,19 +422,33 @@ def check_filename(filename):
 			return False
 	return True
 
-def format_compiler_output(s):
-	"""Formats the output of the java compiler to be displayed in the editor."""
-	# Remove filepaths
-	search = r'\./java/temp_critters/(\w*.java)'
-	replace = r'\1'
-	s = re.sub(search, replace, s)
-	# Fix line numbers
-	search = r'(\w*.java:)(\d+)'
-	replace = lambda m: m.groups()[0] + str(int(m.groups()[1]) - 3)
-	s = re.sub(search, replace, s)
+def parse_compiler_output(s):
+	"""Return a dictionary mapping line number to error message"""
+	errors = {}
+	pattern = re.compile(r'\./java/temp_critters/(\w*.java):(\d+): error:')
+	for line in s.split("\n"):
+		# find lines that describe errors
+		match = pattern.match(line)
+		if match is not None:
+			line = pattern.sub("", line)
+			line = re.sub(r'',"", line)
+			number = int(match.expand(r'\2')) - 3 # subtract 3 for invisible lines
+			errors[number] = line
+	errors['full'] = s
+	return errors
 
-	# HTML line breaks
-	s = s.replace("\n", "<br>")
-	# Non breaking spaces
-	s = s.replace(' ', '&nbsp;')
-	return s
+
+
+	# # Remove filepaths
+	# replace = r'\1'
+	# s = re.sub(search, replace, s)
+	# # Fix line numbers
+	# search = r'(\w*.java:)(\d+)'
+	# replace = lambda m: m.groups()[0] + str(int(m.groups()[1]) - 3)
+	# s = re.sub(search, replace, s)
+
+	# # HTML line breaks
+	# s = s.replace("\n", "<br>")
+	# # Non breaking spaces
+	# s = s.replace(' ', '&nbsp;')
+	# return s
