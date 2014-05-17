@@ -4,16 +4,20 @@
 {{super()}}
 {% if g.user == critter.owner %}
 <script type="text/javascript">
-	SAVEPATH = "{{critter.get_url('save')|safe}}";
-	COMPILEPATH = "{{critter.get_url('compile')|safe}}";
+	SAVE_URL = "{{critter.get_url('save')|safe}}";
+	COMPILE_URL = "{{critter.get_url('compile')|safe}}";
+	REVERT_URL = "{{critter.get_url('revert')|safe}}";
 </script>
 <script type="text/javascript" src="{{url_for('static', filename='codemirror/lib/codemirror.js')}}"></script>
 <script type="text/javascript" src="{{url_for('static', filename='codemirror/addon/comment/comment.js')}}"></script>
+<script type="text/javascript" src="{{url_for('static', filename='codemirror/addon/comment/continuecomment.js')}}"></script>
 <script type="text/javascript" src="{{url_for('static', filename='codemirror/addon/dialog/dialog.js')}}"></script>
 <script type="text/javascript" src="{{url_for('static', filename='codemirror/addon/edit/closebrackets.js')}}"></script>
 <script type="text/javascript" src="{{url_for('static', filename='codemirror/addon/edit/matchbrackets.js')}}"></script>
 <script type="text/javascript" src="{{url_for('static', filename='codemirror/addon/fold/foldcode.js')}}"></script>
 <script type="text/javascript" src="{{url_for('static', filename='codemirror/addon/fold/brace-fold.js')}}"></script>
+<script type="text/javascript" src="{{url_for('static', filename='codemirror/addon/hint/show-hint.js')}}"></script>
+<script type="text/javascript" src="{{url_for('static', filename='codemirror/addon/hint/anyword-hint.js')}}"></script>
 <script type="text/javascript" src="{{url_for('static', filename='codemirror/addon/search/search.js')}}"></script>
 <script type="text/javascript" src="{{url_for('static', filename='codemirror/addon/search/searchcursor.js')}}"></script>
 <script type="text/javascript" src="{{url_for('static', filename='codemirror/addon/selection/active-line.js')}}"></script>
@@ -46,6 +50,7 @@
 			<span class="item left"><a href="{{critter.get_url()|safe}}">Back</a></span>
 			<span class="item left"><a id="savebutton">Save</a></span>
 			<span class="item left"><a id="compilebutton">Compile</a></span>
+			<span class="item left"><a id="revertbutton" title="Revert to last successful compile">Revert</a></span>
 			<span class="item right"><a id="autosavebutton"> </a></span>
 			<div class="clear"></div>
 		</div>
@@ -207,11 +212,11 @@
 					<h2>Editing</h2>
 					<table>
 						<tr>
-							<td>Ctrl-Shift-D</td>
+							<td>Ctrl-D</td>
 							<td>Duplicate Line</td>
 						</tr>
 						<tr>
-							<td>Ctrl-Shift-K</td>
+							<td>Ctrl-Shift-D</td>
 							<td>Delete Line</td>
 						</tr>
 						<tr>
@@ -270,7 +275,7 @@
 					<h2>Selection</h2>
 					<table>
 						<tr>
-							<td>Ctrl-D</td>
+							<td>Ctrl-E</td>
 							<td>Select Next Occurence</td>
 						</tr>
 						<tr>

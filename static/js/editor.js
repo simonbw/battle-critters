@@ -1,129 +1,36 @@
-// SETTINGS //
-var AUTOSAVE = true; // bool if editor should automatically save
-var AUTOSAVE_WAIT = 500; // milliseconds idle before autosaving.
-var EDITOR_ID = '#editor'; // id of the text area
-var BOTTOM_PADDING = 100;
-
-// SETUP KEYS //
-var BLOCK_KEYS = "S"
-$(document).bind('keydown', function(e) {
-	var k = e.which;
-	for (var i = 0; i < BLOCK_KEYS.length; i++) {
-		if (e.ctrlKey && (k == BLOCK_KEYS.charCodeAt(i))) {
-			e.preventDefault();
-			return false;
-		}
-	}
-});
-
-// Globals to declare
-var edits = 0;
-var saving = false;
-var compiling = false;
-var saved = true;
-
 /**
- * Return a string containing the time, ready for insertion into HTML
+ * This module deals with the text editor.
  */
-function time() {
-	var date = new Date();
-	return '<span id="time">' + date.getHours() + ':' + date.getMinutes() + ':' + date.getSeconds() + '</span>';
-}
+editorModule = new(function() {
+	// SETTINGS //
+	var AUTOSAVE = true; // if editor should automatically save
+	var AUTOSAVE_WAIT = 500; // milliseconds idle before autosaving.
+	var BOTTOM_PADDING = 100; // attempted padding at the bottom of the screen
+	var FOLD_ERRORS = true; // whether or not to move the gutter for error markers
 
-$(document).ready(function() {
-	// compiler errors. format: {'lineNumber': 1, 'message': 'a message'}
-	var errors = [];
-
-	$("#errordisplay").hide();
-
-	// This should probably be designed a little better.
-	$("#errordisplay").click(function() {
-		clearErrors();
-		$(this).slideUp(100, function() {
-			resetHeight();
-		});
-	});
-
-	if (AUTOSAVE) {
-		$("#autosavebutton").html("Disable Autosave");
-	} else {
-		$("#autosavebutton").html("Enable Autosave");
-	}
-	$("#autosavebutton").click(function() {
-		AUTOSAVE = !AUTOSAVE;
-		if (AUTOSAVE)
-			$("#autosavebutton").html("Disable Autosave");
-		else
-			$("#autosavebutton").html("Enable Autosave");
-	});
-
-	$("#savestatus").html("Opened at " + time());
-
-	$("#savebutton").click(save);
-	$("#compilebutton").click(compile);
-
-	var keymap = {
-		"Ctrl-S": function(instance) {
-			save();
-			return false;
-		},
-		"Cmd-S": function(instance) {
-			save();
-			return false;
-		},
-		"Ctrl-B": function(instance) {
-			compile();
-			return false;
-		},
-		"Cmd-B": function(instance) {
-			compile();
-			return false;
-		}
-	}
-
-	editor = CodeMirror.fromTextArea($(EDITOR_ID).get(0), {
-		mode: 'text/x-java',
-		lineNumbers: true,
-		gutters: ["CodeMirror-linenumbers", "errormarks"],
-		lineWrapping: true,
-		indentWithTabs: true,
-		smartIndent: true,
-		indentUnit: 4,
-		undoDepth: 100,
-		keyMap: "sublime",
-		extraKeys: keymap,
-		theme: "custom_theme",
-		matchBrackets: true,
-		styleActiveLine: true,
-	});
-	editor.on("change", function() {
-		$('#savestatus').html("You have unsaved changes");
-		$('#compilestatus').html("uncompiled");
-		$('#statusbar').addClass('unsaved');
-		$('#statusbar').removeClass('error');
-		saved = false;
-
-		if (AUTOSAVE) {
-			edits += 1;
-			setTimeout(autosave, AUTOSAVE_WAIT);
-		}
-	});
+	// variables 
+	var compiling = false;
+	var editor = null;
+	var edits = 0;
+	var errors = []; //{'lineNumber': 1, 'message': 'a message'}
+	var saved = true;
+	var saving = false;
 
 	/**
 	 * Saves the current file to the server.
 	 */
 	function save(callback) {
 		if (!saving && !saved) {
-			// console.log("saving to " + SAVEPATH)
+			// console.log("saving to " + SAVE_URL)
 			$('#savestatus').html("Saving...");
 			saving = true;
-			$.post(SAVEPATH, {
+			$.post(SAVE_URL, {
 				content: editor.getValue()
 			}, function(data) {
 				saving = false;
 				if (data.success) {
 					saved = true;
-					$('#savestatus').html("Last saved: " + time());
+					$('#savestatus').html("Last saved: " + util.time());
 					$('#statusbar').removeClass("unsaved");
 					resetHeight();
 				} else {
@@ -150,11 +57,12 @@ $(document).ready(function() {
 			compiling = true;
 			editor.setOption("readOnly", true);
 			f = function(savedata) {
-				// console.log("compiling " + COMPILEPATH);
+				// console.log("compiling " + COMPILE_URL);
 				$('#compilestatus').html("Compiling...");
 				$('#statusbar').addClass('compiling');
 				$('#statusbar').removeClass('error');
-				$.post(COMPILEPATH, {}, function(data) {
+				$.post(COMPILE_URL, {}, function(data) {
+					console.log(data);
 					compiling = false;
 					editor.setOption("readOnly", false);
 					$('#statusbar').removeClass('compiling');
@@ -184,6 +92,25 @@ $(document).ready(function() {
 			else
 				save(f);
 		}
+	}
+
+	/**
+	 * Revert the file to it's last successful compile.
+	 */
+	function revert() {
+		$.getJSON(REVERT_URL, function(data) {
+			if (data.success) {
+				editor.setValue(data['content']);
+				$('#compilestatus').html("Reverted to successful compile");
+				$('#statusbar').addClass('compiled');
+				$('#statusbar').removeClass('error');
+				$("#errordisplay").html("");
+				$("#errordisplay").slideUp(100, function() {
+					resetHeight();
+				});
+				clearErrors();
+			}
+		});
 	}
 
 	/**
@@ -244,20 +171,23 @@ $(document).ready(function() {
 			'lineNumber': n,
 			'message': message
 		});
-		// $('.errormarks').css('width', '10px');
+		if (FOLD_ERRORS) {
+			$('.errormarks').css('width', '10px');
+		}
 	}
 
 	/**
 	 * Removes all compile error marks
 	 */
 	function clearErrors() {
-		console.log("Clearing Errors", errors);
 		for (var i = 0; i < errors.length; i++) {
 			editor.removeLineClass(errors[i].lineNumber, 'background', 'compile-error');
 			editor.setGutterMarker(errors[i].lineNumber, "errormarks", null);
 		}
-		// $('.errormarks').css('width', '0px');
 		errors = [];
+		if (FOLD_ERRORS) {
+			$('.errormarks').css('width', '0px');
+		}
 	}
 
 	/**
@@ -271,21 +201,103 @@ $(document).ready(function() {
 		resetHeight();
 	}
 
-	// there should be a better way to do this...
-	$('#helpbox #tabbuttonbar .tabbutton:eq(' + 0 + ')').click(function() {
+	// init
+	$(document).ready(function() {
+
+		$("#errordisplay").hide();
+
+		// This should probably be designed a little better.
+		$("#errordisplay").click(function() {
+			clearErrors();
+			$(this).slideUp(100, function() {
+				resetHeight();
+			});
+		});
+
+		if (AUTOSAVE) {
+			$("#autosavebutton").html("Disable Autosave");
+		} else {
+			$("#autosavebutton").html("Enable Autosave");
+		}
+		$("#autosavebutton").click(function() {
+			AUTOSAVE = !AUTOSAVE;
+			if (AUTOSAVE) {
+				$("#autosavebutton").html("Disable Autosave");
+			} else {
+				$("#autosavebutton").html("Enable Autosave");
+			}
+		});
+
+		$("#savestatus").html("Opened at " + util.time());
+		$("#savebutton").click(save);
+		$("#compilebutton").click(compile);
+		$("#revertbutton").click(revert);
+
+		// Extra key bindings
+		var keymap = {
+			"Ctrl-S": function(instance) {
+				save();
+				return false;
+			},
+			"Cmd-S": function(instance) {
+				save();
+				return false;
+			},
+			"Ctrl-B": function(instance) {
+				compile();
+				return false;
+			},
+			"Cmd-B": function(instance) {
+				compile();
+				return false;
+			}
+		}
+
+		editor = CodeMirror.fromTextArea($("#editor").get(0), {
+			continueComments: true,
+			extraKeys: keymap,
+			gutters: ["CodeMirror-linenumbers", "errormarks"],
+			indentUnit: 4,
+			indentWithTabs: true,
+			keyMap: "sublime",
+			lineNumbers: true,
+			lineWrapping: true,
+			matchBrackets: true,
+			mode: 'text/x-java',
+			smartIndent: true,
+			styleActiveLine: true,
+			theme: "custom_theme",
+			undoDepth: 100,
+		});
+
+		editor.on("change", function() {
+			$('#savestatus').html("You have unsaved changes");
+			$('#compilestatus').html("uncompiled");
+			$('#statusbar').addClass('unsaved');
+			$('#statusbar').removeClass('error');
+			saved = false;
+
+			if (AUTOSAVE) {
+				edits += 1;
+				setTimeout(autosave, AUTOSAVE_WAIT);
+			}
+		});
+
+
+		$('#helpbox #tabbuttonbar').on('click', '.tabbutton', function(event) {
+			event.preventDefault();
+			helpTab($(this).index());
+		});
 		helpTab(0);
-	});
-	$('#helpbox #tabbuttonbar .tabbutton:eq(' + 1 + ')').click(function() {
-		helpTab(1);
-	});
-	$('#helpbox #tabbuttonbar .tabbutton:eq(' + 2 + ')').click(function() {
-		helpTab(2);
-	});
-	helpTab(0);
 
-	resetHeight();
-	$(window).resize(resetHeight);
+		if (FOLD_ERRORS) {
+			$('.errormarks').css('width', '0px');
+		}
 
-	resetHeight();
+		resetHeight();
+		$(window).resize(resetHeight);
 
-});
+		resetHeight();
+
+	});
+})();

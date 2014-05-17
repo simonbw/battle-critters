@@ -1,6 +1,11 @@
 // A rough approximation of Sublime Text's keybindings
 // Depends on addon/search/searchcursor.js and optionally addon/dialog/dialogs.js
 
+// My changes:
+// Ctrl-Shift-D: DuplicateLine => DeleteLine
+// Ctrl-D: selectNextOccurance => DuplicateLine
+// Ctrl-E: selectNextOccurance
+
 (function(mod) {
   if (typeof exports == "object" && typeof module == "object") // CommonJS
     mod(require("../lib/codemirror"), require("../addon/search/searchcursor"), require("../addon/edit/matchbrackets"));
@@ -87,7 +92,8 @@
     cm.setSelections(extended);
   };
 
-  map["Shift-" + ctrl + "K"] = "deleteLine";
+  // CHANGED: map["Shift-" + ctrl + "K"] = "deleteLine";
+  map["Shift-" + ctrl + "D"] = "deleteLine";
 
   function insertLine(cm, above) {
     cm.operation(function() {
@@ -116,7 +122,8 @@
     return {from: Pos(pos.line, start), to: Pos(pos.line, end), word: line.slice(start, end)};
   }
 
-  cmds[map[ctrl + "D"] = "selectNextOccurrence"] = function(cm) {
+  // CHANGED: cmds[map[ctrl + "D"] = "selectNextOccurrence"] = function(cm) {
+  cmds[map[ctrl + "E"] = "selectNextOccurrence"] = function(cm) {
     var from = cm.getCursor("from"), to = cm.getCursor("to");
     var fullWord = cm.state.sublimeFindFullWord == cm.doc.sel;
     if (CodeMirror.cmpPos(from, to) == 0) {
@@ -250,7 +257,8 @@
     });
   };
 
-  cmds[map["Shift-" + ctrl + "D"] = "duplicateLine"] = function(cm) {
+  // CHANGED: cmds[map["Shift-" + ctrl + "D"] = "duplicateLine"] = function(cm) {
+  cmds[map[ctrl + "D"] = "duplicateLine"] = function(cm) {
     cm.operation(function() {
       var rangeCount = cm.listSelections().length;
       for (var i = 0; i < rangeCount; i++) {

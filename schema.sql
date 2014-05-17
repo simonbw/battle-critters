@@ -16,6 +16,7 @@ create table critters (
 	name text not null,
 	owner_id integer not null,
 	content text,
+	compiled_content text,
 	creation_time numeric,
 	last_save_time numeric,
 	last_compile_time numeric,

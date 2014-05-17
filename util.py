@@ -29,7 +29,8 @@ def json_service(f):
 				results = {}
 			if not isinstance(results, dict):
 				results = {'result': results}
-			results['success'] = True
+			if 'success' not in results:
+				results['success'] = True
 			return jsonify(results)
 		except Exception as e:
 			return jsonify({'success': False, 'error': str(e)})

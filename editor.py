@@ -54,7 +54,9 @@ class Critter():
 			if fail_silent:
 				return None
 			else:
-				raise LookupError("Critter not found: " + filename)
+				e = LookupError("Critter not found: " + filename)
+				e.status_code = 404
+				raise e
 		return Critter(row)
 
 	@staticmethod
@@ -76,6 +78,10 @@ class Critter():
 			self._content = zlib.decompress(row['content'])
 		else:
 			self._content = None
+		if ('compiled_content' in row):
+			self._compiled_content = zlib.decompress(row['compiled_content'])
+		else:
+			self._compiled_content = None
 		self.owner_id = row['owner_id']
 		self._owner = None
 		self.creation_time = row['creation_time']
@@ -103,6 +109,17 @@ class Critter():
 	@content.setter
 	def content(self, value):
 		self._content = value
+
+	@property
+	def compiled_content(self):
+		"""Lazy load the last compiled content of this Critter"""
+		if self._compiled_content == None:
+			self._compiled_content = zlib.decompress(g.db.execute("SELECT compiled_content FROM critters WHERE id=?", (self.id,)).fetchone()['compiled_content'])
+		return self._compiled_content
+
+	@compiled_content.setter
+	def compiled_content(self, value):
+		self._compiled_content = value
 	
 	@property
 	def score(self):
@@ -164,6 +181,8 @@ class Critter():
 			return url_for('editor_app.save_file', owner=self.owner.username, filename=self.name)
 		elif action == 'compile':
 			return url_for('editor_app.compile_file', owner=self.owner.username, filename=self.name)
+		elif action == 'revert':
+			return url_for('editor_app.revert_file', owner=self.owner.username, filename=self.name)
 		else:
 			raise Exception("Unknown Action: " + action)
 
@@ -172,6 +191,11 @@ class Critter():
 		url = self.get_url(action)
 		text = text.format(name = self.name, owner=self.owner.username, id=self.id, url=url)
 		return Markup("<a href='{url}' class='crittername'>{text}</a>".format(url=url,text=text))
+
+	def revert(self):
+		"""Reverts content back to last compiled content."""
+		self.content = self.compiled_content
+		self.save()
 
 	def save(self):
 		"""Save the current content of the critter in the database."""
@@ -195,7 +219,12 @@ class Critter():
 			filename=temp_name)
 		try:
 			subprocess.check_output(command, stderr=subprocess.STDOUT, shell=True)
-			# save stuff
+			# on success, update compiled content
+			current_time = time.time()
+			self.compiled_content = self.content
+			zcontent = zlib.compress(self.content, COMPRESSION_LEVEL)
+			g.db.execute("UPDATE critters SET compiled_content = ?, last_save_time = ?, last_compile_time = ? WHERE id = ?;", (zcontent, current_time, current_time, self.id))
+			g.db.commit()
 			return {'success': True}
 		except subprocess.CalledProcessError as e:
 			errors = parse_compiler_output(e.output)
@@ -341,14 +370,16 @@ def get_critter_list():
 
 @editor_app.route('/<owner>/<filename>')
 def view_file(owner, filename):
-	critter = Critter.from_name(filename, owner_name=owner)
-	return render_template('edit_critter.html', critter=critter)
+	try:
+		critter = Critter.from_name(filename, owner_name=owner)
+		return render_template('edit_critter.html', critter=critter)
+	except LookupError as e:
+		abort(404)
 
 @editor_app.route('/<owner>/<filename>', methods=['PUT', 'POST'])
 @json_service
 def save_file(owner, filename):
 	require_user(owner)
-	
 	critter = Critter.from_name(filename, owner_name=owner)
 	critter.content = request.form['content']
 	critter.save();
@@ -358,16 +389,25 @@ def save_file(owner, filename):
 def delete_file(owner, filename):
 	"""Delete a file if it exists"""
 	owner_id = users.User.from_username(owner).id
-	print "deleting critter: " + filename + ", " + str(owner_id)
 	# throws error if it doesn't exists
 	Critter.from_name(filename, owner_id=owner_id, fail_silent=False).delete()
 
 @editor_app.route('/<owner>/<filename>/compile', methods=["GET","POST"])
+@json_service
 def compile_file(owner, filename):
 	"""Compile a file. User must be the owner of the critter or an admin."""
 	require_user(owner)
 	critter = Critter.from_name(filename, owner_name=owner)
-	return jsonify(critter.compile())
+	return critter.compile()
+
+@editor_app.route('/<owner>/<filename>/revert', methods=["GET","POST"])
+@json_service
+def revert_file(owner, filename):
+	"""Revert a file to its last compiled text. User must be the owner of the critter or an admin. Returns the neew (old) content of the critter."""
+	require_user(owner)
+	critter = Critter.from_name(filename, owner_name=owner)
+	critter.revert()
+	return {'content': critter.content}
 
 @editor_app.route('/<owner>/create_new', methods=["POST", "PUT"])
 @json_service
