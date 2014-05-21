@@ -1,4 +1,5 @@
 home = (function() {
+	var module = {};
 	// map critter ids to critter datas
 	var critters_loaded = [];
 
@@ -105,8 +106,17 @@ home = (function() {
 						if (response_data2.success) {
 							for (var j = 0; j < response_data2.battles.length; j++) {
 								var battle = response_data2.battles[j];
-								var text = (battle['winner_id'] == critter['id']) ? 'victory' : 'loss';
-								text += ' at ' + battle['pretty_time'];
+								var place = battle['place'];
+								if (place % 10 == 1) {
+									place += 'st';
+								} else if (place % 10 == 2) {
+									place += 'nd';
+								} else if (place % 10 == 3) {
+									place += 'rd';
+								} else {
+									place += 'th';
+								}
+								var text = place + ' place at ' + battle['pretty_time'];
 								battlelist.append($("<li>", {
 									'html': $("<a>", {
 										'text': text,
@@ -216,4 +226,6 @@ home = (function() {
 			});
 		});
 	});
+
+	return module;
 })();

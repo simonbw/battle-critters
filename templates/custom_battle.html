@@ -14,11 +14,11 @@
 <script>
 	console.log("Pre-selected Critters:", [{{critter_ids_list}}]);
 	var preselected = [{{critter_ids_list}}];
-	loadCritters(preselected, function() {
+	newBattleModule.loadCritters(preselected, function() {
 		for (var i = 0; i < preselected.length; i++) {
-			selectCritter(preselected[i]);
+			newBattleModule.selectCritter(preselected[i]);
 		}
-		refreshDisplay();
+		newBattleModule.refreshDisplay();
 	});
 </script>
 {% endif %}

@@ -38,7 +38,7 @@ def init():
 	Battle = battles.Battle
 	User = users.User
 
-class Critter():
+class Critter(object):
 	"""A model for a Critter. Handles database comunication. To load a Critter, use one of the static methods."""
 
 	@staticmethod
@@ -109,6 +109,11 @@ class Critter():
 	@content.setter
 	def content(self, value):
 		self._content = value
+		current_time = time.time()
+		zcontent = zlib.compress(self._content, COMPRESSION_LEVEL)
+		g.db.execute("UPDATE critters SET content=?, last_save_time=? WHERE id = ?;", (zcontent, current_time, self.id))
+		g.db.commit()
+		self.last_save_time = current_time
 
 	@property
 	def compiled_content(self):
@@ -120,6 +125,9 @@ class Critter():
 	@compiled_content.setter
 	def compiled_content(self, value):
 		self._compiled_content = value
+		zcontent = zlib.compress(value, COMPRESSION_LEVEL)
+		g.db.execute("UPDATE critters SET compiled_content=? WHERE id = ?;", (zcontent, self.id))
+		g.db.commit()
 	
 	@property
 	def score(self):
@@ -150,17 +158,17 @@ class Critter():
 
 	def get_winning_battles(self):
 		"""Return the list of battles this critter has won"""
-		return map(battles.Battle.from_id, [row.id for row in g.db.execute("SELECT battle_id FROM battle_critters WHERE critter_id = ? AND winner = 1", (self.id,)).fetchall()])
+		return map(battles.Battle.from_id, [row.id for row in g.db.execute("SELECT battle_id FROM battle_critters WHERE critter_id = ? AND place = 1", (self.id,)).fetchall()])
 	
 	def get_losing_battles(self):
 		"""Return the list of battles this critter has not won"""
-		return map(battles.Battle.from_id, [row.id for row in g.db.execute("SELECT battle_id FROM battle_critters WHERE critter_id = ? AND winner = 0", (self.id,)).fetchall()])
+		return map(battles.Battle.from_id, [row.id for row in g.db.execute("SELECT battle_id FROM battle_critters WHERE critter_id = ? AND place > 1", (self.id,)).fetchall()])
 
 	def get_ranked_wins(self):
 		"""Return the number of wins in ranked battles"""
 		query = "SELECT COUNT(*) FROM battle_critters, battles \
 		WHERE battles.id = battle_critters.battle_id \
-		AND critter_id = ? AND winner = 1 AND ranked = 1"
+		AND critter_id = ? AND place = 1 AND ranked = 1"
 		row = g.db.execute(query, (self.id,)).fetchone()
 		return row[0]
 
@@ -168,7 +176,7 @@ class Critter():
 		"""Return the number of wins in ranked battles"""
 		query = "SELECT COUNT(*) FROM battle_critters, battles \
 		WHERE battles.id = battle_critters.battle_id \
-		AND critter_id = ? AND winner = 0 AND ranked = 1"
+		AND critter_id = ? AND place > 1 AND ranked = 1"
 		row = g.db.execute(query, (self.id,)).fetchone()
 		return row[0]
 
@@ -196,16 +204,6 @@ class Critter():
 	def revert(self):
 		"""Reverts content back to last compiled content."""
 		self.content = self.compiled_content
-		self.save()
-
-	def save(self):
-		"""Save the current content of the critter in the database."""
-		current_time = time.time()
-		zcontent = zlib.compress(self.content, COMPRESSION_LEVEL)
-		g.db.execute("UPDATE critters SET content=?, last_save_time=? WHERE name = ? AND owner_id = ?;", (
-					zcontent, current_time, self.name, self.owner_id))
-		g.db.commit()
-		return current_time
 
 	def compile(self):
 		"""Compile the critter."""
@@ -223,8 +221,7 @@ class Critter():
 			# on success, update compiled content
 			current_time = time.time()
 			self.compiled_content = self.content
-			zcontent = zlib.compress(self.content, COMPRESSION_LEVEL)
-			g.db.execute("UPDATE critters SET compiled_content = ?, last_save_time = ?, last_compile_time = ? WHERE id = ?;", (zcontent, current_time, current_time, self.id))
+			g.db.execute("UPDATE critters SET last_compile_time = ? WHERE id = ?;", (current_time, self.id))
 			g.db.commit()
 			return {'success': True}
 		except subprocess.CalledProcessError as e:
@@ -347,7 +344,7 @@ def get_critter_recent_battles():
 		data['time'] = battle.creation_time
 		data['url'] = battle.get_url()
 		data['width'] = battle.width
-		data['winner_id'] = battle.get_winner().id
+		data['place'] = battle.get_critter_place(critter)
 		r['battles'].append(data)
 	return r
 
@@ -383,7 +380,6 @@ def save_file(owner, filename):
 	require_user(owner)
 	critter = Critter.from_name(filename, owner_name=owner)
 	critter.content = request.form['content']
-	critter.save();
 
 @editor_app.route('/<owner>/<filename>', methods=['DELETE'])
 @json_service
@@ -473,7 +469,7 @@ def parse_compiler_output(s):
 		if match is not None:
 			line = pattern.sub("", line)
 			line = re.sub(r'',"", line)
-			number = int(match.expand(r'\2')) - 3 # subtract 3 for invisible lines
+			number = int(match.expand(r'\2')) - 3 # subtract 3 for invisible lines at top of file
 			errors[number] = line
 	errors['full'] = s
 	return errors

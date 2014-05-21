@@ -62,7 +62,11 @@ def reset_all():
 
 			try:
 				print "Creating default critters..."
-				editor.create_file(users.User.from_username('example'), 'Husky')
+				example = users.User.from_username('example')
+				editor.create_file(example, 'Husky')
+				editor.create_file(example, 'Bear')
+				editor.create_file(example, 'Lion')
+				editor.create_file(example, 'Flytrap')
 			except:
 				traceback.print_exc(file=sys.stdout)
 				errored = True

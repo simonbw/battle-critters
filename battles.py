@@ -36,7 +36,7 @@ def init():
 	User = users.User
 
 
-class Battle():
+class Battle(object):
 	"""A model. Interacts with the database. Use from_id to load a battle from the database."""
 	@staticmethod
 	def from_id(id):
@@ -67,7 +67,8 @@ class Battle():
 
 	def get_winner(self):
 		"""Return the Critter that won the battle, or None if no winner."""
-		rows = g.db.execute("SELECT critter_id FROM battle_critters WHERE battle_id=? AND winner=1", (self.id,)).fetchall()
+		query = "SELECT critter_id FROM battle_critters WHERE battle_id=? ORDER BY score LIMIT 1"
+		rows = g.db.execute(query, (self.id,)).fetchall()
 		if len(rows) > 0:
 			return Critter.from_id(rows[0]['critter_id'])
 		else:
@@ -75,8 +76,13 @@ class Battle():
 
 	def get_critters(self):
 		"""Return a list of critters competing in this battle."""
-		rows = g.db.execute("SELECT critter_id, position FROM battle_critters WHERE battle_id=?", (self.id,)).fetchall()
+		rows = g.db.execute("SELECT critter_id FROM battle_critters WHERE battle_id=? ORDER BY place", (self.id,)).fetchall()
 		return [Critter.from_id(row['critter_id']) for row in rows]
+
+	def get_critter_place(self, critter):
+		"""Get the place a critter scored in this battle. Throws an error if the critter was not in this battle."""
+		query = "SELECT place FROM battle_critters WHERE battle_id = ? AND critter_id = ?"
+		return g.db.execute(query, (self.id, critter.id)).fetchone()['place']
 
 	def get_frames(self, start, end):
 		"""Return the data for the frames of the battle."""
@@ -227,18 +233,27 @@ def create_battle(length, height, width, critters, ranked):
 		g.db.execute("INSERT INTO battle_frames (battle_id, frame_number, data) VALUES (?, ?, ?)", (battle_id, frame, data))
 		jbattle.nextFrame()
 
-	# update scores
-	owner_name, critter_name = jbattle.getWinner().split('.')
-	winner = Critter.from_name(critter_name, owner_name=owner_name)
-	g.db.execute("UPDATE battle_critters SET winner = 1 WHERE critter_id = ?", (winner.id,))
-	
-	# g.db.execute("UPDATE critters SET score = score + ? WHERE id = ?", (score_change, winner.id))
+	# determine places
+	scores = jbattle.getScores()
+	sorted_scores = []
+	for name, score in scores.items():
+		owner_name, critter_name = name.split('.')
+		sorted_scores.append((score, Critter.from_name(critter_name, owner_name=owner_name)))
+	sorted_scores.sort(reverse=True)
 
-	# for loser in jbattle.getLosers():
-	# 	owner_name, critter_name = loser.split('.')
-	# 	loser = Critter.from_name(critter_name, owner_name=owner_name)
-	# 	g.db.execute("UPDATE critters SET score = score - ? WHERE id = ?", (score_change, loser.id))
-	
+	# give the critters places
+	place = 1
+	last_score = -1
+	for i, (score, critter) in enumerate(sorted_scores):
+		# handle ties
+		place = place if score == last_score else i + 1
+		last_score = score
+		g.db.execute("UPDATE battle_critters SET place = ?, score = ? WHERE critter_id = ?", (place, score, critter.id))
+
+	# TODO: update rankings
+	if ranked or True:
+		for i, (score, critter) in enumerate(sorted_scores):
+			# this sucks:
+			g.db.execute("UPDATE critters SET score = score + ? WHERE id = ?", (score, critter.id))
 	g.db.commit()
-
 	return battle_id

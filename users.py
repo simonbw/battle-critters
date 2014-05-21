@@ -27,7 +27,7 @@ def init():
 	Critter = editor.Critter
 
 
-class User:
+class User(object):
 	"""A model for a user. Handles database comunication. To load a User, use one of the static methods."""
 	@staticmethod
 	def from_username(username):

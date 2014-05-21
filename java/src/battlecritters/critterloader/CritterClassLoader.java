@@ -24,7 +24,6 @@ public class CritterClassLoader extends ClassLoader {
 	public CritterClassLoader(String critterName) {
 		super(CritterClassLoader.class.getClassLoader());
 		localPackage = critterName.substring(0, critterName.lastIndexOf("."));
-		System.out.println("new critter loader with local package: " + localPackage);
 	}
 
 	/**
@@ -37,7 +36,6 @@ public class CritterClassLoader extends ClassLoader {
 
 		// Access the critter and custom load
 		if (name.startsWith(localPackage)) {
-			System.out.println("using custom loading");
 			try {
 				byte[] data = loadClassData(name);
 				return defineClass(name, data, 0, data.length);
@@ -48,7 +46,6 @@ public class CritterClassLoader extends ClassLoader {
 		// Use default loading on standard packages
 		for (String allowedPackage : ALLOWED_PACKAGES) {
 			if (name.startsWith(allowedPackage)) {
-				System.out.println("using standard loading");
 				return super.loadClass(name);
 			}
 		}

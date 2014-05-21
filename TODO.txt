@@ -40,6 +40,7 @@ Web Interface
 			-	Recent Battles
 			-	My Critters
 	-	Critter Editor
+		-   collapsible sidebar
 		+-	info pane
 		+-	redesign page
 		+--	consoldate edit and view pages

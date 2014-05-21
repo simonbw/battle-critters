@@ -194,22 +194,22 @@ public class Battle {
 		// Uncomment this stuff for timeout //
 		//     Currently very slow          //
 		//////////////////////////////////////
-	
+
 		// CritterMoveThread thread = new CritterMoveThread(critter, info);
 
 		// thread.start();
 
 		// long endTime = System.currentTimeMillis() + 100;
 		// while (thread.isAlive()) {
-		// 	if (System.currentTimeMillis() > endTime) {
-		// 		System.out.println("Method Timed Out");
-		// 		break;
-		// 	}
-		// 	try {
-		// 		Thread.sleep(10);
-		// 	} catch (InterruptedException e) {
-		// 		// Do nothing
-		// 	}
+		//  if (System.currentTimeMillis() > endTime) {
+		//      System.out.println("Method Timed Out");
+		//      break;
+		//  }
+		//  try {
+		//      Thread.sleep(10);
+		//  } catch (InterruptedException e) {
+		//      // Do nothing
+		//  }
 		// }
 
 		// return thread.move;
@@ -264,9 +264,6 @@ public class Battle {
 					data.infectCount++;
 				}
 				break;
-			default:
-				break;
-
 			}
 		}
 	}
@@ -278,31 +275,40 @@ public class Battle {
 		return frame >= maxFrame;
 	}
 
+	/**
+	 * Return the winner of the battle if the battle is over.
+	 * @return {String} ownerName.critterName
+	 */
 	public String getWinner() {
-		Class<? extends Critter> winner = null;
-		int winnerScore = 0;
+		String winner = null;
+		int winnerScore = -1;
 
-		Map<Class<? extends Critter>, Integer> scores = getScores();
-		for (Class<? extends Critter> C : scores.keySet()) {
-			if (scores.get(C) >= winnerScore) {
-				winnerScore = scores.get(C);
-				winner = C;
+		Map<String, Integer> scores = getScores();
+		for (String critter : scores.keySet()) {
+			if (scores.get(critter) >= winnerScore) {
+				winnerScore = scores.get(critter);
+				winner = critter;
 			}
 		}
 
 		return critterNames.get(winner);
 	}
 
-	private Map<Class<? extends Critter>, Integer> getScores() {
-		Map<Class<? extends Critter>, Integer> scores = new HashMap<Class<? extends Critter>, Integer>();
+	/**
+	 * Return the scores
+	 * @return [description]
+	 */
+	public Map<String, Integer> getScores() {
+		Map<String, Integer> scores = new HashMap<String, Integer>();
 		for (Class<? extends Critter> C : critters) {
-			scores.put(C, 0);
+			scores.put(critterNames.get(C), 0);
 		}
 
 		for (int x = 0; x < grid.length; x++) {
 			for (int y = 0; y < grid.length; y++) {
 				if (grid[x][y] != null) {
-					scores.put(grid[x][y].getClass(), scores.get(grid[x][y].getClass()) + 1);
+					String name = critterNames.get(grid[x][y].getClass());
+					scores.put(name, scores.get(name) + 1);
 				}
 			}
 		}

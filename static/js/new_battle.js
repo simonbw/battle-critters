@@ -1,5 +1,6 @@
-newBattleModule = (function() {
-	// number of critters to request
+var newBattleModule = (function() {
+	var module = {}
+		// number of critters to request
 	var LOADING_LIMIT = 32;
 	// if currently waiting for response
 	var request_out = false;
@@ -245,4 +246,13 @@ newBattleModule = (function() {
 			}
 		});
 	});
+
+	// add public functions
+	module['deselectCritter'] = deselectCritter;
+	module['loadCritters'] = loadCritters;
+	module['refreshDisplay'] = refreshDisplay;
+	module['requestCritters'] = requestCritters;
+	module['selectCritter'] = selectCritter;
+	module['setTab'] = setTab;
+	return module;
 })();

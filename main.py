@@ -2,8 +2,6 @@
 Start the development server.
 """
 
-print "\n====================\nMAIN IS LOADING \n====================\n"
-
 import contextlib
 import logging
 import os
