@@ -30,12 +30,22 @@
 	
 	// the error mark bar
 	.errormarks {
-		width: 10px;
+		width: 12px;
+		text-align: center;
 	}
 
 	// the actual error mark
 	.errormark {
-		color: #F00;
+		margin: 0px;
+		padding: 0px;
+		line-height: 100%;
+		img {
+			margin: 0px;
+			max-height: 10px;
+			max-width: 10px;
+			padding: 0px;
+			vertical-align: middle;
+		}
 	}
 
 	.CodeMirror-selected {

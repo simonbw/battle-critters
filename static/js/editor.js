@@ -157,9 +157,10 @@ editorModule = (function() {
 	function processCompilerOutput(output) {
 		clearErrors();
 		for (var n in output) {
-			if (n != 'full') {
-				console.log(n, output[n]);
-				markLineError(parseInt(n - 1), output[n]);
+			if (output.hasOwnProperty(n)) {
+				if (n != 'full') {
+					markLineError(parseInt(n - 1), output[n]);
+				}
 			}
 		}
 	}
@@ -170,8 +171,13 @@ editorModule = (function() {
 	function markLineError(n, message) {
 		editor.addLineClass(n, 'background', 'compile-error');
 		var marker = document.createElement("div");
-		marker.innerHTML = '●';
-		marker.title = message;
+		var img = document.createElement("img");
+		// marker.innerHTML = '●';
+		img.src = ERRORMARK_URL;
+		img.width = 10;
+		img.height = 10;
+		img.title = message;
+		marker.appendChild(img);
 		marker.classList.add("errormark")
 		editor.setGutterMarker(n, "errormarks", marker);
 		errors.push({
@@ -179,7 +185,7 @@ editorModule = (function() {
 			'message': message
 		});
 		if (FOLD_ERRORS) {
-			$('.errormarks').css('width', '10px');
+			$('.errormarks').css('width', '');
 		}
 	}
 
@@ -242,21 +248,35 @@ editorModule = (function() {
 
 		// Extra key bindings
 		var keymap = {
-			"Ctrl-S": function(instance) {
+			"Ctrl-S": function() {
 				save();
 				return false;
 			},
-			"Cmd-S": function(instance) {
+			"Cmd-S": function() {
 				save();
 				return false;
 			},
-			"Ctrl-B": function(instance) {
+			"Ctrl-B": function() {
 				compile();
 				return false;
 			},
-			"Cmd-B": function(instance) {
+			"Cmd-B": function() {
 				compile();
 				return false;
+			},
+			"Ctrl-Alt-F": function() {
+				if (editor.somethingSelected) {
+					var selections = editor.listSelections();
+					for (var i = 0; i < selections.length; i++) {
+						console.log(selections[i]);
+						console.log(selections.fromt());
+						console.log(selections.to());
+					}
+				} else {
+					for (var i = 0; i < editor.lineCount(); i++) {
+						editor.indentLine(i, 'smart');
+					}
+				}
 			}
 		}
 
@@ -289,7 +309,6 @@ editorModule = (function() {
 				setTimeout(autosave, AUTOSAVE_WAIT);
 			}
 		});
-
 
 		$('#helpbox #tabbuttonbar').on('click', '.tabbutton', function(event) {
 			event.preventDefault();

@@ -11,6 +11,7 @@ import traceback
 import sqlite3
 from flask import Flask, g, redirect, request, session, render_template, Blueprint, url_for, Markup, abort, jsonify
 
+from util import json_service, login_required, admin_required, require_user, error_checked
 import users
 import util
 import editor
@@ -18,6 +19,7 @@ import editor
 RANKED_HEIGHT = 100
 RANKED_WIDTH = 100
 RANKED_LENGTH = 1000
+RANKED_CRITTERS = 5 # number of critters in ranked battle
 MAX_LENGTH = 10000
 MAX_HEIGHT = 500
 MAX_WIDTH = 500
@@ -123,7 +125,7 @@ def recent_battles_page():
 	return render_template('recent_battles.html', battles=battles)
 
 @battles_app.route('/<int:battle_id>')
-@util.error_checked
+@error_checked
 def view_battle(battle_id):
 	"""View a battle."""
 	battle = Battle.from_id(battle_id)
@@ -144,7 +146,7 @@ def get_frames(battle_id):
 	return battle.get_frames(start, end)
 	
 @battles_app.route('/custom')
-@util.error_checked
+@error_checked
 def custom_battle_page():
 	"""The page for creating a new custom battle."""
 	critter_ids = []
@@ -153,7 +155,7 @@ def custom_battle_page():
 	return render_template('custom_battle.html', critter_ids=critter_ids)
 	
 @battles_app.route('/ranked')
-@util.error_checked
+@error_checked
 def ranked_battle_page():
 	"""The page for creating a new ranked battle."""
 	critter_ids = []
@@ -162,40 +164,36 @@ def ranked_battle_page():
 	return render_template('ranked_battle.html', critter_ids=critter_ids)
 
 @battles_app.route('/request_custom', methods=["POST"])
+@json_service
 def request_custom_battle():
 	"""Request a new custom battle."""
-	try:
-		length = int(request.form['length'])
-		width = int(request.form['width'])
-		height = int(request.form['height'])
+	length = int(request.form['length'])
+	width = int(request.form['width'])
+	height = int(request.form['height'])
 
-		# check values
-		if (length < MIN_LENGTH or length > MAX_LENGTH):
-			raise ValueError("length must be between {min} and {max}".format(min=MIN_LENGTH, max=MAX_LENGTH))
-		if (height < MIN_HEIGHT or height > MAX_HEIGHT):
-			raise ValueError("height must be between {min} and {max}".format(min=MIN_HEIGHT, max=MAX_HEIGHT))
-		if (width < MIN_WIDTH or width > MAX_WIDTH):
-			raise ValueError("width must be between {min} and {max}".format(min=MIN_WIDTH, max=MAX_WIDTH))
+	# check values
+	if (length < MIN_LENGTH or length > MAX_LENGTH):
+		raise ValueError("length must be between {min} and {max}".format(min=MIN_LENGTH, max=MAX_LENGTH))
+	if (height < MIN_HEIGHT or height > MAX_HEIGHT):
+		raise ValueError("height must be between {min} and {max}".format(min=MIN_HEIGHT, max=MAX_HEIGHT))
+	if (width < MIN_WIDTH or width > MAX_WIDTH):
+		raise ValueError("width must be between {min} and {max}".format(min=MIN_WIDTH, max=MAX_WIDTH))
 
-		critters = [Critter.from_id(critter_id) for critter_id in request.form.getlist('critters[]')]
-
-		battle_id = create_battle(length, width, height, critters, False)
-		return jsonify({'success': True, 'battle_id': battle_id, 'url': url_for('battles_app.view_battle', battle_id=battle_id)})
-	except Exception as e:
-		traceback.print_exc(file=sys.stdout)
-		return jsonify({'success': False, 'error': repr(e)})
+	critters = [Critter.from_id(critter_id) for critter_id in request.form.getlist('critters[]')]
+	battle_id = create_battle(length, width, height, critters, False)
+	return {'battle_id': battle_id, 'url': url_for('battles_app.view_battle', battle_id=battle_id)}
 
 @battles_app.route('/request_ranked', methods=["POST"])
+@json_service
 def request_ranked_battle():
 	"""Request a new ranked battle."""
-	try:
-		critters = [Critter.from_id(critter_id) for critter_id in request.form.getlist('critters[]')]
+	critter = Critter.from_id(request.form['critter_id'])
+	query = "SELECT id FROM critters WHERE id != ? ORDER BY ABS(score - ?), RANDOM() LIMIT ?"
+	rows = g.db.execute(query, (critter.id, critter.score, RANKED_CRITTERS))
+	critters = [critter] + [Critter.from_id(row['id']) for row in rows]
+	battle_id = create_battle(RANKED_LENGTH, RANKED_WIDTH, RANKED_HEIGHT, critters, True)
+	return {'battle_id': battle_id, 'url': url_for('battles_app.view_battle', battle_id=battle_id)}
 
-		battle_id = create_battle(RANKED_LENGTH, RANKED_WIDTH, RANKED_HEIGHT, critters, True)
-		return jsonify({'success': True, 'battle_id': battle_id, 'url': url_for('battles_app.view_battle', battle_id=battle_id)})
-	except Exception as e:
-		traceback.print_exc(file=sys.stdout)
-		return jsonify({'success': False, 'error': repr(e)})
 
 def create_battle(length, height, width, critters, ranked):
 	"""Actually create a new battle"""

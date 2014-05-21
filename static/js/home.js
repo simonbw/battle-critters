@@ -177,7 +177,21 @@ home = (function() {
 				});
 				old.slideDown(100);
 			});
+			return false;
+		});
 
+		$("#critterlist").on('click', '.critter .actionlist .rankedbattle', function(event) {
+			var critter_id = parseInt($(this).parents('.critter').data('critter_id'));
+			$.post(RANKED_BATTLE_URL, {
+				'critter_id': critter_id
+			}, function(response_data) {
+				if (response_data.success) {
+					window.location.href = response_data.url;
+				} else {
+					alert(response_data.error);
+				}
+			});
+			return false;
 		});
 
 		$("#critterlist").on('click', '.critter .actionlist .realdelete', function(event) {

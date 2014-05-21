@@ -7,6 +7,7 @@
 	SAVE_URL = "{{critter.get_url('save')|safe}}";
 	COMPILE_URL = "{{critter.get_url('compile')|safe}}";
 	REVERT_URL = "{{critter.get_url('revert')|safe}}";
+	ERRORMARK_URL = "{{url_for('static', filename='images/errormark.png')}}";
 </script>
 <script type="text/javascript" src="{{url_for('static', filename='codemirror/lib/codemirror.js')}}"></script>
 <script type="text/javascript" src="{{url_for('static', filename='codemirror/addon/comment/comment.js')}}"></script>
