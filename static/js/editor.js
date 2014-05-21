@@ -1,10 +1,11 @@
 /**
  * This module deals with the text editor.
  */
-editorModule = new(function() {
+editorModule = (function() {
 	// SETTINGS //
 	var AUTOSAVE = true; // if editor should automatically save
-	var AUTOSAVE_WAIT = 500; // milliseconds idle before autosaving.
+	var AUTOCOMPILE = false; // if editor should automatically compile
+	var AUTOSAVE_WAIT = 2000; // milliseconds idle before autosaving.
 	var BOTTOM_PADDING = 100; // attempted padding at the bottom of the screen
 	var FOLD_ERRORS = true; // whether or not to move the gutter for error markers
 
@@ -55,6 +56,7 @@ editorModule = new(function() {
 	function compile() {
 		if (!compiling) {
 			compiling = true;
+			// Is this needed?
 			editor.setOption("readOnly", true);
 			f = function(savedata) {
 				// console.log("compiling " + COMPILE_URL);
@@ -87,6 +89,7 @@ editorModule = new(function() {
 					}
 				}, 'json');
 			}
+			// save if needed, else compile
 			if (saved)
 				f(null);
 			else
@@ -119,7 +122,11 @@ editorModule = new(function() {
 	function autosave() {
 		edits -= 1;
 		if (edits === 0) {
-			save();
+			if (AUTOCOMPILE) {
+				compile();
+			} else {
+				save();
+			}
 		}
 
 		// TODO: autocompile?
@@ -294,9 +301,9 @@ editorModule = new(function() {
 			$('.errormarks').css('width', '0px');
 		}
 
+		// I'm not quite sure why I call resize so many times...
 		resetHeight();
 		$(window).resize(resetHeight);
-
 		resetHeight();
 
 	});

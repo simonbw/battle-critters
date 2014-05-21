@@ -1,4 +1,4 @@
-home = new(function() {
+home = (function() {
 	// map critter ids to critter datas
 	var critters_loaded = [];
 

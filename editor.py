@@ -173,6 +173,7 @@ class Critter():
 		return row[0]
 
 	def get_url(self, action="view"):
+		"""Return a url for any type of view."""
 		if action == 'view':
 			return url_for('editor_app.view_file', owner=self.owner.username, filename=self.name)
 		elif action == 'edit':

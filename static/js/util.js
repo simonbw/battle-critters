@@ -12,16 +12,19 @@ var K_SHIFT = 16
 var K_SPACE = 32
 
 // The module for doing nice things
-util = new (function() {
+util = (function() {
+	// the public object
 
+	var module = {};
 	/**
 	 * Return a string containing the time, ready for insertion into HTML
 	 */
-	this.time = function() {
+	module.time = function() {
 		var date = new Date();
 		return '<span id="time">' + date.getHours() + ':' + date.getMinutes() + ':' + date.getSeconds() + '</span>';
 	}
 
 	console.log("util loaded");
 
+	return module;
 })();

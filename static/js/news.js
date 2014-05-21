@@ -1,4 +1,4 @@
-newsModule = new(function() {
+newsModule = (function() {
 	NEWS_PAGE = 0;
 
 	function reload_news() {

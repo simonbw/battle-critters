@@ -1,4 +1,4 @@
-newBattleModule = new(function() {
+newBattleModule = (function() {
 	// number of critters to request
 	var LOADING_LIMIT = 32;
 	// if currently waiting for response
