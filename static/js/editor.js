@@ -265,12 +265,12 @@ editorModule = (function() {
 				return false;
 			},
 			"Ctrl-Alt-F": function() {
-				if (editor.somethingSelected) {
+				if (editor.somethingSelected()) {
 					var selections = editor.listSelections();
 					for (var i = 0; i < selections.length; i++) {
-						console.log(selections[i]);
-						console.log(selections.fromt());
-						console.log(selections.to());
+						for (var j = selections[i].head.line; j <= selections[i].anchor.line; j++) {
+							editor.indentLine(j, 'smart');
+						}
 					}
 				} else {
 					for (var i = 0; i < editor.lineCount(); i++) {

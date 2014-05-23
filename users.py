@@ -145,7 +145,6 @@ def create_user(username, raw_password, admin=False):
 			raise Exception("Invalid Username")
 		password = hash_password(raw_password, username)
 		g.db.execute('INSERT INTO users (username, password, admin) VALUES (?,?,?);', (username, password, int(admin)))
-		g.db.commit()
 
 		critter_dir = os.path.join('.', 'java', 'bin', 'battlecritters', 'critters', username)
 		os.mkdir(critter_dir)
@@ -163,7 +162,6 @@ def delete_user(username):
 	user = User.from_username(username)
 	try:
 		g.db.execute('DELETE FROM users WHERE username=?', (username,))
-		g.db.commit()
 	except Exception:
 		pass
 	try:

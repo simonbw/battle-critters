@@ -76,11 +76,11 @@ def reset_all():
 				for title, content in [("First","Content of the first post"),("Second", "content of the second post")]:
 					g.db.execute("INSERT INTO news (title,date,content) VALUES (?,?,?)", (title,time.time(),content))
 					time.sleep(0.01)
-				g.db.commit();
 			except:
 				traceback.print_exc(file=sys.stdout)
 				errored = True
 
+			g.db.commit();
 		if errored:
 			raise Exception()
 

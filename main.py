@@ -83,7 +83,7 @@ def before_first_request():
 
 @app.before_request
 def before_request():
-	"""Called before the request is routed. Sets up the link to the database and java server."""
+	"""Called before each request is routed. Sets up the link to the database and java server."""
 
 	# recompile the scss every request if not in production
 	if not PRODUCTION:
@@ -110,6 +110,13 @@ def before_request():
 			g.user = User.from_username(session['username'])
 		except LookupError as e:
 			login.logout()
+
+@app.after_request
+def after_request(response):
+	"""Called at the end of every request. Commits changes to the database."""
+	if 'db' in g :
+		g.db.commit()
+	return response
 
 @app.teardown_request
 def teardown_request(exception):

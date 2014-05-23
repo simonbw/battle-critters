@@ -112,7 +112,6 @@ class Critter(object):
 		current_time = time.time()
 		zcontent = zlib.compress(self._content, COMPRESSION_LEVEL)
 		g.db.execute("UPDATE critters SET content=?, last_save_time=? WHERE id = ?;", (zcontent, current_time, self.id))
-		g.db.commit()
 		self.last_save_time = current_time
 
 	@property
@@ -127,7 +126,6 @@ class Critter(object):
 		self._compiled_content = value
 		zcontent = zlib.compress(value, COMPRESSION_LEVEL)
 		g.db.execute("UPDATE critters SET compiled_content=? WHERE id = ?;", (zcontent, self.id))
-		g.db.commit()
 	
 	@property
 	def score(self):
@@ -140,7 +138,6 @@ class Critter(object):
 	def score(self, value):
 		self._score = value
 		g.db.execute("UPDATE critters SET score=? WHERE name = ? AND owner_id = ?;", (self._score, self.name, self.owner_id))
-		g.db.commit()
 
 	def get_all_battles(self):
 		"""Return the list of battles this critter been in"""
@@ -222,7 +219,6 @@ class Critter(object):
 			current_time = time.time()
 			self.compiled_content = self.content
 			g.db.execute("UPDATE critters SET last_compile_time = ? WHERE id = ?;", (current_time, self.id))
-			g.db.commit()
 			return {'success': True}
 		except subprocess.CalledProcessError as e:
 			errors = parse_compiler_output(e.output)
@@ -239,7 +235,6 @@ class Critter(object):
 		"""Delete the critter"""
 		# delete from database
 		g.db.execute("DELETE FROM critters WHERE id = ?;", (self.id,))
-		g.db.commit()
 
 		# remove compiled file
 		path = os.path.join('.', 'java', 'bin', 'critters', owner, filename + '.class')
@@ -433,7 +428,6 @@ def create_file(owner, filename, content=None):
 		raise Exception("That Critter already exists")
 	query = "INSERT INTO critters (creation_time, last_save_time, name, owner_id, content, score) VALUES (?, ?, ?, ?, ?, ?)"
 	g.db.execute(query, (current_time, current_time, filename, owner.id, content, ranking.DEFAULT_SCORE))
-	g.db.commit()
 
 	Critter.from_name(filename, owner_id=owner.id).compile()
 

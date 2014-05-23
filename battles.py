@@ -250,8 +250,14 @@ def create_battle(length, height, width, critters, ranked):
 
 	# TODO: update rankings
 	if ranked or True:
-		for i, (score, critter) in enumerate(sorted_scores):
-			# this sucks:
-			g.db.execute("UPDATE critters SET score = score + ? WHERE id = ?", (score, critter.id))
-	g.db.commit()
+		n = len(sorted_scores)
+		D = 10
+		K = 50
+		for remaining, critter in sorted_scores:
+			expected = 0
+			for other_remaining, other in sorted_scores:
+				1.0 / (1 + 10 ** (other.score - critter.score))
+			expected /= n * (n - 1) / 2.0
+			actual = 1.0 / winners.length if remaining == sorted_scores[0][0] else 0
+			critter.score += K * (actual - expected)
 	return battle_id

@@ -50,7 +50,6 @@ def news():
 			title = request.form['title']
 			content = request.form['content']
 			g.db.execute("INSERT INTO news (title, date, content) VALUES (?,?,?)", (title, time.time(), content))
-			g.db.commit()
 			return "success"
 	except Exception as e:
 		traceback.print_exc()
