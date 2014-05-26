@@ -69,7 +69,7 @@ class Battle(object):
 
 	def get_winner(self):
 		"""Return the Critter that won the battle, or None if no winner."""
-		query = "SELECT critter_id FROM battle_critters WHERE battle_id=? ORDER BY score LIMIT 1"
+		query = "SELECT critter_id FROM battle_critters WHERE battle_id=? ORDER BY place LIMIT 1"
 		rows = g.db.execute(query, (self.id,)).fetchall()
 		if len(rows) > 0:
 			return Critter.from_id(rows[0]['critter_id'])
