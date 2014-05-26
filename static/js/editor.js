@@ -2,12 +2,16 @@
  * This module deals with the text editor.
  */
 editorModule = (function() {
+	var module = {};
+
 	// SETTINGS //
 	var AUTOSAVE = true; // if editor should automatically save
 	var AUTOCOMPILE = false; // if editor should automatically compile
 	var AUTOSAVE_WAIT = 2000; // milliseconds idle before autosaving.
 	var BOTTOM_PADDING = 100; // attempted padding at the bottom of the screen
 	var FOLD_ERRORS = true; // whether or not to move the gutter for error markers
+	var SLIDE_SPEED = 150; // how fast to slide things
+	var SLIDE_SPEED_HELPBOX = 300; // how fast to slide the helpbox
 
 	// variables 
 	var compiling = false;
@@ -37,7 +41,7 @@ editorModule = (function() {
 				} else {
 					console.log(data.error);
 					$("#errordisplay").html(data);
-					$("#errordisplay").slideDown(150, function() {
+					$("#errordisplay").slideDown(SLIDE_SPEED, function() {
 						resetHeight();
 					});
 					$('#savestatus').html("Error Saving");
@@ -73,14 +77,14 @@ editorModule = (function() {
 						$('#statusbar').addClass('compiled');
 						$('#statusbar').removeClass('error');
 						$("#errordisplay").html("");
-						$("#errordisplay").slideUp(100, function() {
+						$("#errordisplay").slideUp(SLIDE_SPEED, function() {
 							resetHeight();
 						});
 						clearErrors();
 					} else {
 						// console.log("Compile Error: " + data);
 						$("#errordisplay").html(data.error);
-						$("#errordisplay").slideDown(150, function() {
+						$("#errordisplay").slideDown(SLIDE_SPEED, function() {
 							resetHeight();
 						});
 						$('#compilestatus').html("Compilation Error");
@@ -108,7 +112,7 @@ editorModule = (function() {
 				$('#statusbar').addClass('compiled');
 				$('#statusbar').removeClass('error');
 				$("#errordisplay").html("");
-				$("#errordisplay").slideUp(100, function() {
+				$("#errordisplay").slideUp(SLIDE_SPEED, function() {
 					resetHeight();
 				});
 				clearErrors();
@@ -195,8 +199,9 @@ editorModule = (function() {
 	function clearErrors() {
 		for (var i = 0; i < errors.length; i++) {
 			editor.removeLineClass(errors[i].lineNumber, 'background', 'compile-error');
-			editor.setGutterMarker(errors[i].lineNumber, "errormarks", null);
+			editor.setGutterMarker(errors[i].lineNumber, 'errormarks', null);
 		}
+		editor.clearGutter('errormarks');
 		errors = [];
 		if (FOLD_ERRORS) {
 			$('.errormarks').css('width', '0px');
@@ -214,6 +219,46 @@ editorModule = (function() {
 		resetHeight();
 	}
 
+	/**
+	 * Toggle the helpbox
+	 */
+	function toggleHelpbox() {
+		($('#helpbox').is(':visible')) ? closeHelpbox() : openHelpbox();
+	}
+
+	/**
+	 * Open the helpbox
+	 */
+	function openHelpbox(speed) {
+		speed = (speed === undefined) ? SLIDE_SPEED_HELPBOX : speed;
+		var helpbox = $('#helpbox');
+		$('div.CodeMirror').css({
+			'width': '',
+			'border-right-width': 0
+		});
+		helpbox.show();
+		helpbox.animate({
+			'left': 0
+		}, speed);
+	}
+
+	/**
+	 * Close the helpbox
+	 */
+	function closeHelpbox(speed) {
+		speed = (speed === undefined) ? SLIDE_SPEED_HELPBOX : speed;
+		var helpbox = $('#helpbox');
+		helpbox.animate({
+			'left': helpbox.outerWidth()
+		}, speed, function() {
+			$(this).hide();
+			$('div.CodeMirror').css({
+				'width': '100%',
+				'border-right-width': 1
+			});
+		});
+	}
+
 	// init
 	$(document).ready(function() {
 
@@ -222,7 +267,7 @@ editorModule = (function() {
 		// This should probably be designed a little better.
 		$("#errordisplay").click(function() {
 			clearErrors();
-			$(this).slideUp(100, function() {
+			$(this).slideUp(SLIDE_SPEED, function() {
 				resetHeight();
 			});
 		});
@@ -240,6 +285,8 @@ editorModule = (function() {
 				$("#autosavebutton").html("Enable Autosave");
 			}
 		});
+
+		$("#togglehelpboxbutton").click(toggleHelpbox);
 
 		$("#savestatus").html("Opened at " + util.time());
 		$("#savebutton").click(save);
@@ -326,4 +373,14 @@ editorModule = (function() {
 		resetHeight();
 
 	});
+
+	// make things public
+	module.openHelpbox = openHelpbox;
+	module.closeHelpbox = closeHelpbox;
+	module.toggleHelpbox = toggleHelpbox;
+	module.helpTab = helpTab;
+	module.clearErrors = clearErrors;
+	module.markLineError = markLineError;
+
+	return module;
 })();

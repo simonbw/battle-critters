@@ -85,10 +85,11 @@
                                   font-weight: normal;
                                   font-style: italic; }
 #editorbox {
+  box-shadow: 0px 3px 16px black;
+  overflow: hidden;
   margin-top: 50px;
   margin-left: 100px;
-  margin-right: 100px;
-  box-shadow: 0px 3px 16px black; }
+  margin-right: 100px; }
   #editorbox #toolbar, #editorbox #statusbar {
     padding-top: 4px;
     padding-bottom: 4px;
@@ -127,6 +128,9 @@
         width: 100%;
         margin-top: 2px; }
         #editorbox #toolbar .item {
+          -moz-user-select: none;
+          -webkit-user-select: none;
+          -ms-user-select: none;
           margin: 0px;
           padding: 0px;
           display: inline;
@@ -153,7 +157,7 @@
                   #editorbox #toolbar .item a:active {
                     background: #606060; }
   #editorbox #middlebox {
-    background: #CFCFCF; }
+    background: #141414; }
     #editorbox #statusbar {
       border-bottom-left-radius: 8px;
       border-bottom-right-radius: 8px; }
@@ -181,13 +185,13 @@
     height: auto; }
 
 #helpbox {
-  margin: 0px;
+  background: #CFCFCF;
   float: right;
-  width: 30%;
+  margin: 0px;
   overflow-y: auto;
-  box-sizing: border-box;
-  -moz-box-sizing: border-box;
   padding: 10px;
+  position: relative;
+  width: 30%;
   font-family: Gen-light, Helvetica, sans-serif;
   font-size: 14px; }
   #helpbox::-webkit-scrollbar {
@@ -243,7 +247,6 @@
       -moz-user-select: none;
       -webkit-user-select: none;
       -ms-user-select: none;
-      cursor: default;
       cursor: pointer;
       float: left;
       margin: 0px;
@@ -285,13 +288,13 @@
     right: 0px;
     bottom: 0px;
     background: #141414;
-    color: #888;
+    color: #777;
     z-index: 15;
     padding: 0.1em 0.8em;
     overflow: hidden; }
 
     .CodeMirror-dialog-top {
-      border-top: 1px solid #888; }
+      border-top: 1px solid #777; }
 
       .CodeMirror-dialog-bottom {
         bottom: 0; }
@@ -308,7 +311,7 @@
             height: 100%;
             background: none;
             border: 1px solid #3A3A3A;
-            color: #888; }
+            color: #777; }
             .CodeMirror-dialog button:focus {
               background: #3A3A3A;
               color: #BBB; }

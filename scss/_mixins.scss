@@ -8,7 +8,7 @@ $light_bg3: #EEE;
 $light_bg4: #8B8B8B;
 
 $accent1: #3A3A3A;
-$accent2: #888;
+$accent2: #777;
 $accent3: #BBB;
 
 $module_spacing: 14px;
@@ -24,7 +24,7 @@ $gutter_text: $accent3;
 	-moz-user-select: none;
 	-webkit-user-select: none;
 	-ms-user-select: none;
-	cursor: default;
+	// cursor: default;
 }
 
 @mixin borderbox() {

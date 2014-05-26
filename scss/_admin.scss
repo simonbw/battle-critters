@@ -1,0 +1,15 @@
+@import 'fonts';
+@import 'mixins';
+
+section.admin {
+	background: $light_bg2;
+	padding: $module_spacing;
+
+	.tools {
+		list-style: none;
+		padding: 0px;
+		margin: 0px;
+		float: left;
+		width: 25%;
+	}
+}

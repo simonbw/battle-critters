@@ -1,8 +1,10 @@
+#!/usr/bin/env python
 """
 Reset the server. Wipes the database and clears all the user files.
 """
 
 import os
+import ranking
 import shutil
 import sqlite3
 import sys
@@ -53,9 +55,6 @@ def reset_all():
 				print "Creating default users..."
 				users.create_user("admin", "admin", True)
 				users.create_user("example", "example", False)
-				# for name in ["bob", "joe", "example"]:
-				# 	print name
-				# 	u = users.create_user(name, name)
 			except:
 				traceback.print_exc(file=sys.stdout)
 				errored = True
@@ -63,10 +62,11 @@ def reset_all():
 			try:
 				print "Creating default critters..."
 				example = users.User.from_username('example')
-				editor.create_file(example, 'Husky')
-				editor.create_file(example, 'Bear')
-				editor.create_file(example, 'Lion')
-				editor.create_file(example, 'Flytrap')
+
+				path = os.path.join('static', 'examplecritters')
+				for filename in os.listdir(path):
+					with open(os.path.join(path, filename), 'r') as f:
+						editor.create_file(example, filename[:-5], f.read())
 			except:
 				traceback.print_exc(file=sys.stdout)
 				errored = True
@@ -87,5 +87,23 @@ def reset_all():
 	except Exception as e:
 		traceback.print_exc(file=sys.stdout)
 
+def reset_scores():
+	import editor
+	import main
+	from main import app
+
+	with app.app_context():
+		print "resetting scores"
+		g.db = database.connect_db()
+		g.db.row_factory = sqlite3.Row
+		g.db.execute("UPDATE critters SET score = ?", (ranking.DEFAULT_SCORE,))
+		g.db.commit()
+
 if __name__ == "__main__":
-	reset_all()
+	args = {a for a in sys.argv}
+	if '-s' in args or '--scores' in args:
+		reset_scores()
+	if '-a' in args or '--all' in args:
+		reset_all()
+	else:
+		print "no args given"

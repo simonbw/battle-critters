@@ -84,6 +84,15 @@
                                   src: url('/static/fonts/leaguegothic-condensed-italic-webfont.woff');
                                   font-weight: normal;
                                   font-style: italic; }
+section.admin {
+  background: #AAA;
+  padding: 14px; }
+  section.admin .tools {
+    list-style: none;
+    padding: 0px;
+    margin: 0px;
+    float: left;
+    width: 25%; }
 #abovebar {
   background: #AAA;
   padding: 4px;
@@ -156,7 +165,6 @@
       -moz-user-select: none;
       -webkit-user-select: none;
       -ms-user-select: none;
-      cursor: default;
       background: #EEE;
       list-style: none;
       overflow: hidden;
@@ -164,7 +172,8 @@
       #dashboard div.critters #critterlist > li:not(:last-of-type) {
         border-bottom: 1px solid #e1e1e1; }
         #dashboard div.critters #critterlist > li:last-of-type {
-          padding: 0px; }
+          padding: 0px;
+          margin: 0px; }
           #dashboard div.critters #critterlist > li:last-of-type .nameinput {
             border: 1px solid transparent;
             display: block;
@@ -187,6 +196,7 @@
             #dashboard div.critters #critterlist > li:last-of-type .newcritterbutton:hover {
               background: #e9e9e9; }
               #dashboard div.critters #critterlist > li:last-of-type .newcritterbutton:active {
+                position: static;
                 background: #e1e1e1;
                 outline: none; }
       #dashboard div.critters #critterlist > li:first-child {
@@ -255,10 +265,11 @@
                 background: #D00;
                 color: #FEFEFE; }
 #editorbox {
+  box-shadow: 0px 3px 16px black;
+  overflow: hidden;
   margin-top: 50px;
   margin-left: 100px;
-  margin-right: 100px;
-  box-shadow: 0px 3px 16px black; }
+  margin-right: 100px; }
   #editorbox #toolbar, #editorbox #statusbar {
     padding-top: 4px;
     padding-bottom: 4px;
@@ -297,6 +308,9 @@
         width: 100%;
         margin-top: 2px; }
         #editorbox #toolbar .item {
+          -moz-user-select: none;
+          -webkit-user-select: none;
+          -ms-user-select: none;
           margin: 0px;
           padding: 0px;
           display: inline;
@@ -323,7 +337,7 @@
                   #editorbox #toolbar .item a:active {
                     background: #606060; }
   #editorbox #middlebox {
-    background: #CFCFCF; }
+    background: #141414; }
     #editorbox #statusbar {
       border-bottom-left-radius: 8px;
       border-bottom-right-radius: 8px; }
@@ -351,13 +365,13 @@
     height: auto; }
 
 #helpbox {
-  margin: 0px;
+  background: #CFCFCF;
   float: right;
-  width: 30%;
+  margin: 0px;
   overflow-y: auto;
-  box-sizing: border-box;
-  -moz-box-sizing: border-box;
   padding: 10px;
+  position: relative;
+  width: 30%;
   font-family: Gen-light, Helvetica, sans-serif;
   font-size: 14px; }
   #helpbox::-webkit-scrollbar {
@@ -413,7 +427,6 @@
       -moz-user-select: none;
       -webkit-user-select: none;
       -ms-user-select: none;
-      cursor: default;
       cursor: pointer;
       float: left;
       margin: 0px;
@@ -455,13 +468,13 @@
     right: 0px;
     bottom: 0px;
     background: #141414;
-    color: #888;
+    color: #777;
     z-index: 15;
     padding: 0.1em 0.8em;
     overflow: hidden; }
 
     .CodeMirror-dialog-top {
-      border-top: 1px solid #888; }
+      border-top: 1px solid #777; }
 
       .CodeMirror-dialog-bottom {
         bottom: 0; }
@@ -478,7 +491,7 @@
             height: 100%;
             background: none;
             border: 1px solid #3A3A3A;
-            color: #888; }
+            color: #777; }
             .CodeMirror-dialog button:focus {
               background: #3A3A3A;
               color: #BBB; }
@@ -542,36 +555,25 @@
 
   #loginform {
     max-width: 250px; }
-    #loginform fieldset {
-      background: #EEE;
-      border-radius: 8px;
-      border: 2px solid #3A3A3A;
-      padding: 16px;
-      text-align: center; }
-      #loginform fieldset legend {
-        background: #EEE;
-        padding-left: 8px;
-        padding-right: 8px;
-        padding-top: 4px;
-        padding-bottom: 0px;
-        border-top: 2px solid #3A3A3A;
-        border-left: 1px solid #3A3A3A;
-        border-right: 1px solid #3A3A3A;
-        border-top-left-radius: 8px;
-        border-top-right-radius: 8px; }
-    #loginform input {
-      width: 100%;
-      box-sizing: border-box;
-      background: #FFF; }
-      #loginform input:focus {
-        background: #FFFFDD; }
     #loginform label {
       width: 100%;
-      display: block;
-      box-sizing: border-box; }
+      display: block; }
       #loginform button {
-        width: 100%;
-        box-sizing: border-box; }
+        display: block;
+        width: 100%; }
+
+#newuserform {
+  margin: auto;
+  max-width: 400px; }
+  #newuserform label {
+    clear: both;
+    float: left;
+    overflow: hidden;
+    text-align: right;
+    width: 100%; }
+    #newuserform label input {
+      width: 50%;
+      float: right; }
 #battlesettings {
   box-sizing: border-box;
   -moz-box-sizing: border-box;
@@ -596,7 +598,6 @@
       -moz-user-select: none;
       -webkit-user-select: none;
       -ms-user-select: none;
-      cursor: default;
       float: left;
       list-style: none;
       margin: 0px;
@@ -638,7 +639,6 @@
           -moz-user-select: none;
           -webkit-user-select: none;
           -ms-user-select: none;
-          cursor: default;
           background: none;
           color: #3A3A3A;
           cursor: pointer;
@@ -658,7 +658,7 @@
             color: #EEE; }
       #critterbox #critterselection .tablebox {
         background: #EEE;
-        border: 1px solid #888;
+        border: 1px solid #777;
         display: block;
         max-height: 400px;
         overflow-y: auto;
@@ -670,7 +670,7 @@
             #critterbox #critterselection .tablebox::-webkit-scrollbar-thumb {
               background: #AAA; }
               #critterbox #critterselection .tablebox div:first-child {
-                border-bottom: 1px solid #888;
+                border-bottom: 1px solid #777;
                 font-weight: bold;
                 overflow: hidden;
                 padding: 4px; }
@@ -689,7 +689,6 @@
             -moz-user-select: none;
             -webkit-user-select: none;
             -ms-user-select: none;
-            cursor: default;
             cursor: pointer;
             display: block;
             margin: 0px;
@@ -714,9 +713,8 @@
           -moz-user-select: none;
           -webkit-user-select: none;
           -ms-user-select: none;
-          cursor: default;
           background: #EEE;
-          border: 1px solid #888;
+          border: 1px solid #777;
           max-height: 200px;
           width: 100%; }
           #critterbox #critterselection .tablebox table th {
@@ -733,7 +731,7 @@
             padding: 2px;
             margin: 0px; }
             #critterbox #critterselection .tablebox table thead tr {
-              border-bottom: 1px solid #888;
+              border-bottom: 1px solid #777;
               background: #CFCFCF; }
               #critterbox #critterselection .tablebox table thead tr:hover {
                 background: #CFCFCF; }
@@ -757,7 +755,7 @@
       cursor: default;
       text-decoration: none;
       background: #b7b7b7;
-      color: #888; }
+      color: #777; }
       #createbutton.disabled:hover {
         background: #b7b7b7; }
 #newsbox {
@@ -823,11 +821,49 @@
   box-sizing: border-box; }
 
   button {
-    cursor: default; }
-    button a {
-      color: black;
-      cursor: default;
-      text-decoration: none; }
+    background: linear-gradient(#FFF, #DDD);
+    border-radius: 2px;
+    border: 1px solid #BBB;
+    color: #777;
+    cursor: pointer;
+    outline: none;
+    padding: 3px 12px;
+    text-decoration: none;
+    letter-spacing: -0.5px;
+    word-spacing: 1px;
+    text-transform: uppercase;
+    font-weight: bold; }
+    button:focus {
+      border: 1px solid #777; }
+      button:hover {
+        background: linear-gradient(#DDD, #FFF); }
+        button:active {
+          position: relative;
+          top: 1px; }
+
+fieldset {
+  background: #EEE;
+  border-radius: 8px;
+  border: 2px solid #3A3A3A;
+  padding: 16px;
+  text-align: center; }
+  fieldset input {
+    background: #FFF;
+    width: 100%;
+    margin: 2px; }
+    fieldset input:focus {
+      background: #FFFFDD; }
+  fieldset legend {
+    background: #EEE;
+    padding-left: 8px;
+    padding-right: 8px;
+    padding-top: 4px;
+    padding-bottom: 0px;
+    border-top: 2px solid #3A3A3A;
+    border-left: 1px solid #3A3A3A;
+    border-right: 1px solid #3A3A3A;
+    border-top-left-radius: 8px;
+    border-top-right-radius: 8px; }
 
 code {
   font-family: Inconsolas, monospace; }
@@ -842,12 +878,12 @@ code {
       font-size: 15px; }
 
       #flashes {
-        background: #FFFF00;
-        border-bottom: 1px dotted #FF0000;
-        border-top: 1px dotted #FF0000;
-        color: #FF0000;
-        margin-bottom: 20px;
+        background: #FFFF55;
+        border-bottom: 1px dotted #D00;
+        border-top: 1px dotted #D00;
+        color: #D00;
         margin: auto;
+        margin-bottom: 16px;
         padding: 4px; }
         #flashes li {
           list-style: none;
@@ -907,13 +943,11 @@ code {
         margin-top: 14px;
         padding-left: 14px;
         padding-right: 14px; }
-        #bodybox section.admin {
-          background: #AAA; }
-  #bodybox ul.list {
-    list-style: none;
-    margin: 0px;
-    padding-left: 10px;
-    li-list-style: none; }
+        #bodybox ul.list {
+          list-style: none;
+          margin: 0px;
+          padding-left: 10px;
+          li-list-style: none; }
 
 .right {
   float: right; }

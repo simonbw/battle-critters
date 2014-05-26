@@ -117,6 +117,7 @@ home = (function() {
 									place += 'th';
 								}
 								var text = place + ' place at ' + battle['pretty_time'];
+								text += battle['ranked'] ? ' (ranked)' : ' (unranked)';
 								battlelist.append($("<li>", {
 									'html': $("<a>", {
 										'text': text,

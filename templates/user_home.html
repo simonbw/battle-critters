@@ -45,14 +45,12 @@
 {% if (g.user.admin) %}
 <section class="admin">
 	<h2>Admin</h2>
-	<a href="{{url_for('users_app.list_users')}}">All Users</a>
-	<br />
-	<h3>Post News</h3>
-	<input name="title" id="newsformtitle" />
-	<br />
-	<textarea name="content" id="newsformcontent"></textarea>
-	<br />
-	<button id="postnewsbutton">Submit</button>
+	<ul class="tools">
+		<li><a href="{{url_for('users_app.list_users')}}">All Users</a></li>
+	</ul>
+	<ul class="tools">
+		<li><a href="{{url_for('users_app.list_users')}}">All Users</a></li>
+	</ul>
 </section>
 {% endif %}
 {% endblock %}

@@ -11,45 +11,30 @@
 
 #loginform {
 	max-width: 250px;
-	fieldset {
-		background: $light_bg3;
-		border-radius: $module_radius;
-		border: 2px solid $accent1;
-		padding: 16px;
-		text-align: center;
-
-		legend {
-			background: $light_bg3;
-			padding: {
-				left: 8px;
-				right: 8px;
-				top: 4px;
-				bottom: 0px;
-			}
-			border: {
-				top: 2px solid $accent1;
-				left: 1px solid $accent1;
-				right: 1px solid $accent1;
-			}
-			border-top-left-radius: $module_radius;
-			border-top-right-radius: $module_radius;
-		}
-	}
-	input {
-		width: 100%;
-		box-sizing: border-box;
-		background: #FFF;
-		&:focus {
-			background: #FFFFDD;
-		}
-	}
 	label {
 		width: 100%;
 		display: block;
-		box-sizing: border-box;
 	}
 	button {
+		display: block;
 		width: 100%;
-		box-sizing: border-box;
+	}
+}
+
+#newuserform {
+	margin: auto;
+	max-width: 400px;
+
+	label {
+		clear: both;
+		float: left;
+		overflow: hidden;
+		text-align: right;
+		width: 100%;
+
+		input {
+			width: 50%;
+			float: right;
+		}
 	}
 }

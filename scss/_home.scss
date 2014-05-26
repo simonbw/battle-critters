@@ -26,6 +26,7 @@
 			// new critter button
 			&:last-of-type {
 				padding: 0px;
+				margin: 0px;
 
 				.nameinput {
 					border: 1px solid transparent;
@@ -61,6 +62,7 @@
 					}
 
 					&:active {
+						position: static;
 						background: darken($light_bg3, 5%);
 						outline: none;
 					}
@@ -117,7 +119,6 @@
 		li {
 			margin: 0px;
 			padding: 2px;
-
 		}
 	}
 

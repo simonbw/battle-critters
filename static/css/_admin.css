@@ -84,29 +84,12 @@
                                   src: url('/static/fonts/leaguegothic-condensed-italic-webfont.woff');
                                   font-weight: normal;
                                   font-style: italic; }
-#loginbox {
-  float: right;
-  margin-left: 14px;
-  margin-right: 14px; }
-
-  #loginform {
-    max-width: 250px; }
-    #loginform label {
-      width: 100%;
-      display: block; }
-      #loginform button {
-        display: block;
-        width: 100%; }
-
-#newuserform {
-  margin: auto;
-  max-width: 400px; }
-  #newuserform label {
-    clear: both;
+section.admin {
+  background: #AAA;
+  padding: 14px; }
+  section.admin .tools {
+    list-style: none;
+    padding: 0px;
+    margin: 0px;
     float: left;
-    overflow: hidden;
-    text-align: right;
-    width: 100%; }
-    #newuserform label input {
-      width: 50%;
-      float: right; }
+    width: 25%; }

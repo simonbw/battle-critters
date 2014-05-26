@@ -42,14 +42,15 @@ class Critter(object):
 	"""A model for a Critter. Handles database comunication. To load a Critter, use one of the static methods."""
 
 	@staticmethod
-	def from_name(filename, owner=None, owner_id=None, owner_name=None, fail_silent=False):
+	def from_name(filename, owner=None, owner_id=None, owner_name=None, fail_silent=False, columns=[]):
 		"""Load a Critter from an owner and filename"""
 		if owner_id == None:
 			if owner == None:
 				owner = users.User.from_username(owner_name)
 			owner_id = owner.id
 
-		row = g.db.execute("SELECT id, name, owner_id, creation_time, last_save_time, score FROM critters WHERE owner_id=? AND name=?", (owner_id, filename)).fetchone()
+		columns = ', '.join({column for column in columns + ['id', 'name', 'owner_id']})
+		row = g.db.execute("SELECT " + columns + " FROM critters WHERE owner_id=? AND name=?", (owner_id, filename)).fetchone()
 		if row is None:
 			if fail_silent:
 				return None
@@ -60,9 +61,10 @@ class Critter(object):
 		return Critter(row)
 
 	@staticmethod
-	def from_id(id, fail_silent=False):
+	def from_id(id, fail_silent=False, columns=[]):
 		"""Load a critter from id"""
-		row = g.db.execute("SELECT id, name, owner_id, creation_time, last_save_time, score FROM critters WHERE id=?", (id,)).fetchone()
+		columns = ', '.join({column for column in columns + ['id', 'name', 'owner_id']})
+		row = g.db.execute("SELECT " + columns + " FROM critters WHERE id=?", (id,)).fetchone()
 		if row is None:
 			if fail_silent:
 				return None
@@ -74,19 +76,15 @@ class Critter(object):
 		"""Create a new critter from a database row"""
 		self.id = row['id']
 		self.name = row['name']
-		if ('content' in row):
-			self._content = zlib.decompress(row['content'])
-		else:
-			self._content = None
-		if ('compiled_content' in row):
-			self._compiled_content = zlib.decompress(row['compiled_content'])
-		else:
-			self._compiled_content = None
 		self.owner_id = row['owner_id']
+		self._content = zlib.decompress(row['content']) if ('content' in row) else None
+		self._compiled_content = zlib.decompress(row['compiled_content']) if ('compiled_content' in row) else None
+		self._public = row['public'] if ('public' in row) else None
+		self._creation_time = row['creation_time'] if ('creation_time' in row) else None
+		self._last_save_time = row['last_save_time'] if ('last_save_time' in row) else None
+		self._last_compile_time = row['last_compile_time'] if ('last_compile_time' in row) else None
+		self._score = row['score'] if ('score' in row) else None
 		self._owner = None
-		self.creation_time = row['creation_time']
-		self.last_save_time = row['last_save_time']
-		self._score = row['score']
 
 	@property
 	def owner(self):
@@ -103,7 +101,7 @@ class Critter(object):
 	def content(self):
 		"""Lazy load the content of this Critter"""
 		if self._content == None:
-			self._content = zlib.decompress(g.db.execute("SELECT content FROM critters WHERE id=?", (self.id,)).fetchone()['content'])
+			self._content = zlib.decompress(g.db.execute("SELECT content FROM critters WHERE id = ?", (self.id,)).fetchone()['content'])
 		return self._content
 
 	@content.setter
@@ -111,33 +109,81 @@ class Critter(object):
 		self._content = value
 		current_time = time.time()
 		zcontent = zlib.compress(self._content, COMPRESSION_LEVEL)
-		g.db.execute("UPDATE critters SET content=?, last_save_time=? WHERE id = ?;", (zcontent, current_time, self.id))
+		g.db.execute("UPDATE critters SET content = ?, last_save_time = ? WHERE id = ?;", (zcontent, current_time, self.id))
 		self.last_save_time = current_time
 
 	@property
 	def compiled_content(self):
-		"""Lazy load the last compiled content of this Critter"""
+		"""Last compiled content of this Critter"""
 		if self._compiled_content == None:
-			self._compiled_content = zlib.decompress(g.db.execute("SELECT compiled_content FROM critters WHERE id=?", (self.id,)).fetchone()['compiled_content'])
+			self._compiled_content = zlib.decompress(g.db.execute("SELECT compiled_content FROM critters WHERE id = ?", (self.id,)).fetchone()['compiled_content'])
 		return self._compiled_content
 
 	@compiled_content.setter
 	def compiled_content(self, value):
 		self._compiled_content = value
 		zcontent = zlib.compress(value, COMPRESSION_LEVEL)
-		g.db.execute("UPDATE critters SET compiled_content=? WHERE id = ?;", (zcontent, self.id))
+		g.db.execute("UPDATE critters SET compiled_content = ? WHERE id = ?;", (zcontent, self.id))
 	
 	@property
 	def score(self):
-		"""Lazy load the score of this Critter"""
+		"""The score of this Critter"""
 		if self._score == None:
-			self._score = zlib.decompress(g.db.execute("SELECT content FROM critters WHERE id=?", (self.id,)).fetchone()['content'])
+			self._score = g.db.execute("SELECT score FROM critters WHERE id=?", (self.id,)).fetchone()['score']
 		return self._score
 
 	@score.setter
 	def score(self, value):
 		self._score = value
-		g.db.execute("UPDATE critters SET score=? WHERE name = ? AND owner_id = ?;", (self._score, self.name, self.owner_id))
+		g.db.execute("UPDATE critters SET score = ? WHERE id = ?;", (self._score, self.id))
+	
+	@property
+	def public(self):
+		"""Whether or not this critter is visible to the public."""
+		if self._public == None:
+			self._public = g.db.execute("SELECT public FROM critters WHERE id=?", (self.id,)).fetchone()['public']
+		return self._public
+
+	@public.setter
+	def public(self, value):
+		self._public = value
+		g.db.execute("UPDATE critters SET public=? WHERE id = ?;", (self._public, self.id))
+
+	@property
+	def creation_time(self):
+		"""The last time this critter was created."""
+		if self._creation_time == None:
+			self._creation_time = g.db.execute("SELECT creation_time FROM critters WHERE id=?", (self.id,)).fetchone()['creation_time']
+		return self._creation_time
+
+	@creation_time.setter
+	def creation_time(self, value):
+		self._creation_time = value
+		g.db.execute("UPDATE critters SET creation_time=? WHERE id = ?;", (self._creation_time, self.id))
+
+	@property
+	def last_save_time(self):
+		"""The last time this critter was saved."""
+		if self._last_save_time == None:
+			self._last_save_time = g.db.execute("SELECT last_save_time FROM critters WHERE id=?", (self.id,)).fetchone()['last_save_time']
+		return self._last_save_time
+
+	@last_save_time.setter
+	def last_save_time(self, value):
+		self._last_save_time = value
+		g.db.execute("UPDATE critters SET last_save_time=? WHERE id = ?;", (self._last_save_time, self.id))
+
+	@property
+	def last_compile_time(self):
+		"""The last time this critter was compiled"""
+		if self._last_compile_time == None:
+			self._last_compile_time = g.db.execute("SELECT last_compile_time FROM critters WHERE id=?", (self.id,)).fetchone()['last_compile_time']
+		return self._last_compile_time
+
+	@last_compile_time.setter
+	def last_compile_time(self, value):
+		self._last_compile_time = value
+		g.db.execute("UPDATE critters SET last_compile_time=? WHERE id = ?;", (self._last_compile_time, self.id))
 
 	def get_all_battles(self):
 		"""Return the list of battles this critter been in"""

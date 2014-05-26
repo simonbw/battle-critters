@@ -1,6 +1,7 @@
 @import "fonts";
 @import "mixins";
 
+@import "admin";
 @import "battle";
 @import "home";
 @import "editor";
@@ -15,13 +16,69 @@
 	box-sizing: border-box;
 }
 
-
 button {
-	cursor: default;
-	a {
-		color: black;
-		cursor: default;
-		text-decoration: none;
+	background: linear-gradient(#FFF, #DDD);
+	border-radius: 2px;
+	border: 1px solid $accent3;
+	color: $accent2;
+	cursor: pointer;
+	outline: none;
+	padding: 3px 12px;
+	text-decoration: none;
+	letter-spacing: -0.5px;
+	word-spacing: 1px;
+	text-transform: uppercase;
+
+	font: {
+		weight: bold;
+	}
+
+	&:focus {
+		border: 1px solid $accent2;
+	}
+
+	&:hover {
+		background: linear-gradient(#DDD, #FFF);
+	}
+
+	&:active {
+		position: relative;
+		top: 1px;
+	}
+}
+
+fieldset {
+	background: $light_bg3;
+	border-radius: $module_radius;
+	border: 2px solid $accent1;
+	padding: 16px;
+	text-align: center;
+
+	input {
+		background: #FFF;
+		width: 100%;
+		
+		&:focus {
+			background: #FFFFDD;
+		}
+		margin: 2px;
+	}
+
+	legend {
+		background: $light_bg3;
+		padding: {
+			left: 8px;
+			right: 8px;
+			top: 4px;
+			bottom: 0px;
+		}
+		border: {
+			top: 2px solid $accent1;
+			left: 1px solid $accent1;
+			right: 1px solid $accent1;
+		}
+		border-top-left-radius: $module_radius;
+		border-top-right-radius: $module_radius;
 	}
 }
 code {
@@ -39,12 +96,12 @@ body {
 	}
 }
 #flashes {
-	background: #FFFF00;
-	border-bottom: 1px dotted #FF0000;
-	border-top: 1px dotted #FF0000;
-	color: #FF0000; 
-	margin-bottom: 20px;
+	background: #FFFF55;
+	border-bottom: 1px dotted #D00;
+	border-top: 1px dotted #D00;
+	color: #D00; 
 	margin:auto;
+	margin-bottom: 16px;
 	padding: 4px;
 
 	li {
@@ -136,10 +193,6 @@ body {
 		padding: {
 			left: $module_spacing;
 			right: $module_spacing;
-		}
-
-		&.admin {
-			background: $light_bg2;
 		}
 	}
 

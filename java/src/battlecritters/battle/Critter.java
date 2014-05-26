@@ -47,6 +47,19 @@ public class Critter {
 		NORTH, SOUTH, EAST, WEST
 	};
 
+	protected static Neighbor WALL = Neighbor.WALL;
+	protected static Neighbor EMPTY = Neighbor.EMPTY;
+	protected static Neighbor SAME = Neighbor.SAME;
+	protected static Neighbor OTHER = Neighbor.OTHER;
+	protected static Action HOP = Action.HOP;
+	protected static Action LEFT = Action.LEFT;
+	protected static Action RIGHT = Action.RIGHT;
+	protected static Action INFECT = Action.INFECT;
+	protected static Direction NORTH = Direction.NORTH;
+	protected static Direction SOUTH = Direction.SOUTH;
+	protected static Direction EAST = Direction.EAST;
+	protected static Direction WEST = Direction.WEST;
+
 	/**
 	 * This method should be overridden. Default action is turning left.
 	 * 

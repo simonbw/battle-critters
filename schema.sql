@@ -23,6 +23,7 @@ create table critters (
 	last_save_time numeric,
 	last_compile_time numeric,
 	score integer,
+	public boolean,
 	foreign key(owner_id) references users(id)
 );
 

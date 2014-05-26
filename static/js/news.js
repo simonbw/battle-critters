@@ -1,7 +1,7 @@
 newsModule = (function() {
 	NEWS_PAGE = 0;
 
-	function reload_news() {
+	function reloadNews() {
 		console.log("loading news page " + NEWS_PAGE + " from " + NEWS_URL);
 		$.get(NEWS_URL, {
 			page: NEWS_PAGE
@@ -27,14 +27,14 @@ newsModule = (function() {
 		}
 	}
 	$(document).ready(function() {
-		reload_news();
+		reloadNews();
 		$("button#nextnews").click(function(event) {
 			NEWS_PAGE = Math.min(NEWS_PAGE + 1, MAX_NEWS - 1);
-			reload_news();
+			reloadNews();
 		});
 		$("button#previousnews").click(function(event) {
 			NEWS_PAGE = Math.max(NEWS_PAGE - 1, 0);
-			reload_news();
+			reloadNews();
 		});
 		$("#postnewsbutton").click(function() {
 			var title = $("#newsformtitle").val();
@@ -48,7 +48,7 @@ newsModule = (function() {
 				if (data != 'success') {
 					alert(data);
 				} else {
-					reload_news();
+					reloadNews();
 				}
 			});
 		});

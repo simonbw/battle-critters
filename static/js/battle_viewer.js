@@ -14,24 +14,24 @@ battleViewerModule = new(function() {
 	var interval_id = null;
 
 	$(document).ready(function() {
-		load_chunk(LAST_FRAME_REQUESTED, CHUNK_SIZE);
+		loadChunk(LAST_FRAME_REQUESTED, CHUNK_SIZE);
 		ctx = $("#battlefield").get(0).getContext('2d');
 		CTX_WIDTH = $("#battlefield").width();
 		CTX_HEIGHT = $("#battlefield").height();
 
 		$("#nextbutton").click(function() {
-			stop_playback();
-			next_frame();
+			stopPlayback();
+			nextFrame();
 		});
 		$("#backbutton").click(function() {
-			stop_playback();
+			stopPlayback();
 			previous_frame();
 		});
 		$("#skipbutton").click(100, skip);
 		$("#playbutton").click(play);
 		$("#rewindbutton").click(rewind);
 		$("#resetbutton").click(reset);
-		$("#stopbutton").click(stop_playback);
+		$("#stopbutton").click(stopPlayback);
 
 		for (var i = 0; i < critter_names.length; i++) {
 			$('#critterlabel' + i).css('color', COLORS[i]);
@@ -45,7 +45,7 @@ battleViewerModule = new(function() {
 	/**
 	 * Called when the battle is completely loaded
 	 */
-	function load_complete() {
+	function loadComplete() {
 		if (interval_id == null) {
 			play();
 		}
@@ -56,7 +56,7 @@ battleViewerModule = new(function() {
 	 * @param  {int} start
 	 * @param  {int} end
 	 */
-	function load_chunk(start, end) {
+	function loadChunk(start, end) {
 		end = Math.min(end, MAX_FRAME);
 		LAST_FRAME_REQUESTED = Math.max(LAST_FRAME_REQUESTED, end);
 		$.get(FRAME_URL, {
@@ -65,14 +65,14 @@ battleViewerModule = new(function() {
 			},
 			function(data) {
 				chunks_loaded++;
-				parse_frame_data(data);
+				parseFrameData(data);
 				if (chunks_loaded == 1) {
-					render_frame();
+					renderFrame();
 				}
 				if (LAST_FRAME_REQUESTED < MAX_FRAME) {
-					load_chunk(LAST_FRAME_REQUESTED + 1, Math.min(LAST_FRAME_REQUESTED + CHUNK_SIZE, MAX_FRAME));
+					loadChunk(LAST_FRAME_REQUESTED + 1, Math.min(LAST_FRAME_REQUESTED + CHUNK_SIZE, MAX_FRAME));
 				} else {
-					load_complete();
+					loadComplete();
 				}
 			});
 	}
@@ -81,7 +81,7 @@ battleViewerModule = new(function() {
 	 * Proccess the raw frame data.
 	 * @param  {str} data
 	 */
-	function parse_frame_data(data) {
+	function parseFrameData(data) {
 		var new_frames = data.split(/\n\n/);
 		for (var i = 0; i < new_frames.length; i++) {
 			var new_frame = new_frames[i].split("\n");
@@ -98,7 +98,7 @@ battleViewerModule = new(function() {
 	/**
 	 * Render the current frame on the canvas.
 	 */
-	function render_frame() {
+	function renderFrame() {
 		$('#framecounter').html(current_frame);
 		frame = frames[current_frame];
 		ctx.clearRect(0, 0, CTX_WIDTH, CTX_HEIGHT);
@@ -120,12 +120,12 @@ battleViewerModule = new(function() {
 	/**
 	 * Advance to the next frame.
 	 */
-	function next_frame() {
+	function nextFrame() {
 		if (current_frame >= frames.length - 1) {
-			stop_playback();
+			stopPlayback();
 		} else {
 			current_frame++;
-			render_frame();
+			renderFrame();
 		}
 	}
 
@@ -134,31 +134,31 @@ battleViewerModule = new(function() {
 	 */
 	function previous_frame() {
 		if (current_frame <= 0) {
-			stop_playback();
+			stopPlayback();
 		} else {
 			current_frame--;
-			render_frame();
+			renderFrame();
 		}
 	}
 
 	function play() {
-		stop_playback();
-		interval_id = window.setInterval(next_frame, PLAY_SPEED);
+		stopPlayback();
+		interval_id = window.setInterval(nextFrame, PLAY_SPEED);
 	}
 
 	function skip() {
 		n = 100;
-		stop_playback();
+		stopPlayback();
 		current_frame = Math.min(frames.length - 1, current_frame + n);
-		render_frame();
+		renderFrame();
 	}
 
 	function rewind() {
-		stop_playback();
+		stopPlayback();
 		interval_id = window.setInterval(previous_frame, PLAY_SPEED);
 	}
 
-	function stop_playback() {
+	function stopPlayback() {
 		if (interval_id) {
 			window.clearInterval(interval_id);
 		}
@@ -166,8 +166,8 @@ battleViewerModule = new(function() {
 	}
 
 	function reset() {
-		stop_playback();
+		stopPlayback();
 		current_frame = 0;
-		render_frame();
+		renderFrame();
 	}
 })();

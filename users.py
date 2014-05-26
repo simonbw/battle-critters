@@ -29,6 +29,7 @@ def init():
 
 class User(object):
 	"""A model for a user. Handles database comunication. To load a User, use one of the static methods."""
+
 	@staticmethod
 	def from_username(username):
 		"""Load a User from the database based on username"""
@@ -48,13 +49,12 @@ class User(object):
 	def __init__(self, row):
 		"""Initialize a User from a database row. You should probably look at the static constructors."""
 		if not (row['id'] and row['username'] and row['password']):
-			raise Exception("improper constructor")
+			raise Exception("Row must contain id, username, and password")
 
 		self.id = row['id']
 		self.username = row['username']
 		self.admin = bool(row['admin'])
 		self.password = row['password']
-
 
 	def get_url(self):
 		"""Return the url for the user's page."""
