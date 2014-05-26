@@ -1,3 +1,4 @@
+#!/usr/bin/env python
 """
 Start the development server.
 """
@@ -33,7 +34,11 @@ import users
 PRODUCTION = True
 ####################################################
 
-app = Flask(__name__)
+class FlaskApp(Flask):
+	def __init__(self, *args, **kwargs):
+		super(FlaskApp, self).__init__(__name__, *args, **kwargs)
+
+app = FlaskApp()
 
 # register blueprints
 app.register_blueprint(battles_app, url_prefix = '/battles')

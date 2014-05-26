@@ -346,7 +346,6 @@ def get_critters_json_user():
 def get_user_critter_ids():
 	"""Return a list of critter ids"""
 	limit = request.args['limit']
-	print "limit", limit
 	owner_id = g.user.id
 	query = "SELECT id FROM critters WHERE owner_id=? ORDER BY id LIMIT ?"
 	rows = g.db.execute(query, (owner_id,limit)).fetchall()
@@ -502,7 +501,7 @@ def check_filename(filename):
 def parse_compiler_output(s):
 	"""Return a dictionary mapping line number to error message"""
 	errors = {}
-	pattern = re.compile(r'\./java/temp_critters/(\w*.java):(\d+): error:')
+	pattern = re.compile(r'\./java/temp_critters/(\w*.java):(\d+):')
 	for line in s.split("\n"):
 		# find lines that describe errors
 		match = pattern.match(line)
