@@ -141,23 +141,37 @@ battleViewerModule = new(function() {
 		}
 	}
 
+	/**
+	 * Start playing the battle from the current position.
+	 */
 	function play() {
 		stopPlayback();
 		interval_id = window.setInterval(nextFrame, PLAY_SPEED);
 	}
 
-	function skip() {
-		n = 100;
+	/**
+	 * Skip some frames.
+	 * @param  {int} n
+	 *         number of frames to skip. defaults to 100
+	 */
+	function skip(n) {
+		n = (n === undefined) ? 100 : n;
 		stopPlayback();
 		current_frame = Math.min(frames.length - 1, current_frame + n);
 		renderFrame();
 	}
 
+	/**
+	 * Start playing in reverse.
+	 */
 	function rewind() {
 		stopPlayback();
 		interval_id = window.setInterval(previous_frame, PLAY_SPEED);
 	}
 
+	/**
+	 * Stop playing.
+	 */
 	function stopPlayback() {
 		if (interval_id) {
 			window.clearInterval(interval_id);
@@ -165,6 +179,9 @@ battleViewerModule = new(function() {
 		interval_id = null;
 	}
 
+	/**
+	 * Stop playing and go back to the first frame.
+	 */
 	function reset() {
 		stopPlayback();
 		current_frame = 0;

@@ -78,7 +78,7 @@ class Battle(object):
 
 	def get_critters(self):
 		"""Return a list of critters competing in this battle."""
-		rows = g.db.execute("SELECT critter_id FROM battle_critters WHERE battle_id=? ORDER BY place", (self.id,)).fetchall()
+		rows = g.db.execute("SELECT critter_id FROM battle_critters WHERE battle_id=? ORDER BY position", (self.id,)).fetchall()
 		return [Critter.from_id(row['critter_id']) for row in rows]
 
 	def get_critter_place(self, critter):
@@ -254,11 +254,17 @@ def create_battle(length, height, width, critters, ranked):
 		D = 10
 		K = 50
 		winners = {critter for s, critter in sorted_scores if s == sorted_scores[0][0]}
+		old_scores = {}
+		for remaining, critter in sorted_scores:
+			old_scores[critter] = critter.score
+
 		for remaining, critter in sorted_scores:
 			expected = 0
 			for other_remaining, other in sorted_scores:
-				expected = 1.0 / (1 + 10 ** (other.score - critter.score))
+				if other != critter:
+					expected += 1.0 / (1 + 10.0 ** (old_scores[other] - critter.score))
 			expected /= n * (n - 1) / 2.0
 			actual = 1.0 / len(winners) if critter in winners else 0
 			critter.score += int(round(K * (actual - expected)))
+			print "Adjusting score:", critter.name, round(actual, 2), round(expected, 2), int(round(K * (actual - expected)))
 	return battle_id

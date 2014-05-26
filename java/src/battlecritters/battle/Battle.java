@@ -305,7 +305,7 @@ public class Battle {
 		}
 
 		for (int x = 0; x < grid.length; x++) {
-			for (int y = 0; y < grid.length; y++) {
+			for (int y = 0; y < grid[x].length; y++) {
 				if (grid[x][y] != null) {
 					String name = critterNames.get(grid[x][y].getClass());
 					scores.put(name, scores.get(name) + 1);

@@ -33,7 +33,8 @@ critter_names = [];
 		<div class="clear"></div>
 	</div>
 
-	<canvas id="battlefield" width="500px" height="500px"></canvas>
+	<canvas id="battlefield" width="{{battle.width * 5}}px" height="{{battle.height * 5}}px"></canvas>
+
 	<div id="sidebar")>
 		{% for i in range(critters|length) %}
 		<div class="critterlabel" id="critterlabel{{i}}">
