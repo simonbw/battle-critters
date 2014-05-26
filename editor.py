@@ -461,6 +461,9 @@ def new_file(owner):
 
 def create_file(owner, filename, content=None):
 	"""Actually create a new critter"""
+	if (Critter.from_name(filename, owner=owner, fail_silent=True) != None):
+		raise Exception("File already exists")
+
 	current_time = time.time()
 	print "creating new critter: " + filename + ", owner id: " + str(owner.id)
 	if content == None:

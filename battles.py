@@ -260,5 +260,5 @@ def create_battle(length, height, width, critters, ranked):
 				expected = 1.0 / (1 + 10 ** (other.score - critter.score))
 			expected /= n * (n - 1) / 2.0
 			actual = 1.0 / len(winners) if critter in winners else 0
-			critter.score += K * (actual - expected)
+			critter.score += int(round(K * (actual - expected)))
 	return battle_id

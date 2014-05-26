@@ -99,11 +99,41 @@ def reset_scores():
 		g.db.execute("UPDATE critters SET score = ?", (ranking.DEFAULT_SCORE,))
 		g.db.commit()
 
+def reset_examples():
+	import editor
+	import main
+	from main import app
+
+	with app.app_context():
+		print "Creating default critters..."
+		g.db = database.connect_db()
+		g.db.row_factory = sqlite3.Row
+
+		example = users.User.from_username('example')
+
+		path = os.path.join('static', 'examplecritters')
+		for filename in os.listdir(path):
+			with open(os.path.join(path, filename), 'r') as f:
+				if (editor.Critter.from_name(filename[:-5], owner=example, fail_silent=True) != None):
+					print "Skipping", filename
+					continue
+				editor.create_file(example, filename[:-5], f.read())
+
+		g.db.commit()
+
 if __name__ == "__main__":
 	args = {a for a in sys.argv}
+	command = False
+
 	if '-s' in args or '--scores' in args:
 		reset_scores()
+		command = True
 	if '-a' in args or '--all' in args:
 		reset_all()
-	else:
-		print "no args given"
+		command = True
+	if '-e' in args or '--examples' in args:
+		reset_examples()
+		command = True
+	
+	if not command:
+		print "bad args:", args
