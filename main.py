@@ -20,6 +20,7 @@ from editor import editor_app
 from feedback import feedback_app
 from home import home_app
 from login import login_app
+from ranking import ranking_app
 from users import users_app, User
 import battles
 import database
@@ -27,6 +28,7 @@ import editor
 import feedback
 import home
 import login
+import ranking
 import users
 
 ####################################################
@@ -43,9 +45,10 @@ app = FlaskApp()
 # register blueprints
 app.register_blueprint(battles_app, url_prefix = '/battles')
 app.register_blueprint(editor_app, url_prefix = '/critters')
+app.register_blueprint(feedback_app, url_prefix = '/feedback')
 app.register_blueprint(home_app)
 app.register_blueprint(login_app)
-app.register_blueprint(feedback_app, url_prefix = '/feedback')
+app.register_blueprint(ranking_app)
 app.register_blueprint(users_app, url_prefix = '/users')
 
 # configuration
@@ -66,7 +69,7 @@ def before_first_request():
 	"""Initialize everything"""
 
 	print "initializing modules"
-	for module in (battles, editor, home, login, users):
+	for module in (battles, editor, home, login, users, ranking):
 		try:
 			module.init()
 		except Exception as e:

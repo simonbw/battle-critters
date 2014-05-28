@@ -37,6 +37,8 @@ def init():
 	global Battle, User
 	Battle = battles.Battle
 	User = users.User
+	print "editor_app initialized"
+
 
 class Critter(object):
 	"""A model for a Critter. Handles database comunication. To load a Critter, use one of the static methods."""
@@ -76,7 +78,7 @@ class Critter(object):
 		"""Create a new critter from a database row"""
 		self.id = row['id']
 		self.name = row['name']
-		self.owner_id = row['owner_id']
+		self._owner_id = row['owner_id'] if ('owner_id' in row) else None
 		self._content = zlib.decompress(row['content']) if ('content' in row) else None
 		self._compiled_content = zlib.decompress(row['compiled_content']) if ('compiled_content' in row) else None
 		self._public = row['public'] if ('public' in row) else None
@@ -95,7 +97,23 @@ class Critter(object):
 	
 	@owner.setter
 	def owner(self, value):
+		"""Set the owner of this Critter"""
+		self.owner_id = value.id
 		self._owner = value
+
+	@property
+	def owner_id(self):
+		"""Get the id of the owner of this Critter"""
+		if self._owner_id == None:
+			self._owner_id = g.db.execute("SELECT owner_id FROM critters WHERE id = ?", (self.id,)).fetchone()['owner_id']
+		return self._owner_id
+	
+	@owner_id.setter
+	def owner_id(self, value):
+		"""Set the id of the owner of this Critter"""
+		self._owner_id = value
+		g.db.execute("UPDATE critters SET owner_id = ? WHERE id = ?;", (self._owner_id, self.id))
+		self._owner = None # so owner is reloaded on next access
 
 	@property
 	def content(self):
@@ -129,7 +147,7 @@ class Critter(object):
 	def score(self):
 		"""The score of this Critter"""
 		if self._score == None:
-			self._score = g.db.execute("SELECT score FROM critters WHERE id=?", (self.id,)).fetchone()['score']
+			self._score = g.db.execute("SELECT score FROM critters WHERE id = ?", (self.id,)).fetchone()['score']
 		return self._score
 
 	@score.setter
@@ -137,11 +155,16 @@ class Critter(object):
 		self._score = value
 		g.db.execute("UPDATE critters SET score = ? WHERE id = ?;", (self._score, self.id))
 	
+	def increment_score(self, amount):
+		"""Change the critter's score by an amount."""
+		self._score = None
+		g.db.execute("UPDATE critters SET score = score + ? WHERE id = ?;", (amount, self.id))
+
 	@property
 	def public(self):
 		"""Whether or not this critter is visible to the public."""
 		if self._public == None:
-			self._public = g.db.execute("SELECT public FROM critters WHERE id=?", (self.id,)).fetchone()['public']
+			self._public = g.db.execute("SELECT public FROM critters WHERE id = ?", (self.id,)).fetchone()['public']
 		return self._public
 
 	@public.setter
@@ -153,7 +176,7 @@ class Critter(object):
 	def creation_time(self):
 		"""The last time this critter was created."""
 		if self._creation_time == None:
-			self._creation_time = g.db.execute("SELECT creation_time FROM critters WHERE id=?", (self.id,)).fetchone()['creation_time']
+			self._creation_time = g.db.execute("SELECT creation_time FROM critters WHERE id = ?", (self.id,)).fetchone()['creation_time']
 		return self._creation_time
 
 	@creation_time.setter
@@ -165,7 +188,7 @@ class Critter(object):
 	def last_save_time(self):
 		"""The last time this critter was saved."""
 		if self._last_save_time == None:
-			self._last_save_time = g.db.execute("SELECT last_save_time FROM critters WHERE id=?", (self.id,)).fetchone()['last_save_time']
+			self._last_save_time = g.db.execute("SELECT last_save_time FROM critters WHERE id = ?", (self.id,)).fetchone()['last_save_time']
 		return self._last_save_time
 
 	@last_save_time.setter
@@ -177,7 +200,7 @@ class Critter(object):
 	def last_compile_time(self):
 		"""The last time this critter was compiled"""
 		if self._last_compile_time == None:
-			self._last_compile_time = g.db.execute("SELECT last_compile_time FROM critters WHERE id=?", (self.id,)).fetchone()['last_compile_time']
+			self._last_compile_time = g.db.execute("SELECT last_compile_time FROM critters WHERE id = ?", (self.id,)).fetchone()['last_compile_time']
 		return self._last_compile_time
 
 	@last_compile_time.setter
@@ -223,6 +246,14 @@ class Critter(object):
 		row = g.db.execute(query, (self.id,)).fetchone()
 		return row[0]
 
+	def get_ranked_total(self):
+		"""Return the total number of ranked battles"""
+		query = "SELECT COUNT(*) FROM battle_critters, battles \
+		WHERE battles.id = battle_critters.battle_id \
+		AND critter_id = ? AND ranked = 1"
+		row = g.db.execute(query, (self.id,)).fetchone()
+		return row[0]
+
 	def get_url(self, action="view"):
 		"""Return a url for any type of view."""
 		if action == 'view':
@@ -239,7 +270,7 @@ class Critter(object):
 			raise Exception("Unknown Action: " + action)
 
 	def get_link(self, action='view', text="{owner}.{name}"):
-		"""Return an HTML snippet with a link to the userpage. If text is none, defaults to 'ownername.name' ."""
+		"""Return an HTML snippet with a link to the userpage. If text is none, defaults to 'ownername.name'."""
 		url = self.get_url(action)
 		text = text.format(name = self.name, owner=self.owner.username, id=self.id, url=url)
 		return Markup("<a href='{url}' class='crittername'>{text}</a>".format(url=url,text=text))

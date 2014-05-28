@@ -7,6 +7,7 @@
 @import "editor";
 @import "faq";
 @import "footer";
+@import "leaderboard";
 @import "login";
 @import "newbattle";
 @import "news";
@@ -81,12 +82,11 @@ fieldset {
 		border-top-right-radius: $module_radius;
 	}
 }
+
 code {
 	font-family: $font_monospace;
 }
-.clear {
-	clear: both;
-}
+
 body {
 	background: url('/static/images/background2.png');
 	padding: 0px;
@@ -95,6 +95,7 @@ body {
 		size: 15px;
 	}
 }
+
 #flashes {
 	background: #FFFF55;
 	border-bottom: 1px dotted #D00;
@@ -109,6 +110,7 @@ body {
 		margin-left: 20px;
 	}
 }
+
 #bodybox {
 	background: $light_bg;
 	border-bottom-left-radius: $module_radius;
@@ -209,10 +211,14 @@ body {
 	}
 }
 
-// extras
 .right {
 	float: right;
 }
+
 .left {
 	float: left;
+}
+
+.clear {
+	clear: both;
 }

@@ -25,6 +25,7 @@ def init():
 	global Battle, Critter
 	Battle = battles.Battle
 	Critter = editor.Critter
+	print "users_app initialized"
 
 
 class User(object):

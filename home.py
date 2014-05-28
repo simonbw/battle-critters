@@ -13,7 +13,7 @@ home_app = Blueprint('home_app', __name__, template_folder='templates')
 
 def init():
 	"""Initialize the module"""
-	pass
+	print "home_app initialized"
 
 
 @home_app.route('/')

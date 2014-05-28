@@ -1,0 +1,19 @@
+@import 'fonts';
+@import 'mixins';
+
+table.leaderboard {
+	border-collapse: collapse;
+	width: 100%;
+
+	tr {
+
+		background: lighten($light_bg, 7%);
+		&:nth-of-type(odd) {
+			background: darken($light_bg, 7%);
+		}
+
+		td {
+			text-align: center;
+		}
+	}
+}

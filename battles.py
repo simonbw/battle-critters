@@ -36,6 +36,7 @@ def init():
 	global Critter, User
 	Critter = editor.Critter
 	User = users.User
+	print "battles_app initialized"
 
 
 class Battle(object):

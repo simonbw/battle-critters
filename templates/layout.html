@@ -25,8 +25,9 @@
 		</div>
 		<div class="right">
 			{% if 'user' in g %}
-			<div class="item">{{g.user.get_link()}}</div>
 			<div class="item"><a href="{{url_for('login_app.logout')}}">Logout</a></div>
+			<div class="item">{{g.user.get_link()}}</div>
+			<div class="item"><a href="{{url_for('ranking_app.leaderboard_page')}}">Leaderboard</a></div>
 			{% else %}
 			<div class="item"><a href="{{url_for('login_app.login_page')}}">Sign In</a></div>
 			<div class="item"><a href="{{url_for('users_app.new_user')}}">Make An Account</a></div>

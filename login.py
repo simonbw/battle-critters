@@ -14,6 +14,7 @@ def init():
 	"""Initialize the module"""
 	global User
 	User = users.User
+	print "login_app initialized"
 
 
 @login_app.route('/login', methods=['GET', 'POST'])

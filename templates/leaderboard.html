@@ -1,0 +1,25 @@
+{% extends "layout.html" %}
+{% block title %}Critters{% endblock %}
+{% block body %}
+<h1>Leaderboard</h1>
+<section>
+	<table class="leaderboard">
+		<tr>
+			<th class="rank">Rank</th>
+			<th class="critter">Critter</th>
+			<th class="owner">Owner</th>
+			<th class="score">Score</th>
+			<th class="battles">Battles</th>
+		</tr>
+		{% for i, critter in critters%}
+		<tr>
+			<td class="rank">{{i}}</td>
+			<td class="critter">{{critter.get_link()}}</td>
+			<td class="owner">{{critter.owner.get_link()}}</td>
+			<td class="score">{{critter.score}}</td>
+			<td class="battles">{{critter.get_ranked_total()}}</td>
+		</tr>
+		{% endfor %}
+	</table>
+</section>
+{% endblock %}

@@ -143,11 +143,11 @@ editorModule = (function() {
 		var maxHeight = $(window).height() - $("#editor").offset().top - $('#statusbar').height() - $('#toolbar').height() - BOTTOM_PADDING;
 		$('.CodeMirror-scroll').css('max-height', '' + maxHeight + 'px');
 		$('#editorbox #helpbox').css('max-height', '' + maxHeight + 'px');
-		var minHeight = $('#editorbox #helpbox').height() + 50;
+		var minHeight = $('#editorbox #helpbox').height() + 50; // I don't remember where this 50 came from
 		$('.CodeMirror-scroll').css('min-height', '' + minHeight + 'px');
 		editor.refresh();
 
-		// This is needed because it seems this function needs to be called once the DOM rebuilds itself or something
+		// This is needed because it seems this function needs to be called again once the DOM rebuilds itself or something
 		if (!stop) {
 			setTimeout(function() {
 				resetHeight(true);

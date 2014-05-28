@@ -265,6 +265,7 @@ section.admin {
                 background: #D00;
                 color: #FEFEFE; }
 #editorbox {
+  border-radius: 8px;
   box-shadow: 0px 3px 16px black;
   overflow: hidden;
   margin-top: 50px;
@@ -548,6 +549,15 @@ section.admin {
           color: #FFF; }
           #footer .navlist li a:active {
             color: #FFF; }
+table.leaderboard {
+  border-collapse: collapse;
+  width: 100%; }
+  table.leaderboard tr {
+    background: #e1e1e1; }
+    table.leaderboard tr:nth-of-type(odd) {
+      background: #bdbdbd; }
+      table.leaderboard tr td {
+        text-align: center; }
 #loginbox {
   float: right;
   margin-left: 14px;
@@ -868,26 +878,23 @@ fieldset {
 code {
   font-family: Inconsolas, monospace; }
 
-  .clear {
-    clear: both; }
+  body {
+    background: url('/static/images/background2.png');
+    padding: 0px;
+    font-family: Gen-light, Helvetica, sans-serif;
+    font-size: 15px; }
 
-    body {
-      background: url('/static/images/background2.png');
-      padding: 0px;
-      font-family: Gen-light, Helvetica, sans-serif;
-      font-size: 15px; }
-
-      #flashes {
-        background: #FFFF55;
-        border-bottom: 1px dotted #D00;
-        border-top: 1px dotted #D00;
-        color: #D00;
-        margin: auto;
-        margin-bottom: 16px;
-        padding: 4px; }
-        #flashes li {
-          list-style: none;
-          margin-left: 20px; }
+    #flashes {
+      background: #FFFF55;
+      border-bottom: 1px dotted #D00;
+      border-top: 1px dotted #D00;
+      color: #D00;
+      margin: auto;
+      margin-bottom: 16px;
+      padding: 4px; }
+      #flashes li {
+        list-style: none;
+        margin-left: 20px; }
 
 #bodybox {
   background: #CFCFCF;
@@ -954,3 +961,6 @@ code {
 
   .left {
     float: left; }
+
+    .clear {
+      clear: both; }
